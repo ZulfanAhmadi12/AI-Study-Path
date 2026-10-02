@@ -1,0 +1,1166 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AI Field Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a wall chart of stacked, colour-coded layers (the source picture's structure). Ink wires overlay the chart to show connections; a side panel reads out the selected node. */
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --ink:#141A22; --muted:#525D6C; --rule:#CDD3DA; --halo:#FFFFFF;
+  --blue-band:#DBE8FA; --blue-card:#F3F7FE; --blue-line:#86A9DE; --blue-ink:#1B4A94;
+  --green-band:#DBEFDD; --green-card:#F3FAF4; --green-line:#7FBB88; --green-ink:#1D6632;
+  --amber-band:#FAEAC2; --amber-card:#FFF9E8; --amber-line:#D6A63A; --amber-ink:#735000;
+  --rose-band:#FADBDF; --rose-card:#FFF4F5; --rose-line:#E08B96; --rose-ink:#972233;
+  --violet-band:#E7DEFA; --violet-card:#F8F4FE; --violet-line:#A98DE0; --violet-ink:#572BA3;
+  --teal-band:#D3EEEC; --teal-card:#F0FAF9; --teal-line:#69B7B3; --teal-ink:#0C5F62;
+  --font-display:'Archivo','Arial Narrow',Arial,sans-serif;
+  --font-body:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1318; --surface:#1A2029; --ink:#E9ECF0; --muted:#A4AEBB; --rule:#343D4A; --halo:#0B0E12;
+    --blue-band:#15253D; --blue-card:#1C304F; --blue-line:#3F6DB5; --blue-ink:#A2C5FF;
+    --green-band:#142E1B; --green-card:#1B3B24; --green-line:#3F8A4E; --green-ink:#9EDDA8;
+    --amber-band:#31280E; --amber-card:#3F3314; --amber-line:#9F7A1F; --amber-ink:#F2CF78;
+    --rose-band:#38171C; --rose-card:#481F26; --rose-line:#A8505C; --rose-ink:#FFADB7;
+    --violet-band:#251A3F; --violet-card:#2F2350; --violet-line:#7355BA; --violet-ink:#CBB6FF;
+    --teal-band:#0F2E2D; --teal-card:#153B3A; --teal-line:#3A8B88; --teal-ink:#92DEDA;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1318; --surface:#1A2029; --ink:#E9ECF0; --muted:#A4AEBB; --rule:#343D4A; --halo:#0B0E12;
+  --blue-band:#15253D; --blue-card:#1C304F; --blue-line:#3F6DB5; --blue-ink:#A2C5FF;
+  --green-band:#142E1B; --green-card:#1B3B24; --green-line:#3F8A4E; --green-ink:#9EDDA8;
+  --amber-band:#31280E; --amber-card:#3F3314; --amber-line:#9F7A1F; --amber-ink:#F2CF78;
+  --rose-band:#38171C; --rose-card:#481F26; --rose-line:#A8505C; --rose-ink:#FFADB7;
+  --violet-band:#251A3F; --violet-card:#2F2350; --violet-line:#7355BA; --violet-ink:#CBB6FF;
+  --teal-band:#0F2E2D; --teal-card:#153B3A; --teal-line:#3A8B88; --teal-ink:#92DEDA;
+  color-scheme:dark;
+}
+.t-blue{--band:var(--blue-band);--card:var(--blue-card);--line:var(--blue-line);--tink:var(--blue-ink)}
+.t-green{--band:var(--green-band);--card:var(--green-card);--line:var(--green-line);--tink:var(--green-ink)}
+.t-amber{--band:var(--amber-band);--card:var(--amber-card);--line:var(--amber-line);--tink:var(--amber-ink)}
+.t-rose{--band:var(--rose-band);--card:var(--rose-card);--line:var(--rose-line);--tink:var(--rose-ink)}
+.t-violet{--band:var(--violet-band);--card:var(--violet-card);--line:var(--violet-line);--tink:var(--violet-ink)}
+.t-teal{--band:var(--teal-band);--card:var(--teal-card);--line:var(--teal-line);--tink:var(--teal-ink)}
+.t-plain{--band:var(--surface);--card:var(--bg);--line:var(--ink);--tink:var(--ink)}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.45}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;text-align:left;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1560px;margin:0 auto;padding-inline:clamp(16px,2.4vw,32px);padding-block:28px 40px}
+
+/* header */
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,470px);gap:28px 36px;align-items:start;margin-bottom:30px}
+h1{font-family:var(--font-display);font-stretch:76%;font-weight:800;font-size:clamp(32px,4.2vw,48px);line-height:.98;letter-spacing:-.01em;margin:0 0 12px;text-wrap:balance}
+.lede{font-size:16px;line-height:1.5;max-width:60ch;margin:0 0 18px}
+.legend{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:13px;color:var(--muted)}
+.legend li{display:flex;gap:10px;align-items:center}
+.legend svg{flex:none;color:var(--ink)}
+.legend .grey{color:var(--muted)}
+.legend b{color:var(--ink);font-weight:700}
+.dotring{flex:none;width:44px;display:flex;justify-content:center}
+.ring{flex:none;display:inline-block;width:9px;height:9px;border:1.5px solid currentColor;border-radius:50%}
+
+.nest{margin:0;min-width:0}
+.nest figcaption{font-size:12.5px;color:var(--muted);margin-top:8px}
+.r{background:var(--band);border:2px solid var(--line);border-radius:12px;padding:7px 9px 9px;display:grid;gap:7px;min-width:0}
+.rh{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}
+.rh button{font-family:var(--font-display);font-stretch:80%;font-weight:700;font-size:15px;color:var(--tink)}
+.rh button:hover{text-decoration:underline}
+.rh span{font-size:12px;color:var(--muted)}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+.map{position:relative;container-type:inline-size;display:grid;gap:30px;min-width:0}
+
+/* bands */
+.band{background:var(--band);border:2px solid var(--line);border-radius:14px;padding:14px 14px 30px;min-width:0}
+.bhead{display:grid;gap:3px;margin-bottom:12px}
+.kick{font-family:var(--font-mono);font-size:11px;line-height:1.35;letter-spacing:.06em;text-transform:uppercase;color:var(--tink);margin:0}
+.btitle{font-family:var(--font-display);font-stretch:76%;font-weight:800;font-size:25px;line-height:1.08;margin:0;text-wrap:balance}
+.btitle button{display:inline-flex;gap:9px;align-items:baseline}
+.btitle button:hover span:last-child,.gtitle button:hover span:last-child,.ct button:hover span:last-child{text-decoration:underline}
+.bsub{margin:0;font-size:13.5px;max-width:86ch}
+.ghead{display:grid;gap:3px;margin:20px 0 12px;padding:12px 0 0;border-top:2px dashed var(--line)}
+.ghead.first{margin-top:0;padding-top:0;border-top:0}
+.gtitle{font-family:var(--font-display);font-stretch:78%;font-weight:800;font-size:19px;line-height:1.1;margin:0}
+.gtitle button{display:inline-flex;gap:8px;align-items:baseline}
+
+/* card grids: column counts that the items fill */
+.grid{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+@container (min-width:440px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (min-width:700px){
+  .g5,.g6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g7,.g8{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@container (min-width:860px){
+  .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .g5,.g10{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@container (min-width:1000px){.g6{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@container (min-width:1180px){.g7{grid-template-columns:repeat(7,minmax(0,1fr))}}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px 11px 12px;display:flex;flex-direction:column;gap:7px;min-width:0;transition:opacity .15s}
+.ct{font-family:var(--font-display);font-stretch:80%;font-weight:700;font-size:15.5px;line-height:1.15;color:var(--tink);margin:0;overflow-wrap:anywhere}
+.ct button{display:flex;gap:7px;align-items:flex-start;width:100%}
+.ct .ring{margin-top:.24em}
+.eg{margin:-3px 0 0;font-family:var(--font-mono);font-size:11px;line-height:1.35;color:var(--muted)}
+.plain{margin:0;font-size:13px;line-height:1.38}
+.items{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:12.5px;line-height:1.3;color:var(--muted)}
+.items li{position:relative;padding-left:14px;overflow-wrap:anywhere}
+.items li::before{content:"";position:absolute;left:3px;top:.5em;width:4px;height:4px;border-radius:50%;background:var(--line)}
+.items li.lk::before{left:0;top:.3em;width:9px;height:9px;background:transparent;border:1.5px solid var(--ink)}
+.it{color:var(--ink);border-radius:4px;padding:0 3px;margin-left:-3px;text-decoration:underline dotted var(--line);text-underline-offset:3px}
+.it:hover{background:var(--band)}
+.it.hit{background:var(--line);font-weight:700;text-decoration:none}
+.it.sel{background:var(--ink);color:var(--bg);font-weight:700;text-decoration:none}
+.foot{margin:auto 0 0;padding-top:8px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.35}
+.lab{display:block;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--tink);margin-bottom:4px}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-block;font-size:12px;line-height:1.2;padding:3px 8px;border-radius:999px;background:var(--band);border:1px solid var(--line);color:var(--ink);overflow-wrap:anywhere}
+button.chip:hover{border-color:var(--ink)}
+.recipe{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.recipe li{display:flex;flex-wrap:wrap;gap:2px 7px;align-items:baseline}
+.why{font-size:12.5px;line-height:1.3;color:var(--muted)}
+.why b{color:var(--ink)}
+
+/* books and sources */
+.reslist{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.res{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start;min-width:0;border-radius:4px}
+.rb{display:grid;gap:1px;min-width:0}
+.ck{width:16px;height:16px;margin:1px 0 0;accent-color:var(--ink);cursor:pointer}
+.res.fin .rt,.res.fin .rt a{text-decoration:line-through;text-decoration-thickness:1px;color:var(--muted)}
+.res.flash{outline:2px solid var(--ink);outline-offset:5px}
+.cnt{margin:-3px 0 0;font-family:var(--font-mono);font-size:11px;line-height:1.35;color:var(--muted)}
+.notes{border:1.5px dashed var(--ink);border-radius:10px;padding:12px 14px 14px;margin:2px 0 18px;background:var(--bg)}
+.notes h3{font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+.notes ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:10px 26px}
+.notes li{font-size:13px;line-height:1.42;color:var(--muted);min-width:0}
+.notes b{color:var(--ink)}
+.progress{display:grid;gap:6px;margin:0 0 14px;max-width:560px}
+.progress p{margin:0;font-size:13.5px}
+.sync{font-size:12.5px;color:var(--muted)}
+.bar{height:8px;border-radius:999px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:999px;background:var(--ink)}
+.steps{list-style:none;margin:0;padding:0;counter-reset:st;display:grid;gap:2px}
+.steps li{counter-increment:st}
+.steps button{display:grid;grid-template-columns:18px minmax(0,1fr);gap:6px;width:100%;font-size:12.5px;line-height:1.3;padding:3px 5px;border-radius:5px}
+.steps button::before{content:counter(st);font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right}
+.steps button:hover{background:var(--surface)}
+.steps button.on{background:var(--ink);color:var(--surface);font-weight:700}
+.steps button.on::before{color:inherit}
+.pcard .clear{margin-top:4px;align-self:flex-start}
+.pcard .tags{margin:0}
+.psearch{display:grid;gap:5px;margin-bottom:14px}
+.psearch .lab{margin:0;color:var(--muted)}
+.psearch input{font:inherit;width:100%;padding:8px 10px;border:1.5px solid var(--ink);border-radius:8px;background:var(--bg);color:var(--ink)}
+.psearch input::placeholder{color:var(--muted)}
+.pathbar{border:1.5px solid var(--ink);border-radius:10px;padding:12px;margin-bottom:16px;background:var(--bg)}
+.pathbar h2{font-size:19px}
+.pd{margin:0;font-size:14px;line-height:1.45}
+.pnav{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pnav .clear,.starts .clear,.jumps .clear{margin:0}
+.jumps{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.clear.solid{background:var(--ink);color:var(--surface)}
+.clear:disabled{opacity:.4;cursor:default}
+.clear:disabled:hover{background:none;color:inherit}
+.clear.solid:disabled:hover{background:var(--ink);color:var(--surface)}
+.rt{font-size:13px;line-height:1.3;font-weight:700;overflow-wrap:anywhere}
+.rt a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.rt a::after{content:"\00A0\2197";font-weight:400}
+.rt a:hover{text-decoration-thickness:2px}
+.rm{font-size:12.5px;line-height:1.32;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0 2px}
+.tag{font-family:var(--font-mono);font-size:10px;line-height:1.55;letter-spacing:.05em;text-transform:uppercase;padding:0 5px;border:1px solid var(--rule);border-radius:4px;color:var(--ink);background:var(--surface)}
+.tag.free{color:var(--green-ink);border-color:var(--green-line);background:var(--green-band)}
+.tag.paid{color:var(--amber-ink);border-color:var(--amber-line);background:var(--amber-band)}
+.none{margin:0;font-size:12.5px;font-style:italic;color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:end;margin:4px 0 16px}
+.fg{display:grid;gap:4px;min-width:0}
+.fg .lab{margin:0}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{font-size:12.5px;line-height:1.2;padding:5px 11px;border:1.5px solid var(--rule);border-radius:999px;background:var(--surface)}
+.seg button:hover{border-color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface);font-weight:700}
+.fcount{margin:0 0 5px;font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+.rfrom{margin:0 0 4px;font-size:12.5px;color:var(--muted)}
+.panel .reslist{gap:0}
+.panel .res{padding:8px 0;border-top:1px solid var(--rule)}
+.shelf{align-items:start}
+
+/* selection states */
+.map.has-sel .card:not(.rcard):not(.sel):not(.sel-box):not(.rel-in):not(.rel-out){opacity:.45}
+.card.sel,.card.sel-box{outline:3px solid var(--ink);outline-offset:1px}
+.card.rel-in{outline:2px solid var(--ink);outline-offset:1px}
+.card.rel-out{outline:2px dashed var(--ink);outline-offset:1px}
+.band.sel{outline:3px solid var(--ink);outline-offset:3px}
+.band.rel-in{outline:2px solid var(--ink);outline-offset:3px}
+.band.rel-out{outline:2px dashed var(--ink);outline-offset:3px}
+.ghead.sel .gtitle,.ghead.rel-in .gtitle,.ghead.rel-out .gtitle{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+
+/* wires */
+.wires{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:visible}
+.w-halo{fill:none;stroke:var(--halo);stroke-width:6;stroke-linecap:round;opacity:.85}
+.w{fill:none;stroke:var(--ink);stroke-width:2}
+.w.out{stroke-dasharray:6 5}
+.w.spine{stroke:var(--muted)}
+.ah{fill:var(--ink)}
+.ah-s{fill:var(--muted)}
+@container (max-width:639px){.wires{display:none}}
+
+/* panel */
+.panel{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:16px;min-width:0}
+.panel h2{font-family:var(--font-display);font-stretch:78%;font-weight:800;font-size:22px;line-height:1.1;margin:4px 0 8px;text-wrap:balance}
+.panel .kick{color:var(--muted)}
+.panel .d{margin:0 0 4px;font-size:14px;line-height:1.45}
+.panel h3{display:flex;gap:8px;align-items:center;font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:16px 0 0;padding-bottom:6px;color:var(--ink)}
+.panel h3 svg{flex:none}
+.rows{list-style:none;margin:0;padding:0}
+.row{display:grid;gap:4px;justify-items:start;width:100%;padding:8px 0;border-top:1px solid var(--rule)}
+.row:hover .chip{border-color:var(--ink)}
+.clear{margin-top:16px;padding:7px 12px;border:1.5px solid var(--ink);border-radius:8px;font-size:13px;font-weight:700}
+.clear:hover{background:var(--ink);color:var(--surface)}
+.starts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+@media (max-width:1119px){
+  .layout{display:block}
+  .panel{top:auto;bottom:0;margin-top:20px;max-height:44vh;border-bottom:0;border-radius:14px 14px 0 0;padding:12px 14px calc(14px + env(safe-area-inset-bottom, 0px));box-shadow:0 -8px 24px rgb(0 0 0 / .16)}
+  .panel h2{font-size:19px}
+  .panel.rest .d,.panel.rest .wide{display:none}
+}
+@media (max-width:900px){.top{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion: reduce){.card{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>AI Field Map</h1>
+      <p class="lede">A map of the fields of study inside AI: how they nest, how they connect, and which models and products they produce. Select any ringed title or item to see what it builds on, what it leads to and what to read about it. Below the map, learning paths walk it in order, and a reading list of books, courses and papers keeps track of what you have finished.</p>
+      <ul class="legend">
+        <li><svg width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Builds on.</b> Solid line: an ingredient of the selected item.</span></li>
+        <li><svg width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="6 5"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Leads to.</b> Dashed line: something the selected item makes possible.</span></li>
+        <li><svg class="grey" width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Opens up.</b> Grey line: a layer that expands one item from the layer above.</span></li>
+        <li><span class="dotring"><span class="ring" style="color:var(--ink)"></span></span><span><b>Has connections.</b> Ringed titles and items can be selected.</span></li>
+      </ul>
+      <div class="jumps"><button class="clear" data-el="paths">Learning paths</button><button class="clear" data-el="reading">Books and sources</button></div>
+    </div>
+    <figure class="nest">
+      <div class="r t-blue">
+        <div class="rh"><button data-scroll="b-ai">Artificial Intelligence</button><span>outside ML: hand-written rules, logic, search (Deep Blue)</span></div>
+        <div class="r t-amber">
+          <div class="rh"><button data-scroll="b-ml">Machine Learning</button><span>outside deep learning: decision trees, boosted trees, SVMs</span></div>
+          <div class="r t-rose">
+            <div class="rh"><button data-scroll="b-dl">Deep Learning</button><span>outside foundation models: single-task networks such as ResNet, AlphaGo</span></div>
+            <div class="r t-violet">
+              <div class="rh"><button data-scroll="b-fm">Foundation Models</button><span>not language models: CLIP, Stable Diffusion, Whisper</span></div>
+              <div class="r t-teal">
+                <div class="rh"><button data-scroll="b-llm">Large Language Models</button><span>GPT, Claude, Llama, Gemini</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Each box is a special case of the box around it. The small text names things that sit in a box but outside the next one in.</figcaption>
+    </figure>
+  </header>
+
+  <div class="layout">
+    <main class="map" id="map"></main>
+    <aside class="panel" id="panel"><div class="psearch"><label class="lab" for="q">Search the map and the reading list</label><input id="q" type="search" placeholder="transformer, Whisper, Sutton…" autocomplete="off"></div><div id="pbody" aria-live="polite"></div></aside>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- content ---------- */
+/* item = "plain text"  or  [id, text, description, shortName] */
+var BANDS=[
+{id:'ai',tone:'blue',title:'Artificial Intelligence (AI)',kicker:'The whole field',
+ sub:'Goal: build systems that perceive, reason, learn, communicate and act to achieve goals. These are the seven abilities such a system needs.',
+ groups:[{cols:7,cards:[
+  {id:'cap-reason',t:'Reasoning & Problem Solving',s:'Reasoning',p:'Working out an answer step by step, like finding the best route on a map.',studied:1,items:['Search','Planning','Knowledge representation','Logic & inference','Decision making']},
+  {id:'cap-learn',t:'Learning from Data',p:'Getting better from examples instead of being handed rules.',studied:1,items:['Machine learning','Deep learning','Representation learning','Unsupervised learning','Self-supervised learning']},
+  {id:'cap-percept',t:'Perception',p:'Turning pixels and sound waves into things it can recognise.',studied:1,items:['Computer vision','Speech / audio','Sensory processing','Multimodal understanding']},
+  {id:'cap-lang',t:'Language & Communication',s:'Language',p:'Understanding what people say and answering in words.',studied:1,items:['Natural language processing','Speech recognition','Speech synthesis','Dialogue systems']},
+  {id:'cap-act',t:'Action & Interaction',s:'Action',p:'Doing things in the world: moving, clicking, working alongside people.',studied:1,items:['Robotics','Control','Embodied AI','Human-AI interaction','Autonomous agents']},
+  {id:'cap-memory',t:'Knowledge & Memory',p:'Storing facts and finding the right one when it is needed.',studied:1,items:['Knowledge graphs','World models','Memory systems','Retrieval and search']},
+  {id:'cap-safe',t:'Responsible & Safe AI',p:'Making sure the system does what people intend and harms no one.',studied:1,items:['Alignment','Fairness','Safety and security','Privacy','Governance and ethics']}
+ ]}]},
+
+{id:'sub',tone:'green',title:'Subfields of AI',kicker:'Each ability above is studied by one or more of these',
+ sub:'The major areas of study and research. Each has its own community, methods and typical outputs.',
+ groups:[{cols:10,cards:[
+  {id:'sf-symbolic',t:'Symbolic AI',p:'Intelligence written by hand as rules and logic. The main approach before machine learning took over.',items:['Logic','Knowledge representation','Rule-based systems','Expert systems','Automated reasoning','Classical planning'],out:'Expert systems, Prolog, knowledge graphs'},
+  {id:'sf-search',t:'Search, Planning & Optimization',s:'Search & Planning',p:'Finding a good sequence of moves among a huge number of options.',items:['Search algorithms','Planning (classical and modern)','Reinforcement','Constrained optimization'],out:'A* route finding, Deep Blue, the look-ahead in AlphaGo'},
+  {id:'sf-nlp',t:'Natural Language Processing (NLP)',s:'NLP',p:'Teaching computers to read, write and converse in human language.',items:['Text understanding','Text generation','Dialogue systems','Language agents'],out:'BERT, GPT, machine translation'},
+  {id:'sf-cv',t:'Computer Vision',p:'Teaching computers to make sense of images and video.',items:['Image / video understanding','2D / 3D perception','Scene understanding'],out:'ResNet, YOLO, SAM, face unlock'},
+  {id:'sf-speech',t:'Speech & Audio',p:'Turning sound into text and meaning, and text back into a voice.',items:['Speech recognition','Audio understanding','Spoken dialogue'],out:'Whisper, voice assistants, live captions'},
+  {id:'sf-ml',t:'Machine Learning',p:'Programs that find patterns in data instead of following hand-written rules.',items:['Learn patterns from data','Statistical inference','Optimization'],out:'Spam filters, recommendation feeds, credit scoring'},
+  {id:'sf-dl',t:'Deep Learning',p:'Machine learning with many-layered neural networks that work out their own features.',items:['Neural networks','Representation learning','End-to-end learning'],out:'AlexNet, ResNet, and nearly every model in the last layer'},
+  {id:'sf-robotics',t:'Robotics & Embodied AI',s:'Robotics',p:'AI with a body: sensing, deciding and moving in the physical world.',items:['Perception','Control','Planning','Sim-to-real','Embodied agents'],out:'Warehouse robots, robot arms, self-driving cars'},
+  {id:'sf-multi',t:'Multi-Agent Systems',p:'Many AIs acting at once, cooperating or competing.',items:['Agent architectures','Multi-agent coordination','Collective intelligence','Game theory'],out:'AlphaStar, poker bots, teams of LLM agents'},
+  {id:'sf-safety',t:'AI Safety, Ethics & Governance',s:'AI Safety',p:'Keeping AI systems reliable, fair and under human control.',items:['Alignment','Fairness & bias','Robustness','Privacy & security','Policy & regulation'],out:'Alignment training, red-teaming, model cards, the EU AI Act'}
+ ]}]},
+
+{id:'ml',tone:'amber',title:'Machine Learning (ML)',kicker:'Opens up: Machine Learning, from the subfields above',
+ sub:'The subfield of AI focused on learning from data rather than explicit programming.',
+ groups:[{cols:6,cards:[
+  {id:'ml-paradigms',t:'Learning Paradigms',p:'What kind of feedback the model learns from.',items:[
+    ['p-sup','Supervised learning','Learns from examples that come with the right answer, like photos already tagged cat or dog.'],
+    'Unsupervised learning','Semi-supervised learning',
+    ['p-ssl','Self-supervised learning','The model makes its own quiz from raw data: hide part of a sentence or image, then guess it. No human labels are needed, so it scales to the whole internet.'],
+    ['p-weak','Weakly supervised learning','Learns from labels that are rough or noisy, such as videos paired with their existing subtitles.'],
+    ['p-rl','Reinforcement learning','Learns by trial and error from a reward, like a game score.'],
+    ['p-transfer','Transfer learning','Reuses what a model learned on one task as the starting point for another.'],
+    'Meta-learning (learning to learn)']},
+  {id:'ml-problems',t:'Types of Problems',p:'The question being asked of the data.',items:[
+    ['p-class','Classification','Pick one label from a fixed set: spam or not spam, cat or dog.'],
+    'Regression','Clustering','Dimensionality reduction','Density estimation',
+    ['p-anom','Anomaly detection','Spot the item that does not look like the rest.'],
+    ['p-rank','Ranking','Put items in order so the best match comes first.'],
+    ['p-reco','Recommendation','Predict what this person will want next.']]},
+  {id:'ml-eval',t:'Evaluation & Validation',s:'Evaluation',p:'Checking that the model works on data it has never seen.',items:['Train / validation / test split','Cross-validation','Metrics (accuracy, F1…)','Generalization','Overfitting / underfitting','Bias-variance tradeoff']},
+  {id:'ml-algos',t:'Algorithms & Models',p:'The mathematical shape that holds what was learned.',items:[
+    'Linear models','Decision trees',
+    ['a-ens','Ensemble methods','Many small models voting together, such as gradient-boosted trees. Still the usual winner on spreadsheet-style data.'],
+    'Kernel methods (SVM)','Graphical models','Probabilistic models',
+    ['a-nn','Neural networks (deep learning)','Layers of simple units whose connection strengths are learned. Stack many layers and you get deep learning.','Neural networks']]},
+  {id:'ml-opt',t:'Optimization',p:'How the model’s numbers get adjusted until its errors are small.',items:[
+    ['o-loss','Loss functions','A score for how wrong the model is. Training means pushing this number down.'],
+    ['o-gd','Gradient descent','Nudge every parameter a little in the direction that lowers the loss, then repeat millions of times.'],
+    'Stochastic optimization','Regularization','Hyperparameter tuning','Scalability and efficiency']},
+  {id:'ml-sys',t:'ML Systems & Deployment',s:'ML Systems',p:'The engineering that gets a model out of the lab and keeps it working.',items:[
+    'Data pipelines','Feature engineering','Model training at scale',
+    ['s-serve','Model serving','Running the trained model for real users, fast and cheaply.'],
+    ['s-monitor','Monitoring & drift detection','Watching for the moment real-world data stops looking like the training data.','Monitoring & drift'],
+    'MLOps']}
+ ]}]},
+
+{id:'dl',tone:'rose',title:'Deep Learning (DL)',kicker:'Opens up: Neural networks, from Algorithms & Models above',
+ sub:'The subfield of ML that uses neural networks with many layers to learn hierarchical representations.',
+ groups:[{cols:5,cards:[
+  {id:'dl-core',t:'Core Concepts',p:'The handful of ideas every deep network shares.',items:[
+    'Neural networks',
+    ['c-backprop','Backpropagation','Works out how much each connection contributed to the error, so gradient descent knows what to change.'],
+    'Activation functions',
+    ['c-rep','Representation learning','The network invents its own internal description of the data. Stored as lists of numbers, those descriptions are called embeddings.'],
+    'End-to-end learning']},
+  {id:'dl-arch',t:'Model Architectures',p:'The wiring diagram of the network. Different shapes suit different data.',items:[
+    'Feedforward networks (MLP)',
+    ['arch-cnn','Convolutional networks (CNN)','Slides small pattern detectors across an image. Built for pixels.','CNNs'],
+    ['arch-rnn','Recurrent networks (RNN)','Reads a sequence one step at a time, carrying a memory forward. The standard for language before 2017.','RNNs'],
+    ['arch-tr','Transformers','Lets every word look at every other word at once, using attention. Introduced in 2017, it now sits under almost every large model.'],
+    'Graph neural networks (GNN)',
+    ['arch-ae','Autoencoders','Squeezes data into a small code and rebuilds it. The code is a compact summary.'],
+    ['arch-diff','Diffusion models','Learns to turn pure noise into an image by removing a little noise at a time.'],
+    'Others (state-space models, hybrids)']},
+  {id:'dl-train',t:'Training Techniques',p:'The methods that make very large networks trainable at all.',items:[
+    ['t-scale','Large-scale training','Billions of examples and parameters, trained for weeks on thousands of GPUs.'],
+    'Regularization (dropout…)','Normalization (batch / layer norm)','Optimizers (Adam…)','Learning-rate schedules','Distributed training','Mixed precision',
+    ['t-peft','Efficient training (PEFT)','Adapts a huge model by training only a tiny add-on, such as LoRA.','PEFT']]},
+  {id:'dl-cap',t:'Capabilities',p:'What depth buys you over classic ML.',items:[
+    'Learn complex patterns','Handle unstructured data','Scale with data and compute',
+    ['cap-fm','Enable foundation models','Once networks could absorb internet-scale data, one model could be trained once and reused for many jobs.']]},
+  {id:'dl-apps',t:'Applications',p:'Where deep networks are used today.',items:['Vision','Language','Speech','Multimodal','Time series','Scientific data','Robotics']}
+ ]}]},
+
+{id:'fm',tone:'violet',title:'Foundation Models (FMs)',kicker:'Opens up: Enable foundation models, from Capabilities above',
+ sub:'Large models trained on broad data, with general-purpose abilities that adapt to many downstream tasks.',
+ groups:[{cols:4,cards:[
+  {id:'fm-char',t:'Characteristics',p:'What makes a model a foundation model.',items:['Trained on massive data','Large number of parameters','General-purpose capabilities','Transferable to many tasks','Often trained with self-supervision']},
+  {id:'fm-obj',t:'Training Objectives',p:'The quiz the model is given during training. The quiz decides what the model ends up good at.',items:[
+    ['o-next','Next-token prediction (autoregressive)','Guess the next word, over and over. A model that is good at this can write.','Next-token prediction'],
+    ['o-mask','Masked-token prediction (masked LM)','Hide some words in a sentence and guess them using both sides. A model that is good at this understands text.','Masked-token prediction'],
+    ['o-denoise','Denoising','Repair a damaged input: noisy pixels or text with pieces removed.'],
+    ['o-contrast','Contrastive learning','Pull matching pairs together and push mismatched ones apart, such as a photo and its caption.'],
+    ['o-multi','Multimodal objectives (image-text…)','Training quizzes that tie two kinds of data together, such as an image and the sentence describing it.','Multimodal objectives']]},
+  {id:'fm-modal',t:'Modalities',p:'The kinds of data the model takes in or puts out.',items:['Text','Images','Audio','Video','Multimodal (text + image + audio)']},
+  {id:'fm-adapt',t:'Adaptation Methods',p:'How one general model is turned into something useful for a specific job.',items:[
+    ['a-prompt','Prompting (zero / few-shot)','Just ask, with or without a few examples. No retraining.','Prompting'],
+    ['a-ft','Fine-tuning','Continue training on a smaller, specialised dataset.'],
+    ['a-instr','Instruction tuning','Fine-tune on request-and-answer examples so the model follows instructions instead of only continuing text.'],
+    ['a-align','Alignment (RLHF, DPO…)','Train on human preferences so the answers are helpful and safe.','Alignment (RLHF)'],
+    ['a-rag','Retrieval augmentation (RAG)','Look up relevant documents first, then let the model answer from them.','RAG'],
+    ['a-tools','Tool use and agents','Let the model call software such as search, code or a calendar, and act over many steps.']]}
+ ]}]},
+
+{id:'fam',tone:'teal',title:'Model Families within Foundation Models',short:'Model families',kicker:'Opens up: Modalities, from the layer above',
+ sub:'Foundation models grouped by what goes in and what comes out.',
+ groups:[
+  {cols:6,cards:[
+   {id:'fam-lm',t:'Language Models (LMs)',s:'Language models',p:'Models of text.',items:['Trained primarily on text','LLMs (large language models)','Text embeddings','Instruction-tuned models']},
+   {id:'fam-vision',t:'Vision Models',p:'Models that take in or produce images.',items:['Image classification','Image generation','Vision-language models (VLMs)','Segmentation (e.g. SAM)']},
+   {id:'fam-multi',t:'Multimodal Models',p:'One model that handles several kinds of data together.',items:['Combine multiple modalities','Text + image + audio + video','Examples: GPT-4V, Gemini, Claude']},
+   {id:'fam-speech',t:'Speech Models',p:'Models that listen or speak.',items:['Automatic speech recognition (ASR)','Text-to-speech (TTS)','Speech understanding','Spoken dialogue models']},
+   {id:'fam-gen',t:'Generative Models',p:'Models that create new content instead of only labelling it.',items:['Autoregressive (e.g. GPT)','Diffusion (e.g. Stable Diffusion)','Variational autoencoders (VAE)','Flow-based models','GANs']},
+   {id:'fam-embed',t:'Embedding Models',p:'Models that turn text or images into lists of numbers, so that similar things land close together.',items:['Text embeddings (BERT, SBERT)','Image embeddings (CLIP)','Multimodal embeddings','Used for retrieval, search, RAG']}
+  ]},
+  {id:'llm',title:'Language models, opened up',kicker:'Opens up: Language Models, from the row above',
+   note:'Three ways to lay out a Transformer, plus two labels that describe size and finishing.',cols:5,cards:[
+   {id:'llm-ar',t:'Autoregressive / Causal LMs',s:'Autoregressive LMs',p:'Reads left to right and predicts the next token. Built to write.',items:['Decoder-only Transformer','Probabilistic sequence modeling','Used for text generation and coding','Examples: GPT, Llama, Claude']},
+   {id:'llm-mlm',t:'Masked Language Models',s:'Masked LMs',p:'Sees the whole sentence at once and fills in blanks. Built to understand.',items:['Encoder-only Transformer','Rich contextual representations','Used for understanding tasks','Examples: BERT, RoBERTa, ALBERT']},
+   {id:'llm-encdec',t:'Encoder-Decoder Models',s:'Encoder-decoder models',p:'One half reads the input, the other half writes the output. Built to convert.',items:['Separate encoder and decoder','Used for seq2seq tasks (translation…)','Examples: T5, BART, mBART']},
+   {id:'llm-large',t:'Large Language Models (LLMs)',s:'LLMs',p:'A language model made very large. The size is what makes it general.',items:['Very large-scale language models','General-purpose text understanding','Text generation, reasoning, agents','Examples: GPT-4, Claude, Llama, Gemini']},
+   {id:'llm-aligned',t:'Instruction-Tuned & Aligned LLMs',s:'Instruction-tuned LLMs',p:'An LLM after finishing school: it follows requests and behaves well in conversation.',items:['Fine-tuned to follow instructions','Often aligned with human preferences','Better for helpful, safe conversation','Examples: ChatGPT, Claude, Llama chat models']}
+  ]}
+ ]},
+
+{id:'out',tone:'plain',title:'What these fields produce',kicker:'Where the layers meet',
+ sub:'Every model is a recipe: an architecture, a training objective, a kind of data and a way of learning. Each card lists its ingredients, coloured by the layer they come from.',
+ groups:[
+  {id:'models',title:'Models',note:'Trained once, then reused in many places.',cols:8,first:1,cards:[
+   {id:'m-gpt',t:'GPT, Llama, Claude, Gemini',s:'GPT-style LLMs',eg:'Large language models',p:'Text in, text out. Writes, summarises, answers questions, writes code.',made:[
+     ['arch-tr','decoder-only layout'],['o-next','the training quiz'],['p-ssl','no human labels needed'],['t-scale','internet-scale text, thousands of GPUs'],['sf-nlp','the text data and the tasks'],['llm-ar','its family']]},
+   {id:'m-bert',t:'BERT, RoBERTa',s:'BERT',eg:'Encoder models',p:'Reads text and understands it. Used for search ranking, classification and text embeddings.',made:[
+     ['arch-tr','encoder-only layout'],['o-mask','the training quiz'],['p-ssl','labels come from the text itself'],['sf-nlp','the text data and the tasks'],['llm-mlm','its family']]},
+   {id:'m-t5',t:'T5, BART',eg:'Text-to-text models',p:'Turns one text into another: translate, summarise, rewrite.',made:[
+     ['arch-tr','encoder and decoder together'],['o-denoise','rebuild text that had pieces removed'],['p-ssl','labels come from the text itself'],['sf-nlp','the text data and the tasks'],['llm-encdec','its family']]},
+   {id:'m-clip',t:'CLIP',eg:'Image-text embedding model',p:'Places images and captions in one shared space, so that words can search pictures.',made:[
+     ['arch-tr','one encoder for images, one for text'],['o-contrast','match each photo to its own caption'],['p-weak','400 million image-caption pairs from the web'],['sf-cv','the images'],['sf-nlp','the captions'],['fam-embed','its family']]},
+   {id:'m-sd',t:'Stable Diffusion',eg:'Text-to-image generator',p:'Type a sentence, get a picture.',made:[
+     ['arch-diff','the generator'],['o-denoise','remove noise a step at a time'],['arch-ae','works on a compressed image to save compute'],['m-clip','CLIP’s text encoder steers the picture'],['sf-cv','the image data'],['fam-gen','its family']]},
+   {id:'m-whisper',t:'Whisper',eg:'Speech recognition model',p:'Speech in many languages, turned into text.',made:[
+     ['arch-tr','encoder and decoder together'],['p-weak','680,000 hours of audio with existing transcripts'],['sf-speech','the audio data and the task'],['fam-speech','its family']]},
+   {id:'m-resnet',t:'ResNet, YOLO',eg:'Image classifiers and detectors',p:'Says what is in a picture and where.',made:[
+     ['arch-cnn','the network shape'],['p-sup','hand-labelled photos such as ImageNet'],['p-class','the question: what is in this picture?'],['sf-cv','the image data and the task']]},
+   {id:'m-alphago',t:'AlphaGo',eg:'Game-playing system',p:'Beat world champion Lee Sedol at Go in 2016.',made:[
+     ['arch-cnn','reads the board like an image'],['p-sup','first copied expert human games'],['p-rl','then improved by playing itself'],['sf-search','tree search looks many moves ahead']]}
+  ]},
+  {id:'systems',title:'Products and systems',note:'Models combined with other parts.',cols:8,cards:[
+   {id:'prod-chat',t:'Chat assistants',eg:'ChatGPT, Claude, Gemini',p:'A conversation you can ask almost anything.',made:[
+     ['m-gpt','the base model underneath'],['a-instr','taught to follow requests'],['a-align','taught which answers people prefer'],['sf-safety','testing and guardrails'],['llm-aligned','its family'],['s-serve','runs it for millions of people']]},
+   {id:'prod-multi',t:'Multimodal assistants',eg:'GPT-4o, Gemini',p:'Show it a photo or talk to it, and it answers.',made:[
+     ['prod-chat','the language side'],['m-clip','a CLIP-style encoder lets it see'],['fam-speech','speech models let it hear and talk'],['o-multi','trained on paired images and text'],['fam-multi','its family']]},
+   {id:'prod-rag',t:'Search with answers (RAG)',s:'RAG search',eg:'Perplexity, chat with your documents',p:'Finds the relevant pages first, then writes an answer from them.',made:[
+     ['fam-embed','turns documents into searchable vectors'],['m-bert','BERT-style encoders make the embeddings'],['a-rag','the method: look up, then answer'],['prod-chat','writes the answer']]},
+   {id:'prod-agent',t:'AI agents',eg:'Coding and research agents',p:'Given a goal, it plans the steps, uses tools and checks its own work.',made:[
+     ['prod-chat','the reasoning engine'],['a-tools','lets it run software'],['sf-search','planning over many steps'],['a-rag','looks things up as it works'],['sf-multi','several agents can share a task'],['sf-safety','limits on what it may do']]},
+   {id:'prod-translate',t:'Translation apps',eg:'Google Translate, DeepL',p:'A sentence in one language becomes a sentence in another.',made:[
+     ['llm-encdec','read one language, write another'],['arch-tr','the Transformer was invented for translation'],['p-sup','millions of human-translated sentence pairs'],['sf-nlp','the field behind it']]},
+   {id:'prod-drive',t:'Self-driving cars',eg:'Waymo',p:'Sees the road, predicts what others will do, plans a path and steers.',made:[
+     ['sf-cv','sees lanes, cars and people'],['m-resnet','detectors like these find objects'],['sf-search','plans a safe path'],['sf-robotics','sensors, steering and control'],['sf-safety','must be shown to be safe']]},
+   {id:'prod-reco',t:'Recommendation feeds',eg:'YouTube, Netflix, TikTok',p:'Chooses what to show you next.',made:[
+     ['p-reco','the question: what next?'],['p-rank','puts the candidates in order'],['c-rep','people and videos as embeddings'],['p-sup','learns from clicks and watch time'],['s-serve','answers in milliseconds']]},
+   {id:'prod-fraud',t:'Spam and fraud detection',eg:'Email filters, bank card checks',p:'Flags the message or payment that looks wrong.',made:[
+     ['p-sup','past cases labelled good or bad'],['p-class','the question: fraud or not?'],['p-anom','spots unusual behaviour'],['a-ens','boosted trees, the usual choice'],['s-monitor','fraudsters keep changing tactics']]}
+  ]}
+ ]}
+];
+
+/* connections: [from, to, label, spine?]  (from feeds or enables to) */
+var LINKS=[
+ ['cap-reason','sf-symbolic','studied by'],['cap-reason','sf-search','studied by'],
+ ['cap-learn','sf-ml','studied by'],['cap-learn','sf-dl','studied by'],
+ ['cap-percept','sf-cv','studied by'],['cap-percept','sf-speech','studied by'],
+ ['cap-lang','sf-nlp','studied by'],['cap-lang','sf-speech','studied by'],
+ ['cap-act','sf-robotics','studied by'],['cap-act','sf-multi','studied by'],['cap-act','sf-search','studied by'],
+ ['cap-memory','sf-symbolic','studied by'],['cap-memory','sf-nlp','studied by'],
+ ['cap-memory','a-rag','retrieval works as the model’s memory'],['cap-memory','fam-embed','search by meaning'],
+ ['cap-safe','sf-safety','studied by'],
+
+ ['sf-symbolic','sf-search','classical search and planning started here'],
+ ['sf-ml','sf-dl','deep learning is ML with many-layered networks'],
+ ['sf-ml','b-ml','opened up in the next layer',1],
+ ['sf-dl','b-dl','opened up two layers down'],
+ ['sf-dl','sf-nlp','Transformers took over language'],
+ ['sf-dl','sf-cv','CNNs took over vision from 2012'],
+ ['sf-dl','sf-speech','neural networks replaced older speech pipelines'],
+ ['sf-dl','sf-robotics','learned perception and control'],
+ ['sf-cv','sf-robotics','gives robots eyes'],
+ ['sf-search','sf-robotics','motion and task planning'],
+ ['sf-search','sf-multi','planning against other players, game theory'],
+ ['sf-search','p-rl','reinforcement learning is planning that learns'],
+ ['sf-nlp','fam-lm','language models are its main tool today'],
+ ['sf-cv','fam-vision','its foundation models'],
+ ['sf-speech','fam-speech','its foundation models'],
+ ['sf-nlp','fam-multi','supplies the language side'],
+ ['sf-cv','fam-multi','supplies the vision side'],
+ ['sf-safety','a-align','alignment research becomes a training step'],
+ ['sf-safety','ml-eval','tests for robustness and fairness'],
+ ['a-tools','sf-multi','LLM agents working as a team'],
+
+ ['p-ssl','fm-obj','each objective is a self-made quiz'],
+ ['p-ssl','fm-char','lets training use unlabelled internet data'],
+ ['p-transfer','fm-adapt','pretrain once, adapt many times'],
+ ['p-rl','a-align','in RLHF the reward comes from human ratings'],
+ ['a-nn','b-dl','made deep, becomes the next layer',1],
+ ['o-gd','c-backprop','backpropagation supplies the gradients it follows'],
+ ['o-loss','fm-obj','each objective is a loss function'],
+
+ ['c-rep','fam-embed','learned representations are the embeddings'],
+ ['arch-rnn','arch-tr','replaced by Transformers for language'],
+ ['arch-tr','llm-ar','uses the decoder half only'],
+ ['arch-tr','llm-mlm','uses the encoder half only'],
+ ['arch-tr','llm-encdec','uses both halves'],
+ ['arch-cnn','fam-vision','classic vision backbones'],
+ ['arch-diff','fam-gen','image and video generators'],
+ ['arch-ae','fam-gen','variational autoencoders'],
+ ['t-scale','fm-char','makes massive pretraining possible'],
+ ['t-peft','a-ft','cheap fine-tuning, such as LoRA'],
+ ['cap-fm','b-fm','opened up in the next layer',1],
+
+ ['o-next','llm-ar','the objective that trains them'],
+ ['o-mask','llm-mlm','the objective that trains them'],
+ ['o-denoise','llm-encdec','trains T5 and BART'],
+ ['o-contrast','fam-embed','trains CLIP-style embeddings'],
+ ['o-multi','fam-multi','the objective that trains them'],
+ ['fm-modal','b-fam','one family per kind of data',1],
+ ['a-instr','llm-aligned','turns a base LLM into an assistant'],
+ ['a-align','llm-aligned','shapes how it behaves'],
+ ['fam-lm','b-llm','opened up in the row below',1],
+ ['llm-ar','llm-large','almost all LLMs today are this type'],
+ ['llm-large','llm-aligned','after instruction tuning'],
+ ['llm-large','m-gpt','the label these models carry']
+];
+
+/* ---------- books and sources ---------- */
+/* key: [kind, title, by, note, url, free] ; books need no link */
+var AX="https://arxiv.org/abs/";
+var LIB={
+ aima:["Book","Artificial Intelligence: A Modern Approach","Stuart Russell & Peter Norvig","The standard university textbook for the whole field.","https://aima.cs.berkeley.edu/"],
+ mitchell:["Book","Artificial Intelligence: A Guide for Thinking Humans","Melanie Mitchell","A readable overview with no maths."],
+ elements:["Course","Elements of AI","University of Helsinki & MinnaLearn","For complete beginners, no coding needed.","https://www.elementsofai.com/",1],
+ cs50ai:["Course","CS50's Introduction to Artificial Intelligence with Python","Harvard University","Search, logic, learning and language, with projects.","https://cs50.harvard.edu/ai/",1],
+ brachman:["Book","Knowledge Representation and Reasoning","Ronald Brachman & Hector Levesque","Logic, rules and ontologies in depth."],
+ lavalle:["Book","Planning Algorithms","Steven LaValle","Motion planning and decision making.","https://lavalle.pl/planning/",1],
+ sutton:["Book","Reinforcement Learning: An Introduction","Richard Sutton & Andrew Barto","The standard reinforcement learning textbook.","http://incompleteideas.net/book/the-book-2nd.html",1],
+ spinning:["Guide","Spinning Up in Deep RL","OpenAI","A practical start in deep reinforcement learning.","https://spinningup.openai.com/",1],
+ boyd:["Book","Convex Optimization","Stephen Boyd & Lieven Vandenberghe","The maths of optimization, for the theory-minded.","https://web.stanford.edu/~boyd/cvxbook/",1],
+ alphago:["Paper","Mastering the game of Go with deep neural networks and tree search","David Silver et al., 2016","The AlphaGo paper, in the journal Nature.","https://www.nature.com/articles/nature16961"],
+ islr:["Book","An Introduction to Statistical Learning","Gareth James, Daniela Witten, Trevor Hastie & Rob Tibshirani","The gentlest serious introduction to ML.","https://www.statlearning.com/",1],
+ esl:["Book","The Elements of Statistical Learning","Trevor Hastie, Robert Tibshirani & Jerome Friedman","The more mathematical follow-up. The authors offer the PDF free on their site."],
+ geron:["Book","Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow","Aurélien Géron","Learn by building, with code throughout."],
+ prml:["Book","Pattern Recognition and Machine Learning","Christopher Bishop","A classic, probability-first treatment.","https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/"],
+ murphy:["Book","Probabilistic Machine Learning: An Introduction","Kevin Murphy","A modern, comprehensive reference.","https://probml.github.io/pml-book/book1.html"],
+ mlcc:["Course","Machine Learning Crash Course","Google","Short lessons with exercises.","https://developers.google.com/machine-learning/crash-course",1],
+ sklearn:["Guide","scikit-learn User Guide","scikit-learn developers","Every classic algorithm with worked examples.","https://scikit-learn.org/stable/user_guide.html",1],
+ xgb:["Paper","XGBoost: A Scalable Tree Boosting System","Tianqi Chen & Carlos Guestrin, 2016","Boosted trees, the workhorse for spreadsheet-style data.",AX+"1603.02754"],
+ ruder:["Paper","An overview of gradient descent optimization algorithms","Sebastian Ruder, 2016","SGD, momentum and Adam explained side by side.",AX+"1609.04747"],
+ sslcook:["Paper","A Cookbook of Self-Supervised Learning","Randall Balestriero et al., 2023","A practical tour of self-supervised methods.",AX+"2304.12210"],
+ dmls:["Book","Designing Machine Learning Systems","Chip Huyen","From data pipelines to monitoring in production."],
+ rules:["Guide","Rules of Machine Learning","Martin Zinkevich, Google","Best practices for ML engineering.","https://developers.google.com/machine-learning/guides/rules-of-ml",1],
+ fsdl:["Course","The Full Stack","Full Stack Deep Learning","Building and shipping AI products end to end.","https://fullstackdeeplearning.com/",1],
+ goodfellow:["Book","Deep Learning","Ian Goodfellow, Yoshua Bengio & Aaron Courville","The reference text for the theory.","https://www.deeplearningbook.org/",1],
+ d2l:["Book","Dive into Deep Learning","Aston Zhang, Zachary Lipton, Mu Li & Alexander Smola","Every idea paired with runnable code.","https://d2l.ai/",1],
+ udl:["Book","Understanding Deep Learning","Simon Prince","Recent and clearly illustrated; covers Transformers and diffusion.","https://udlbook.github.io/udlbook/"],
+ bishopdl:["Book","Deep Learning: Foundations and Concepts","Christopher Bishop & Hugh Bishop","A 2024 textbook from first principles.","https://www.bishopbook.com/",1],
+ chollet:["Book","Deep Learning with Python","François Chollet","A practical introduction by the creator of Keras."],
+ b3b1b:["Video","Neural Networks video series","3Blue1Brown (Grant Sanderson)","Visual intuition for networks and backpropagation.","https://www.3blue1brown.com/topics/neural-networks",1],
+ karpathy:["Course","Neural Networks: Zero to Hero","Andrej Karpathy","Build backpropagation and a small GPT from scratch.","https://karpathy.ai/zero-to-hero.html",1],
+ fastai:["Course","Practical Deep Learning for Coders","fast.ai","Train real models first, theory later.","https://course.fast.ai/",1],
+ slp3:["Book","Speech and Language Processing (3rd ed. draft)","Dan Jurafsky & James Martin","The NLP textbook. Also covers speech recognition and text-to-speech.","https://web.stanford.edu/~jurafsky/slp3/",1],
+ cs224n:["Course","CS224N: Natural Language Processing with Deep Learning","Stanford University","Lecture notes and assignments online.","https://web.stanford.edu/class/cs224n/"],
+ hfllm:["Course","Hugging Face LLM Course","Hugging Face","Hands-on with Transformers and LLMs.","https://huggingface.co/learn/llm-course/chapter1/1",1],
+ tunstall:["Book","Natural Language Processing with Transformers","Lewis Tunstall, Leandro von Werra & Thomas Wolf","Applied NLP with pretrained models."],
+ szeliski:["Book","Computer Vision: Algorithms and Applications (2nd ed.)","Richard Szeliski","The broad reference for vision.","https://szeliski.org/Book/",1],
+ visionbook:["Book","Foundations of Computer Vision","Antonio Torralba, Phillip Isola & William Freeman","A 2024 textbook built around deep learning.","https://visionbook.mit.edu/",1],
+ cs231n:["Course","CS231n: Deep Learning for Computer Vision","Stanford University","The classic course on CNNs and vision.","https://cs231n.stanford.edu/"],
+ resnet:["Paper","Deep Residual Learning for Image Recognition","Kaiming He et al., 2015","The ResNet paper.",AX+"1512.03385"],
+ yolo:["Paper","You Only Look Once: Unified, Real-Time Object Detection","Joseph Redmon et al., 2015","The YOLO paper.",AX+"1506.02640"],
+ vit:["Paper","An Image is Worth 16x16 Words","Alexey Dosovitskiy et al., 2020","Transformers applied to images (ViT).",AX+"2010.11929"],
+ sam:["Paper","Segment Anything","Alexander Kirillov et al., 2023","A foundation model for cutting objects out of images.",AX+"2304.02643"],
+ hfaudio:["Course","Hugging Face Audio Course","Hugging Face","Speech recognition, audio classification, text-to-speech.","https://huggingface.co/learn/audio-course",1],
+ huang:["Book","Spoken Language Processing","Xuedong Huang, Alex Acero & Hsiao-Wuen Hon","The classic speech engineering text."],
+ whisper:["Paper","Robust Speech Recognition via Large-Scale Weak Supervision","Alec Radford et al., 2022","The Whisper paper.",AX+"2212.04356"],
+ modrob:["Book","Modern Robotics: Mechanics, Planning, and Control","Kevin Lynch & Frank Park","How robots move. Free preprint from the authors.","https://hades.mech.northwestern.edu/index.php/Modern_Robotics",1],
+ probrob:["Book","Probabilistic Robotics","Sebastian Thrun, Wolfram Burgard & Dieter Fox","Localisation, mapping and acting under uncertainty."],
+ underact:["Course","Underactuated Robotics","Russ Tedrake, MIT","Course notes on controlling walking and flying robots.","https://underactuated.mit.edu/",1],
+ shoham:["Book","Multiagent Systems: Algorithmic, Game-Theoretic, and Logical Foundations","Yoav Shoham & Kevin Leyton-Brown","The theory of many agents and game theory.","https://www.masfoundations.org/",1],
+ marl:["Book","Multi-Agent Reinforcement Learning: Foundations and Modern Approaches","Stefano Albrecht, Filippos Christianos & Lukas Schäfer","Many learning agents at once.","https://www.marl-book.com/",1],
+ wooldridge:["Book","An Introduction to MultiAgent Systems","Michael Wooldridge","A gentler first book on agents."],
+ christian:["Book","The Alignment Problem","Brian Christian","The story of AI safety research, told for general readers."],
+ human:["Book","Human Compatible","Stuart Russell","Why control of AI is hard, and one proposed fix."],
+ hendrycks:["Book","Introduction to AI Safety, Ethics, and Society","Dan Hendrycks","A structured textbook on risks and governance.","https://www.aisafetybook.com/",1],
+ fairml:["Book","Fairness and Machine Learning","Solon Barocas, Moritz Hardt & Arvind Narayanan","Bias and fairness, treated carefully.","https://fairmlbook.org/",1],
+ concrete:["Paper","Concrete Problems in AI Safety","Dario Amodei et al., 2016","Five practical safety research problems.",AX+"1606.06565"],
+ raschka:["Book","Build a Large Language Model (From Scratch)","Sebastian Raschka","Code a GPT-style model step by step."],
+ alammar:["Book","Hands-On Large Language Models","Jay Alammar & Maarten Grootendorst","Visual, practical guide to using LLMs."],
+ aie:["Book","AI Engineering","Chip Huyen","Building applications on top of foundation models."],
+ fmreport:["Paper","On the Opportunities and Risks of Foundation Models","Rishi Bommasani et al., 2021","The Stanford report that named the category.",AX+"2108.07258"],
+ attention:["Paper","Attention Is All You Need","Ashish Vaswani et al., 2017","The paper that introduced the Transformer.",AX+"1706.03762"],
+ illustrated:["Guide","The Illustrated Transformer","Jay Alammar","The Transformer explained in pictures.","https://jalammar.github.io/illustrated-transformer/",1],
+ annotated:["Guide","The Annotated Transformer","Harvard NLP","The same paper, line by line in code.","https://nlp.seas.harvard.edu/annotated-transformer/",1],
+ bert:["Paper","BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding","Jacob Devlin et al., 2018","The BERT paper.",AX+"1810.04805"],
+ gpt3:["Paper","Language Models are Few-Shot Learners","Tom Brown et al., 2020","The GPT-3 paper.",AX+"2005.14165"],
+ t5:["Paper","Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer","Colin Raffel et al., 2019","The T5 paper.",AX+"1910.10683"],
+ bart:["Paper","BART: Denoising Sequence-to-Sequence Pre-training","Mike Lewis et al., 2019","The BART paper.",AX+"1910.13461"],
+ seq2seq:["Paper","Sequence to Sequence Learning with Neural Networks","Ilya Sutskever, Oriol Vinyals & Quoc Le, 2014","Where encoder-decoder models began.",AX+"1409.3215"],
+ gnmt:["Paper","Google's Neural Machine Translation System","Yonghui Wu et al., 2016","How Google Translate moved to neural networks.",AX+"1609.08144"],
+ ddpm:["Paper","Denoising Diffusion Probabilistic Models","Jonathan Ho, Ajay Jain & Pieter Abbeel, 2020","The paper that made diffusion work.",AX+"2006.11239"],
+ ldm:["Paper","High-Resolution Image Synthesis with Latent Diffusion Models","Robin Rombach et al., 2021","The method behind Stable Diffusion.",AX+"2112.10752"],
+ wengdiff:["Guide","What are Diffusion Models?","Lilian Weng, 2021","A careful written explanation.","https://lilianweng.github.io/posts/2021-07-11-diffusion-models/",1],
+ hfdiff:["Course","Hugging Face Diffusion Models Course","Hugging Face","Theory plus hands-on notebooks.","https://huggingface.co/learn/diffusion-course",1],
+ clip:["Paper","Learning Transferable Visual Models From Natural Language Supervision","Alec Radford et al., 2021","The CLIP paper.",AX+"2103.00020"],
+ llava:["Paper","Visual Instruction Tuning","Haotian Liu et al., 2023","LLaVA: a vision encoder joined to an LLM.",AX+"2304.08485"],
+ gan:["Paper","Generative Adversarial Networks","Ian Goodfellow et al., 2014","The GAN paper.",AX+"1406.2661"],
+ vae:["Paper","Auto-Encoding Variational Bayes","Diederik Kingma & Max Welling, 2013","The variational autoencoder paper.",AX+"1312.6114"],
+ prompting:["Guide","Prompt engineering overview","Anthropic","How to write clear, effective prompts.","https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview",1],
+ instructgpt:["Paper","Training language models to follow instructions with human feedback","Long Ouyang et al., 2022","InstructGPT: instruction tuning plus RLHF.",AX+"2203.02155"],
+ cai:["Paper","Constitutional AI: Harmlessness from AI Feedback","Yuntao Bai et al., 2022","Aligning a model using written principles.",AX+"2212.08073"],
+ lora:["Paper","LoRA: Low-Rank Adaptation of Large Language Models","Edward Hu et al., 2021","Cheap fine-tuning with a small add-on.",AX+"2106.09685"],
+ rag:["Paper","Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks","Patrick Lewis et al., 2020","The paper that named RAG.",AX+"2005.11401"],
+ react:["Paper","ReAct: Synergizing Reasoning and Acting in Language Models","Shunyu Yao et al., 2022","The reason-then-act loop behind many agents.",AX+"2210.03629"],
+ agents:["Guide","Building Effective AI Agents","Anthropic, 2024","Practical patterns for agent systems.","https://www.anthropic.com/engineering/building-effective-agents",1],
+ sbert:["Paper","Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks","Nils Reimers & Iryna Gurevych, 2019","Text embeddings for search.",AX+"1908.10084"],
+ covington:["Paper","Deep Neural Networks for YouTube Recommendations","Paul Covington, Jay Adams & Emre Sargin, 2016","How a large recommendation feed is built.","https://research.google/pubs/deep-neural-networks-for-youtube-recommendations/"],
+ recsys:["Course","Recommendation Systems","Google","A short course on candidate generation and ranking.","https://developers.google.com/machine-learning/recommendation",1],
+ spam:["Guide","A Plan for Spam","Paul Graham, 2002","The essay that popularised statistical spam filters.","https://paulgraham.com/spam.html",1]
+};
+/* categories: cost (paid list, everything else is free to read) and level (papers default to Advanced, the rest to Intermediate) */
+var PAID={};'aima mitchell brachman geron dmls chollet tunstall huang probrob wooldridge christian human raschka alammar aie alphago'.split(' ').forEach(function(k){PAID[k]=1});
+var LEVEL={};
+'mitchell elements cs50ai mlcc islr geron chollet b3b1b fastai illustrated wooldridge christian human spam prompting alammar'.split(' ').forEach(function(k){LEVEL[k]='Beginner'});
+'esl prml murphy boyd goodfellow bishopdl brachman huang probrob underact shoham marl lavalle'.split(' ').forEach(function(k){LEVEL[k]='Advanced'});
+LEVEL.ruder='Intermediate';
+function cats(k){
+  var r=LIB[k], m=META[k]||['none',2], h=m[1];
+  return {kind:r[0],cost:PAID[k]?'Paid':'Free',level:LEVEL[k]||(r[0]==='Paper'?'Advanced':'Intermediate'),
+          pre:PRE[m[0]],preG:PREG[m[0]],hours:h,time:h<5?'Quick':(h<=40?'Medium':'Long')};
+}
+/* node id -> sources ; lookup falls back item -> card -> layer */
+var READS={
+ 'b-ai':['aima','mitchell','elements','cs50ai'],'b-sub':['aima','mitchell','elements','cs50ai'],
+ 'cap-reason':['aima','lavalle'],'cap-learn':['islr','goodfellow'],'cap-percept':['szeliski','slp3'],'cap-lang':['slp3','cs224n'],
+ 'cap-act':['modrob','sutton'],'cap-memory':['rag','sbert'],'cap-safe':['christian','hendrycks'],
+ 'sf-symbolic':['aima','brachman'],'sf-search':['aima','lavalle','sutton','boyd'],'sf-nlp':['slp3','tunstall','cs224n','hfllm'],
+ 'sf-cv':['szeliski','visionbook','cs231n'],'sf-speech':['slp3','huang','hfaudio','whisper'],'sf-ml':['islr','geron','mlcc','prml'],
+ 'sf-dl':['goodfellow','d2l','b3b1b','fastai'],'sf-robotics':['modrob','probrob','underact'],'sf-multi':['shoham','marl','wooldridge'],
+ 'sf-safety':['christian','human','hendrycks','fairml','concrete'],
+ 'b-ml':['islr','geron','prml','murphy','esl','mlcc'],'ml-paradigms':['islr','sutton','sslcook'],'p-rl':['sutton','spinning'],'p-ssl':['sslcook','bert'],
+ 'ml-problems':['islr','sklearn','recsys'],'ml-algos':['islr','esl','xgb','sklearn'],'ml-eval':['islr','sklearn','mlcc'],
+ 'ml-opt':['boyd','ruder','goodfellow'],'ml-sys':['dmls','rules','fsdl'],
+ 'b-dl':['goodfellow','d2l','udl','bishopdl','chollet','b3b1b','karpathy','fastai'],'dl-core':['b3b1b','karpathy','goodfellow'],
+ 'dl-arch':['d2l','udl','attention','resnet'],'arch-tr':['attention','illustrated','annotated','karpathy'],'arch-cnn':['cs231n','resnet'],
+ 'arch-diff':['ddpm','wengdiff','hfdiff'],'arch-ae':['vae','udl'],'arch-rnn':['seq2seq','d2l'],'dl-train':['goodfellow','d2l','lora'],
+ 'b-fm':['raschka','alammar','aie','fmreport','hfllm'],'fm-char':['fmreport','aie'],'fm-obj':['gpt3','bert','ddpm','clip'],
+ 'o-next':['gpt3','raschka'],'o-mask':['bert'],'o-denoise':['ddpm','bart'],'o-contrast':['clip'],'o-multi':['clip','llava'],
+ 'fm-adapt':['prompting','instructgpt','lora','rag','react','agents'],'a-prompt':['prompting','gpt3'],'a-ft':['lora'],'a-instr':['instructgpt'],
+ 'a-align':['instructgpt','cai'],'a-rag':['rag'],'a-tools':['react','agents'],
+ 'fam-lm':['slp3','raschka','cs224n'],'fam-vision':['vit','sam','cs231n'],'fam-multi':['clip','llava'],'fam-speech':['whisper','hfaudio'],
+ 'fam-gen':['ddpm','gan','vae'],'fam-embed':['sbert','clip'],'b-llm':['slp3','raschka','illustrated'],
+ 'llm-ar':['gpt3','raschka'],'llm-mlm':['bert'],'llm-encdec':['t5','bart','seq2seq'],'llm-large':['gpt3','raschka','alammar'],'llm-aligned':['instructgpt','cai'],
+ 'b-out':['attention','bert','gpt3','clip','ldm'],
+ 'm-gpt':['gpt3','attention','raschka'],'m-bert':['bert'],'m-t5':['t5','bart'],'m-clip':['clip'],'m-sd':['ldm','ddpm','hfdiff'],'m-whisper':['whisper'],
+ 'm-resnet':['resnet','yolo'],'m-alphago':['alphago','sutton'],'prod-chat':['instructgpt','cai','prompting'],'prod-multi':['llava','clip'],
+ 'prod-rag':['rag','sbert'],'prod-agent':['react','agents'],'prod-translate':['attention','seq2seq','gnmt'],'prod-drive':['probrob','modrob'],
+ 'prod-reco':['covington','recsys'],'prod-fraud':['xgb','spam','islr']
+};
+/* the reading-list layer */
+var SHELF=[
+ {title:'By field',note:'One shelf per field of study. Start with the first book on each shelf.',first:1,cards:[
+  {t:'Start here: the whole field',go:'b-ai',keys:['mitchell','aima','elements','cs50ai']},
+  {t:'Symbolic AI',go:'sf-symbolic',keys:['aima','brachman']},
+  {t:'Search, planning & reinforcement learning',go:'sf-search',keys:['sutton','lavalle','spinning','boyd','alphago']},
+  {t:'Machine learning',go:'b-ml',keys:['islr','geron','mlcc','sklearn','prml','murphy','esl','xgb','ruder','sslcook']},
+  {t:'ML in production',go:'ml-sys',keys:['dmls','rules','fsdl','recsys','covington','spam']},
+  {t:'Deep learning',go:'b-dl',keys:['goodfellow','d2l','udl','bishopdl','chollet','b3b1b','karpathy','fastai']},
+  {t:'Natural language processing',go:'sf-nlp',keys:['slp3','tunstall','cs224n','hfllm']},
+  {t:'Computer vision',go:'sf-cv',keys:['szeliski','visionbook','cs231n','resnet','yolo']},
+  {t:'Speech & audio',go:'sf-speech',keys:['slp3','huang','hfaudio','whisper']},
+  {t:'Robotics',go:'sf-robotics',keys:['modrob','probrob','underact']},
+  {t:'Multi-agent systems',go:'sf-multi',keys:['wooldridge','shoham','marl']},
+  {t:'AI safety, ethics & governance',go:'sf-safety',keys:['christian','human','hendrycks','fairml','concrete']}
+ ]},
+ {title:'Foundation models and the papers behind them',note:'Books first, then the original papers for the models in the layer above.',cards:[
+  {t:'Foundation models & LLMs',go:'b-fm',keys:['raschka','alammar','aie','fmreport','hfllm']},
+  {t:'Transformers and language models',go:'arch-tr',keys:['illustrated','attention','annotated','bert','gpt3','t5','bart','seq2seq','gnmt']},
+  {t:'Image, speech and multimodal models',go:'b-fam',keys:['wengdiff','hfdiff','ddpm','ldm','clip','vit','sam','llava','gan','vae']},
+  {t:'Turning a model into a product',go:'fm-adapt',keys:['prompting','agents','instructgpt','cai','lora','rag','react','sbert']}
+ ]}
+];
+
+/* ---------- prerequisites and time (rough estimates) ---------- */
+/* key: [what you need first, hours to finish] */
+var PRE={none:'No prerequisites',basic:'Needs school maths',code:'Needs Python',math:'Needs university maths',both:'Needs Python + maths',ml:'Needs ML basics',dl:'Needs deep learning basics'};
+var PREG={none:'None',basic:'None',code:'Code',math:'Maths',both:'Maths',ml:'ML',dl:'ML'};
+var META={
+ aima:['both',120],mitchell:['none',10],elements:['none',30],cs50ai:['code',80],brachman:['math',60],lavalle:['math',100],sutton:['both',80],spinning:['dl',20],boyd:['math',120],alphago:['dl',3],
+ islr:['basic',60],esl:['math',120],geron:['code',80],prml:['math',150],murphy:['math',150],mlcc:['code',15],sklearn:['code',20],xgb:['ml',3],ruder:['ml',2],sslcook:['dl',5],
+ dmls:['ml',25],rules:['ml',2],fsdl:['dl',30],goodfellow:['math',120],d2l:['both',100],udl:['math',80],bishopdl:['math',120],chollet:['code',40],b3b1b:['basic',3],karpathy:['code',30],fastai:['code',60],
+ slp3:['both',100],cs224n:['both',100],hfllm:['code',30],tunstall:['ml',40],szeliski:['math',120],visionbook:['math',100],cs231n:['both',100],resnet:['dl',3],yolo:['dl',2],vit:['dl',3],sam:['dl',3],
+ hfaudio:['ml',25],huang:['math',150],whisper:['dl',3],modrob:['math',100],probrob:['math',100],underact:['both',100],shoham:['math',100],marl:['ml',60],wooldridge:['none',30],
+ christian:['none',12],human:['none',10],hendrycks:['none',30],fairml:['basic',30],concrete:['ml',2],raschka:['code',40],alammar:['code',30],aie:['code',30],fmreport:['ml',10],
+ attention:['dl',3],illustrated:['ml',1],annotated:['dl',5],bert:['dl',3],gpt3:['dl',4],t5:['dl',4],bart:['dl',2],seq2seq:['dl',2],gnmt:['dl',3],
+ ddpm:['dl',4],ldm:['dl',3],wengdiff:['dl',2],hfdiff:['dl',20],clip:['dl',3],llava:['dl',2],gan:['dl',2],vae:['dl',3],
+ prompting:['none',2],instructgpt:['dl',3],cai:['dl',3],lora:['dl',2],rag:['dl',2],react:['dl',2],agents:['code',1],sbert:['dl',2],covington:['ml',2],recsys:['ml',4],spam:['none',1]
+};
+
+/* ---------- learning paths: each step is a stop on the map ---------- */
+var PATHS=[
+ {t:'From zero to understanding GPT',lv:'Beginner',d:'No background assumed. Ends with every ingredient of a large language model in place.',steps:[
+  {n:'b-ai',t:'See the whole field',say:'AI is a goal, and machine learning is only one way to reach it. Get the map in your head first.',src:['mitchell']},
+  {n:'sf-ml',t:'Learning from data',say:'Instead of writing rules, show the program examples and let it find the pattern.',src:['mlcc']},
+  {n:'o-gd',t:'How training works',say:'Training means pushing one number, the loss, down. Gradient descent nudges every parameter a little, millions of times.',src:['b3b1b']},
+  {n:'a-nn',t:'Neural networks',say:'Stack layers of simple units and the same training recipe still works. Made deep, this becomes deep learning.',src:['karpathy']},
+  {n:'p-ssl',t:'Self-supervision',say:'Hide part of the text and ask the model to guess it. Now the whole internet is training data, with no labelling.',src:['hfllm']},
+  {n:'arch-tr',t:'The Transformer',say:'Attention lets every word look at every other word. This is the architecture inside GPT.',src:['illustrated']},
+  {n:'o-next',t:'Next-token prediction',say:'The only quiz GPT is ever given is to guess the next word.',src:['karpathy']},
+  {n:'m-gpt',t:'GPT, assembled',say:'Transformer plus next-token prediction plus internet-scale text. Watch the ingredient lines meet on this card.',src:['raschka']},
+  {n:'prod-chat',t:'From GPT to a chat assistant',say:'Instruction tuning and alignment turn a text predictor into something that answers you.',src:['prompting']}
+ ]},
+ {t:'Practical machine learning on real data',lv:'Beginner',d:'The classic route for tables of business data: predict, check, ship.',steps:[
+  {n:'sf-ml',t:'What machine learning is',say:'Programs that find patterns in data instead of following hand-written rules.',src:['islr']},
+  {n:'p-sup',t:'Supervised learning',say:'Most everyday ML is this: past examples that come with the right answer.',src:['mlcc']},
+  {n:'p-class',t:'Name the question',say:'Classification, regression, ranking. Naming the problem type picks your tools.',src:['sklearn']},
+  {n:'a-ens',t:'Boosted trees',say:'On spreadsheet-style data, ensembles of trees usually beat neural networks.',src:['xgb']},
+  {n:'ml-eval',t:'Check it honestly',say:'Always test on data the model has never seen.',src:['geron']},
+  {n:'ml-sys',t:'Ship it and watch it',say:'Most of the real work is pipelines, serving and monitoring.',src:['dmls','rules']},
+  {n:'prod-fraud',t:'A finished example',say:'Spam and fraud detectors put every step above together.',src:['spam']}
+ ]},
+ {t:'How image generators work',lv:'Intermediate',d:'From pixels to Stable Diffusion. Assumes you know what a neural network is.',steps:[
+  {n:'sf-cv',t:'Images as data',say:'A picture is a grid of numbers. Vision is finding structure in that grid.',src:['cs231n']},
+  {n:'arch-cnn',t:'Convolutional networks',say:'Small pattern detectors slid across the image.',src:['resnet']},
+  {n:'m-clip',t:'Linking words to pictures',say:'CLIP learns one shared space where a caption sits next to its image.',src:['clip']},
+  {n:'arch-ae',t:'Compress first',say:'An autoencoder shrinks the image so the generator can work on a small code.',src:['vae']},
+  {n:'arch-diff',t:'Diffusion',say:'Learn to remove noise a step at a time, then start from pure noise to draw.',src:['wengdiff','hfdiff']},
+  {n:'m-sd',t:'Stable Diffusion, assembled',say:'A denoiser working on compressed images, steered by CLIP reading your prompt.',src:['ldm']}
+ ]},
+ {t:'Building with LLMs',lv:'Intermediate',d:'For people who want to make products on top of a model: chatbots, search, agents.',steps:[
+  {n:'m-gpt',t:'What an LLM is',say:'A next-token predictor trained on internet-scale text.',src:['alammar']},
+  {n:'a-prompt',t:'Prompting',say:'The cheapest way to adapt a model is to ask well.',src:['prompting']},
+  {n:'fam-embed',t:'Embeddings',say:'Turn text into vectors so that search works by meaning, not keywords.',src:['sbert']},
+  {n:'prod-rag',t:'Retrieval-augmented generation',say:'Look up the relevant pages first, then let the model answer from them.',src:['rag']},
+  {n:'a-ft',t:'Fine-tuning',say:'When prompting is not enough, train a small add-on for your task.',src:['lora']},
+  {n:'prod-agent',t:'Agents',say:'Give the model tools and let it work over many steps.',src:['agents','react']},
+  {n:'sf-safety',t:'Keep it safe',say:'Test what the system will and will not do before people rely on it.',src:['hendrycks']}
+ ]},
+ {t:'AI that plays and moves',lv:'Advanced',d:'Planning, reinforcement learning and robots. The most mathematical path.',steps:[
+  {n:'sf-search',t:'Search and planning',say:'Look ahead through possible moves and pick the best line.',src:['aima']},
+  {n:'p-rl',t:'Reinforcement learning',say:'Learn from reward by trial and error.',src:['sutton','spinning']},
+  {n:'m-alphago',t:'AlphaGo',say:'A network supplies intuition, tree search supplies look-ahead, and self-play supplies the training data.',src:['alphago']},
+  {n:'sf-robotics',t:'Into the physical world',say:'Real sensors are noisy and real motors are imprecise.',src:['modrob']},
+  {n:'prod-drive',t:'Self-driving cars',say:'Perception, prediction, planning and control in one system.',src:['probrob']}
+ ]}
+];
+function pathKeys(p){var seen={},out=[];p.steps.forEach(function(s){s.src.forEach(function(k){if(!seen[k]){seen[k]=1;out.push(k)}})});return out}
+
+/* ---------- registry ---------- */
+var N={}, EDGES=[], ord=0, cur=null, ins=[], outs=[], PLAIN=[];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function reg(id,o){o.id=id;o.ord=ord++;N[id]=o}
+
+BANDS.forEach(function(b){
+  reg('b-'+b.id,{kind:'band',name:b.title,short:b.short||b.title,d:b.sub,tone:b.tone,bid:'b-'+b.id,where:'Layer'});
+  b.groups.forEach(function(g){
+    if(g.id==='llm') reg('b-llm',{kind:'group',name:g.title,short:'LLM types',d:g.note,tone:b.tone,bid:'b-'+b.id,where:b.title});
+    g.cards.forEach(function(c){
+      reg(c.id,{kind:'card',name:c.t,short:c.s||c.t,d:c.p,tone:b.tone,bid:'b-'+b.id,where:b.title+(g.title?' › '+g.title:''),kids:[]});
+      (c.items||[]).forEach(function(it){
+        if(typeof it==='string'){PLAIN.push([it,c.id]);return}
+        reg(it[0],{kind:'item',name:it[1],short:it[3]||it[1],d:it[2],tone:b.tone,bid:'b-'+b.id,where:b.title+' › '+c.t,card:c.id});
+        N[c.id].kids.push(it[0]);
+      });
+      (c.made||[]).forEach(function(m){EDGES.push({f:m[0],t:c.id,l:m[1]})});
+    });
+  });
+});
+LINKS.forEach(function(l){EDGES.push({f:l[0],t:l[1],l:l[2],spine:!!l[3]})});
+EDGES=EDGES.filter(function(e){var ok=N[e.f]&&N[e.t];if(!ok&&window.console)console.warn('unknown node in link',e.f,e.t);return ok});
+
+function touches(id){return EDGES.some(function(e){return e.f===id||e.t===id})}
+function cardTouches(c){return touches(c.id)||N[c.id].kids.some(touches)}
+
+/* ---------- render the map ---------- */
+function chip(id){var n=N[id];return '<button class="chip t-'+n.tone+'" data-goto="'+id+'">'+esc(n.short)+'</button>'}
+function titleBtn(id,text){return '<button data-pick="'+id+'"><span class="ring"></span><span>'+esc(text)+'</span></button>'}
+
+function cardHTML(c){
+  var h='<article class="card" id="n-'+c.id+'">';
+  h+='<h3 class="ct">'+(cardTouches(c)?titleBtn(c.id,c.t):esc(c.t))+'</h3>';
+  if(c.eg) h+='<p class="eg">'+esc(c.eg)+'</p>';
+  h+='<p class="plain">'+esc(c.p)+'</p>';
+  if(c.items){
+    h+='<ul class="items">'+c.items.map(function(it){
+      if(typeof it==='string') return '<li>'+esc(it)+'</li>';
+      return '<li class="lk"><button class="it" id="n-'+it[0]+'" data-pick="'+it[0]+'">'+esc(it[1])+'</button></li>';
+    }).join('')+'</ul>';
+  }
+  if(c.studied){
+    var st=EDGES.filter(function(e){return e.f===c.id&&e.l==='studied by'});
+    h+='<div class="foot"><span class="lab">Studied by</span><div class="chips">'+st.map(function(e){return chip(e.t)}).join('')+'</div></div>';
+  }
+  if(c.out) h+='<p class="foot"><span class="lab">Produced</span>'+esc(c.out)+'</p>';
+  if(c.made){
+    h+='<div class="foot"><span class="lab">Made from</span><ul class="recipe">'+c.made.map(function(m){
+      return '<li>'+chip(m[0])+'<span class="why">'+esc(m[1])+'</span></li>';
+    }).join('')+'</ul></div>';
+  }
+  return h+'</article>';
+}
+function groupHTML(g){
+  var h='';
+  if(g.title){
+    var gid=g.id==='llm'?'b-llm':null;
+    h+='<div class="ghead'+(g.first?' first':'')+'"'+(gid?' id="n-'+gid+'"':'')+'>';
+    if(g.kicker) h+='<p class="kick">'+esc(g.kicker)+'</p>';
+    h+='<h3 class="gtitle">'+(gid?titleBtn(gid,g.title):esc(g.title))+'</h3>';
+    if(g.note) h+='<p class="bsub">'+esc(g.note)+'</p>';
+    h+='</div>';
+  }
+  return h+'<div class="grid g'+g.cols+'">'+g.cards.map(cardHTML).join('')+'</div>';
+}
+function bandHTML(b){
+  var bid='b-'+b.id;
+  return '<section class="band t-'+b.tone+'" id="n-'+bid+'"><header class="bhead"><p class="kick">'+esc(b.kicker)+'</p>'+
+    '<h2 class="btitle">'+(touches(bid)?titleBtn(bid,b.title):esc(b.title))+'</h2><p class="bsub">'+esc(b.sub)+'</p></header>'+
+    b.groups.map(groupHTML).join('')+'</section>';
+}
+
+var map=document.getElementById('map'), panel=document.getElementById('panel'), pbody=document.getElementById('pbody');
+function resHTML(k,ctx){
+  var r=LIB[k]; if(!r){if(window.console)console.warn('unknown source',k);return ''}
+  var title=r[4]?'<a href="'+esc(r[4])+'" target="_blank" rel="noopener">'+esc(r[1])+'</a>':esc(r[1]);
+  var c=cats(k);
+  return '<li class="res" data-key="'+k+'" data-kind="'+c.kind+'" data-cost="'+c.cost+'" data-level="'+c.level+'" data-time="'+c.time+'" data-pre="'+c.preG+'">'+
+    '<input type="checkbox" class="ck" id="ck-'+ctx+'-'+k+'" data-done="'+k+'" aria-label="Finished: '+esc(r[1])+'">'+
+    '<div class="rb"><span class="rt">'+title+'</span>'+
+    '<span class="tags"><span class="tag">'+c.kind+'</span><span class="tag '+c.cost.toLowerCase()+'">'+c.cost+'</span><span class="tag">'+c.level+'</span><span class="tag">'+esc(c.pre)+'</span><span class="tag">≈ '+c.hours+' h</span></span>'+
+    '<span class="rm">'+esc(r[2])+(r[3]?'. '+esc(r[3]):'')+'</span></div></li>';
+}
+function resList(keys,ctx){return '<ul class="reslist">'+keys.map(function(k){return resHTML(k,ctx)}).join('')+'</ul>'}
+function readsFor(id){
+  var n=N[id], from=READS[id]?id:(n.card&&READS[n.card]?n.card:(READS[n.bid]?n.bid:'b-ai'));
+  return {from:from,keys:READS[from]||[]};
+}
+var FDEF=[
+ ['status','Progress',[['','All'],['todo','To read'],['done','Finished']]],
+ ['cost','Cost',[['','All'],['Free','Free'],['Paid','Paid']]],
+ ['level','Level',[['','All'],['Beginner','Beginner'],['Intermediate','Intermediate'],['Advanced','Advanced']]],
+ ['kind','Type',[['','All'],['Book','Books'],['Course','Courses'],['Paper','Papers'],['Guide','Guides and videos']]],
+ ['time','Time to finish',[['','Any'],['Quick','Under 5 h'],['Medium','5 to 40 h'],['Long','Over 40 h']]],
+ ['pre','What you need first',[['','Anything'],['None','No background'],['Code','Python only'],['Maths','University maths'],['ML','ML background']]]
+];
+function shelfHTML(){
+  return '<section class="band t-plain" id="reading"><header class="bhead"><p class="kick">Where to learn each field</p>'+
+    '<h2 class="btitle">Books and sources</h2><p class="bsub">Every source is tagged by type, cost, level, what you need first and roughly how long it takes. Hours and prerequisites are estimates. Tick a source when you finish it. Titles with an arrow open the book’s site, the course or the paper.</p></header>'+
+    '<aside class="notes" aria-labelledby="notes-h"><h3 id="notes-h">Things to know</h3><ul>'+
+    '<li><b>Hours and prerequisites are estimates.</b> They were judged, not looked up. Use them to compare one source with another. They are too rough for planning a schedule.</li>'+
+    '<li><b>Path totals look large.</b> The hours on a learning path add up every source on it in full, whole books and courses included. You can move to the next step before finishing each one.</li>'+
+    '<li><b>Free and Paid.</b> Free means a free edition, course or paper is available online. Paid means no free edition was found. Prices were not checked.</li>'+
+    '<li><b>Levels are one opinion.</b> Try the next level up or down if a source feels too easy or too hard.</li>'+
+    '<li><b>Where your ticks are saved.</b> In this browser, and in your Claude account when the page can reach it, so they follow you to other devices. The line above the progress bar says which one is active.</li>'+
+    '<li><b>Links.</b> Most links were checked on 2 October 2026. A book without an arrow has no link, so look it up by title and author.</li>'+
+    '</ul></aside>'+
+    '<div class="progress"><p><strong id="prog"></strong> <span class="sync" id="sync">Your ticks are saved in this browser.</span></p><div class="bar" aria-hidden="true"><i id="progbar"></i></div></div>'+
+    '<div class="filters" role="group" aria-label="Filter sources">'+
+    FDEF.map(function(f){
+       return '<div class="fg"><span class="lab">'+f[1]+'</span><div class="seg">'+f[2].map(function(o){
+         return '<button id="f-'+f[0]+'-'+(o[0]||'all').toLowerCase()+'" data-f="'+f[0]+'" data-v="'+o[0]+'" aria-pressed="'+(o[0]?'false':'true')+'">'+o[1]+'</button>';
+       }).join('')+'</div></div>';
+     }).join('')+'<p class="fcount" id="fcount"></p></div>'+
+    SHELF.map(function(g,gi){
+      return '<div class="ghead'+(g.first?' first':'')+'"><h3 class="gtitle">'+esc(g.title)+'</h3><p class="bsub">'+esc(g.note)+'</p></div>'+
+        '<div class="grid g8 shelf">'+g.cards.map(function(c,ci){
+          return '<article class="card rcard t-'+N[c.go].tone+'"><h3 class="ct"><button data-goto="'+c.go+'"><span class="ring"></span><span>'+esc(c.t)+'</span></button></h3>'+
+            '<p class="cnt"></p>'+resList(c.keys,'s'+gi+'-'+ci)+'<p class="none" hidden>Nothing on this shelf matches the filters.</p></article>';
+        }).join('')+'</div>';
+    }).join('')+'</section>';
+}
+function pathsHTML(){
+  return '<section class="band t-plain" id="paths"><header class="bhead"><p class="kick">A suggested order</p>'+
+    '<h2 class="btitle">Learning paths</h2><p class="bsub">Each path walks the map in order. Start one and the side panel takes you from stop to stop, with what to read at each. The hours on each card add up every source on the path in full, so they look large. You can move to the next step before finishing each source.</p></header>'+
+    '<div class="grid g5 shelf">'+PATHS.map(function(p,i){
+      var hrs=pathKeys(p).reduce(function(a,k){return a+cats(k).hours},0);
+      return '<article class="card rcard pcard" id="path-'+i+'"><h3 class="ct">'+esc(p.t)+'</h3>'+
+        '<span class="tags"><span class="tag">'+p.lv+'</span><span class="tag">'+p.steps.length+' steps</span><span class="tag">≈ '+hrs+' h</span></span>'+
+        '<p class="plain">'+esc(p.d)+'</p>'+
+        '<ol class="steps">'+p.steps.map(function(s,j){return '<li><button data-path="'+i+'" data-step="'+j+'"><span>'+esc(s.t)+'</span></button></li>'}).join('')+'</ol>'+
+        '<p class="cnt" data-pprog="'+i+'"></p>'+
+        '<button class="clear" data-path="'+i+'" data-step="0">Start this path</button></article>';
+    }).join('')+'</div></section>';
+}
+Object.keys(READS).forEach(function(id){if(!N[id]&&window.console)console.warn('sources for unknown node',id)});
+map.innerHTML=BANDS.map(bandHTML).join('')+pathsHTML()+shelfHTML()+'<svg class="wires" id="wires" aria-hidden="true"></svg>';
+var svg=document.getElementById('wires');
+Object.keys(N).forEach(function(id){
+  var n=N[id]; n.el=document.getElementById('n-'+id);
+  n.box=n.kind==='item'?document.getElementById('n-'+n.card):n.el;
+});
+
+/* ---------- selection ---------- */
+var LINE_IN='<svg width="30" height="10" viewBox="0 0 30 10" aria-hidden="true"><line x1="1" y1="5" x2="22" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="20,0.5 30,5 20,9.5" fill="currentColor"/></svg>';
+var LINE_OUT='<svg width="30" height="10" viewBox="0 0 30 10" aria-hidden="true"><line x1="1" y1="5" x2="22" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="5 4"/><polygon points="20,0.5 30,5 20,9.5" fill="currentColor"/></svg>';
+var STARTS=['m-gpt','m-sd','arch-tr','p-ssl','prod-chat'];
+
+function rowsHTML(list,dir){
+  return list.slice().sort(function(a,b){return N[dir==='in'?a.f:a.t].ord-N[dir==='in'?b.f:b.t].ord}).map(function(e){
+    var other=N[dir==='in'?e.f:e.t], mine=N[dir==='in'?e.t:e.f];
+    var via=mine.id!==cur?'<b>'+esc(mine.short)+':</b> ':'';
+    return '<li><button class="row" data-goto="'+other.id+'"><span class="chip t-'+other.tone+'">'+esc(other.short)+'</span><span class="why">'+via+esc(e.l)+'</span></button></li>';
+  }).join('');
+}
+function searchHTML(){
+  var q=QUERY.toLowerCase(), hits=[], seen={};
+  INDEX.forEach(function(e){
+    var n=e.name.toLowerCase(), a=(e.alt||'').toLowerCase(), s;
+    if(n.indexOf(q)===0) s=0; else if(n.indexOf(' '+q)>-1||n.indexOf('('+q)>-1) s=1; else if(n.indexOf(q)>-1) s=2;
+    else if(a.indexOf(q)>-1) s=3; else if((e.text||'').toLowerCase().indexOf(q)>-1) s=4; else return;
+    var key=(e.id||e.key)+'|'+(s<3?e.name:'');
+    if(seen[e.id||e.key]) return; seen[e.id||e.key]=1;
+    hits.push({e:e,s:s});
+  });
+  hits.sort(function(x,y){return x.s-y.s||x.e.ord-y.e.ord});
+  var total=hits.length; hits=hits.slice(0,14);
+  var h='<p class="kick">Search</p><h2>'+(total?total+(total===1?' match':' matches'):'No matches')+'</h2>';
+  if(!total) return h+'<p class="d">Nothing on the map or in the reading list contains “'+esc(QUERY)+'”. Try a shorter word.</p>';
+  h+='<ul class="rows">'+hits.map(function(x){
+    var e=x.e;
+    if(e.key){var r=LIB[e.key];return '<li><button class="row" data-src="'+e.key+'"><span class="chip">'+esc(r[1])+'</span><span class="why">'+r[0]+' · '+esc(r[2])+'</span></button></li>'}
+    var n=N[e.id], via=e.name!==n.name?'<b>'+esc(e.name)+'</b> in ':'';
+    return '<li><button class="row" data-goto="'+e.id+'"><span class="chip t-'+n.tone+'">'+esc(n.short)+'</span><span class="why">'+via+esc(e.name!==n.name?n.where+' › '+n.name:n.where)+'</span></button></li>';
+  }).join('')+'</ul>';
+  if(total>hits.length) h+='<p class="rfrom">Showing the first '+hits.length+'. Type more to narrow it down.</p>';
+  return h;
+}
+function pathBlockHTML(){
+  var p=PATHS[PATH], s=p.steps[STEP], last=STEP===p.steps.length-1;
+  var h='<div class="pathbar"><p class="kick">Path · '+esc(p.t)+'</p><h2>Step '+(STEP+1)+' of '+p.steps.length+': '+esc(s.t)+'</h2><p class="pd">'+esc(s.say)+'</p>';
+  if(cur!==s.n) h+='<div class="pnav"><button class="clear" data-step-nav="0">Show this step on the map</button></div>';
+  h+='<h3>Read for this step</h3>'+resList(s.src,'w');
+  h+='<div class="pnav"><button class="clear" data-step-nav="-1"'+(STEP===0?' disabled':'')+'>Back</button>'+
+     '<button class="clear solid" data-step-nav="1"'+(last?' disabled':'')+'>'+(last?'Last step':'Next step')+'</button>'+
+     '<button class="clear" data-path-exit="1">Leave path</button></div></div>';
+  return h;
+}
+function renderPanel(){
+  var inPath=PATH!==null, h='';
+  panel.classList.toggle('rest',!cur&&!QUERY&&!inPath);
+  if(QUERY){pbody.innerHTML=searchHTML();return}
+  if(inPath) h+=pathBlockHTML();
+  if(!cur){
+    if(!inPath) h+='<p class="kick">Connections</p><h2>Trace a connection</h2>'+
+      '<p class="d">Select any ringed title or item on the map. This panel lists what it builds on, what it leads to and what to read about it, and the map draws the links.</p>'+
+      '<h3>Good places to start</h3><div class="starts">'+STARTS.map(chip).join('')+'</div>'+
+      '<h3 class="wide">Prefer a guided route?</h3><p class="d wide">Learning paths walk the map in order. The reading list keeps track of what you have finished.</p>'+
+      '<div class="starts wide"><button class="clear" data-el="paths">Learning paths</button><button class="clear" data-el="reading">Books and sources</button></div>';
+  } else {
+    var n=N[cur];
+    h+='<p class="kick">'+esc(n.where)+'</p><h2>'+esc(n.name)+'</h2><p class="d">'+esc(n.d||'')+'</p>';
+    if(ins.length) h+='<h3>'+LINE_IN+'Builds on</h3><ul class="rows">'+rowsHTML(ins,'in')+'</ul>';
+    if(outs.length) h+='<h3>'+LINE_OUT+'Leads to</h3><ul class="rows">'+rowsHTML(outs,'out')+'</ul>';
+    var rd=readsFor(cur);
+    if(rd.keys.length) h+='<h3>Learn it</h3>'+(rd.from!==cur?'<p class="rfrom">Sources for '+esc(N[rd.from].short)+'</p>':'')+resList(rd.keys,'p');
+    h+='<button class="clear" data-clear="1">Clear selection</button>';
+  }
+  pbody.innerHTML=h; panel.scrollTop=0; syncChecks(pbody);
+}
+function paint(){
+  map.querySelectorAll('.sel,.sel-box,.rel-in,.rel-out,.hit').forEach(function(el){el.classList.remove('sel','sel-box','rel-in','rel-out','hit')});
+  ins=[]; outs=[];
+  map.classList.toggle('has-sel',!!cur);
+  if(cur){
+    var n=N[cur], S=[cur].concat(n.kids||[]);
+    var inS=function(id){return S.indexOf(id)>-1};
+    ins=EDGES.filter(function(e){return inS(e.t)&&!inS(e.f)});
+    outs=EDGES.filter(function(e){return inS(e.f)&&!inS(e.t)});
+    n.el.classList.add('sel');
+    if(n.kind==='item') n.box.classList.add('sel-box');
+    ins.forEach(function(e){var o=N[e.f];o.el.classList.add('hit');if(o.box!==n.box)o.box.classList.add('rel-in');if(N[e.t].kind==='item'&&e.t!==cur)N[e.t].el.classList.add('hit')});
+    outs.forEach(function(e){var o=N[e.t];o.el.classList.add('hit');if(o.box!==n.box)o.box.classList.add('rel-out');if(N[e.f].kind==='item'&&e.f!==cur)N[e.f].el.classList.add('hit')});
+  }
+  renderPanel(); markPath(); draw();
+}
+var calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function reveal(el,block){if(el&&el.scrollIntoView)el.scrollIntoView({block:block||'center',behavior:calm?'auto':'smooth'})}
+function select(id,jump){
+  if(id&&!N[id]) return;
+  if(!jump&&cur===id) id=null;
+  cur=id; paint();
+  if(id&&jump) reveal(N[id].el,N[id].kind==='band'?'start':'center');
+}
+
+/* ---------- wires ---------- */
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function draw(){
+  var W=map.clientWidth, H=map.offsetHeight, m=map.getBoundingClientRect();
+  svg.setAttribute('width',W); svg.setAttribute('height',H); svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  function R(el){var r=el.getBoundingClientRect();return{l:r.left-m.left,t:r.top-m.top,r:r.right-m.left,b:r.bottom-m.top,w:r.width,cx:r.left-m.left+r.width/2}}
+  var wires=[], seen={}, selBox=cur?N[cur].box:null;
+  function add(e,kind){
+    var a=N[e.f].box,b=N[e.t].box; if(a===b) return;
+    var k=kind+a.id+'>'+b.id; if(seen[k]) return; seen[k]=1;
+    var A=R(a),B=R(b), mode=B.t>=A.b-2?'down':(B.b<=A.t+2?'up':'side');
+    wires.push({a:a,b:b,A:A,B:B,kind:kind,mode:mode});
+  }
+  if(cur){ins.forEach(function(e){add(e,'in')});outs.forEach(function(e){add(e,'out')})}
+  else if(W>=860){EDGES.forEach(function(e){if(e.spine)add(e,'spine')})}
+
+  if(selBox){
+    var sides={};
+    wires.forEach(function(w){
+      var selIsA=w.a===selBox;
+      var side=w.mode==='side'?'b':(selIsA?(w.mode==='down'?'b':'t'):(w.mode==='down'?'t':'b'));
+      w.other=selIsA?w.B:w.A; (sides[side]=sides[side]||[]).push(w);
+    });
+    var S=R(selBox);
+    Object.keys(sides).forEach(function(k){
+      var g=sides[k].sort(function(p,q){return p.other.cx-q.other.cx});
+      g.forEach(function(w,i){w.slot=S.l+S.w*(i+1)/(g.length+1)});
+    });
+  }
+  function anchor(box,rect,other,slot){
+    if(rect.w>480) return clamp(other.cx,rect.l+24,rect.r-24);
+    if(box===selBox&&slot!=null) return slot;
+    return rect.cx;
+  }
+  var out='<defs><marker id="ah" viewBox="0 0 10 10" refX="9.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker>'+
+          '<marker id="ahs" viewBox="0 0 10 10" refX="9.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path class="ah-s" d="M0 0L10 5L0 10z"/></marker></defs>';
+  var halos='', lines='';
+  wires.forEach(function(w){
+    var ax=anchor(w.a,w.A,w.B,w.slot), bx=anchor(w.b,w.B,w.A,w.slot), d, k;
+    if(w.mode==='down'){k=clamp((w.B.t-w.A.b)*.5,18,220);d='M'+ax+' '+w.A.b+'C'+ax+' '+(w.A.b+k)+' '+bx+' '+(w.B.t-k)+' '+bx+' '+w.B.t}
+    else if(w.mode==='up'){k=clamp((w.A.t-w.B.b)*.5,18,220);d='M'+ax+' '+w.A.t+'C'+ax+' '+(w.A.t-k)+' '+bx+' '+(w.B.b+k)+' '+bx+' '+w.B.b}
+    else{d='M'+ax+' '+w.A.b+'C'+ax+' '+(w.A.b+30)+' '+bx+' '+(w.B.b+30)+' '+bx+' '+w.B.b}
+    halos+='<path class="w-halo" d="'+d+'"/>';
+    lines+='<path class="w '+w.kind+'" d="'+d+'" marker-end="url(#'+(w.kind==='spine'?'ahs':'ah')+')"/>';
+  });
+  svg.innerHTML=out+halos+lines;
+}
+var pending=0;
+function schedule(){if(pending)return;pending=requestAnimationFrame(function(){pending=0;draw()})}
+if(window.ResizeObserver) new ResizeObserver(schedule).observe(map);
+window.addEventListener('resize',schedule);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(schedule);
+
+/* ---------- reading progress ---------- */
+/* kept in this browser, and in the viewer's own private db document when the page can reach it */
+var DONE={}, TS=0, touched=false, cloud=null;
+try{var sv=JSON.parse(localStorage.getItem('aimap.done')||'null');if(sv&&sv.done){Object.keys(sv.done).forEach(function(k){if(LIB[k])DONE[k]=true});TS=+sv.ts||0}}catch(e){}
+function saveLocal(){try{localStorage.setItem('aimap.done',JSON.stringify({done:DONE,ts:TS}))}catch(e){}}
+function syncChecks(root){
+  root.querySelectorAll('input[data-done]').forEach(function(cb){
+    cb.checked=!!DONE[cb.dataset.done]; cb.closest('.res').classList.toggle('fin',cb.checked);
+  });
+}
+function refreshDone(){
+  syncChecks(document);
+  document.querySelectorAll('#reading .rcard').forEach(function(card){
+    var cbs=card.querySelectorAll('input[data-done]'), n=0; cbs.forEach(function(c){if(c.checked)n++});
+    card.querySelector('.cnt').textContent=n+' of '+cbs.length+' finished';
+  });
+  var keys=Object.keys(LIB), d=keys.filter(function(k){return DONE[k]}).length;
+  document.getElementById('prog').textContent=d+' of '+keys.length+' sources finished.';
+  document.getElementById('progbar').style.width=(keys.length?100*d/keys.length:0)+'%';
+  PATHS.forEach(function(p,i){
+    var ks=pathKeys(p), n=ks.filter(function(k){return DONE[k]}).length;
+    document.querySelector('[data-pprog="'+i+'"]').textContent=n+' of '+ks.length+' sources finished';
+  });
+  if(FIL.status) applyFilters();
+}
+function setSync(where){
+  document.getElementById('sync').textContent=where==='account'?'Your ticks are saved to your Claude account and follow you to other devices.':'Your ticks are saved in this browser.';
+}
+var pushT=0, pushing=false, again=false;
+function pushCloud(){if(!cloud)return;clearTimeout(pushT);pushT=setTimeout(doPush,700)}
+function doPush(){
+  if(!cloud) return;
+  if(pushing){again=true;return}
+  pushing=true;
+  cloud.set({done:DONE,ts:TS}).then(function(){setSync('account')},function(e){
+    setSync('local');
+    if(e&&e.code!=='unavailable'&&e.code!=='resource_exhausted') cloud=null;
+  }).then(function(){pushing=false;if(again){again=false;doPush()}});
+}
+function initCloud(){
+  if(!window.claude||typeof window.claude.use!=='function') return;
+  Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
+    var db=r[0], user=r[1]; if(!db||!user) return;
+    return user.id().then(function(uid){
+      if(!uid) return;
+      var ref=db.doc('data/users/'+uid+'/progress');
+      return ref.get().then(function(snap){
+        var d=snap.exists?(snap.data()||{}):null, remoteTs=d?+d.ts||0:0;
+        cloud=ref;
+        if(d&&d.done&&typeof d.done==='object'&&remoteTs>=TS&&!touched){
+          DONE={}; Object.keys(d.done).forEach(function(k){if(LIB[k]&&d.done[k])DONE[k]=true});
+          TS=remoteTs; saveLocal(); refreshDone(); setSync('account');
+        } else if(Object.keys(DONE).length||d){
+          doPush();
+        } else setSync('account');
+      });
+    });
+  }).catch(function(){setSync('local')});
+}
+
+/* ---------- source filters ---------- */
+var FIL={};
+FDEF.forEach(function(f){FIL[f[0]]=''});
+try{var saved=JSON.parse(localStorage.getItem('aimap.filters')||'null');if(saved)FDEF.forEach(function(f){if(typeof saved[f[0]]==='string')FIL[f[0]]=saved[f[0]]})}catch(e){}
+function applyFilters(){
+  var shelf=document.getElementById('reading'), all=shelf.querySelectorAll('.res'), shown=0;
+  all.forEach(function(li){
+    var d=li.dataset, kind=d.kind==='Video'?'Guide':d.kind, st=DONE[d.key]?'done':'todo';
+    var ok=(!FIL.cost||d.cost===FIL.cost)&&(!FIL.level||d.level===FIL.level)&&(!FIL.kind||kind===FIL.kind)&&
+           (!FIL.time||d.time===FIL.time)&&(!FIL.pre||d.pre===FIL.pre)&&(!FIL.status||st===FIL.status);
+    li.hidden=!ok; if(ok) shown++;
+  });
+  shelf.querySelectorAll('.rcard').forEach(function(c){c.querySelector('.none').hidden=!!c.querySelector('.res:not([hidden])')});
+  shelf.querySelectorAll('[data-f]').forEach(function(b){b.setAttribute('aria-pressed',FIL[b.dataset.f]===b.dataset.v?'true':'false')});
+  document.getElementById('fcount').textContent='Showing '+shown+' of '+all.length+' entries';
+}
+function saveFilters(){try{localStorage.setItem('aimap.filters',JSON.stringify(FIL))}catch(e){}}
+
+/* ---------- search and paths ---------- */
+var QUERY='', PATH=null, STEP=0, INDEX=[], qbox=document.getElementById('q');
+Object.keys(N).forEach(function(id){var n=N[id];INDEX.push({id:id,name:n.name,alt:n.short,text:n.d||'',ord:n.ord})});
+PLAIN.forEach(function(p,i){INDEX.push({id:p[1],name:p[0],alt:'',text:'',ord:1000+i})});
+Object.keys(LIB).forEach(function(k,i){var r=LIB[k];INDEX.push({key:k,name:r[1],alt:r[2],text:r[3]||'',ord:5000+i})});
+function setQuery(v){QUERY=v.trim();renderPanel()}
+function gotoSource(k){
+  FDEF.forEach(function(f){FIL[f[0]]=''}); saveFilters(); applyFilters();
+  var el=document.querySelector('#reading .res[data-key="'+k+'"]'); if(!el) return;
+  reveal(el,'center'); el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash')},2200);
+}
+function markPath(){
+  document.querySelectorAll('.steps button').forEach(function(b){
+    b.classList.toggle('on',PATH!==null&&+b.dataset.path===PATH&&+b.dataset.step===STEP);
+  });
+}
+function goStep(i,j){
+  PATH=i; STEP=Math.max(0,Math.min(PATHS[i].steps.length-1,j));
+  select(PATHS[PATH].steps[STEP].n,true);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-goto],[data-pick],[data-scroll],[data-clear],[data-el],[data-f],[data-src],[data-path],[data-step-nav],[data-path-exit]'); if(!t) return;
+  var d=t.dataset;
+  if(d.goto||d.src){var had=QUERY; if(had){qbox.value='';QUERY=''}
+    if(d.goto) select(d.goto,true); else {if(had) renderPanel(); gotoSource(d.src)}}
+  else if(d.pick) select(d.pick,false);
+  else if(d.scroll){var n=N[d.scroll]; if(n) reveal(n.el,'start')}
+  else if(d.f){FIL[d.f]=d.v;saveFilters();applyFilters()}
+  else if(d.path) goStep(+d.path,+d.step);
+  else if(d.stepNav) goStep(PATH,STEP+(+d.stepNav));
+  else if(d.pathExit){PATH=null;paint()}
+  else if(d.el) reveal(document.getElementById(d.el),'start');
+  else select(null,false);
+});
+document.addEventListener('change',function(e){
+  var cb=e.target; if(!cb.dataset||!cb.dataset.done) return;
+  if(cb.checked) DONE[cb.dataset.done]=true; else delete DONE[cb.dataset.done];
+  TS=Date.now(); touched=true; saveLocal(); refreshDone(); pushCloud();
+});
+qbox.addEventListener('input',function(){setQuery(qbox.value)});
+qbox.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){var first=pbody.querySelector('.row'); if(QUERY&&first){e.preventDefault();first.click()}}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape') return;
+  if(QUERY){qbox.value='';setQuery('')} else if(cur) select(null,false);
+});
+
+applyFilters();
+refreshDone();
+paint();
+initCloud();
+})();
+</script>
+
+</body></html>
