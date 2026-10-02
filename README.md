@@ -2,7 +2,9 @@
 
 An interactive wall chart of the field of artificial intelligence, in a single HTML file. It shows how the fields of study nest inside each other, how they connect, and which models and products come out of them. It also includes guided learning paths and a reading list where you can track your progress.
 
-Open `AI Field Map.html` in any modern browser. There is no build step, no server and no install.
+**Live site:** https://zulfanahmadi12.github.io/AI-Study-Path/
+
+Or open `index.html` locally in any modern browser. There is no build step, no server and no install.
 
 ## What's on the map
 
