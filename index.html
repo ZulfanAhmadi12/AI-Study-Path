@@ -1035,7 +1035,7 @@ var GLOSS=[
  ['Bias-variance tradeoff','','The balance between a model that is too simple to capture the pattern (high bias) and one so flexible it memorises noise (high variance).','ml-eval'],
  ['Chain of thought','reasoning steps, chain-of-thought prompting','Having a model write out its intermediate reasoning before the final answer. It often improves results on maths and logic problems.','a-prompt'],
  ['Classification','','A problem where the answer is one of a fixed set of labels: spam or not spam, cat or dog.','p-class'],
- ['Clustering','','Grouping examples that are similar to each other, without being told what the groups should be.','ml-problems'],
+ ['Clustering','k-means, cluster analysis','Grouping examples that are similar to each other, without being told what the groups should be. K-means is the classic method: it picks k group centres and moves them until each sits in the middle of its group.','ml-problems'],
  ['Computer vision','CV','The field that teaches computers to make sense of images and video.','sf-cv'],
  ['Constitutional AI','CAI','An alignment method from Anthropic in which a model critiques and revises its own answers against a written list of principles.','a-align'],
  ['Context window','context length','The most text, counted in tokens, that a language model can read at once. Anything beyond it is not seen.','llm-large'],
@@ -1869,11 +1869,19 @@ document.addEventListener('change',function(e){
 });
 qbox.addEventListener('input',function(){setQuery(qbox.value)});
 var gq=document.getElementById('gq'), gcount=document.getElementById('gcount'), gnone=document.getElementById('gnone');
+// Match at the start of a word, ignoring hyphens and spaces ("fine tuning", "finetuning"
+// and "fine-tuning" all match) and a trailing plural "s" ("LLMs" finds "LLM").
+function glossMatcher(v){
+  var q=nrm(v).replace(/[!-\/:-@\[-`{-~]/g,''); if(!q) return null;
+  var qs=[q]; if(q.length>3&&/s$/.test(q)) qs.push(q.slice(0,-1));
+  var re=new RegExp('(^|[^a-z0-9])('+qs.map(function(x){return x.split('').map(function(c){return c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}).join('[-\\s]?')}).join('|')+')','i');
+  return function(s){return re.test(s)};
+}
 function filterGloss(v){
-  var q=v.trim().toLowerCase(), shown=0;
+  var q=v.trim(), m=glossMatcher(q), shown=0;
   document.querySelectorAll('#glossary .gletter').forEach(function(sec){
     var any=0;
-    sec.querySelectorAll('.gent').forEach(function(el){var g=GLOSS_BY[el.id], ok=!q||(g.t+' '+g.a+' '+g.d).toLowerCase().indexOf(q)>-1; el.hidden=!ok; if(ok){any++;shown++}});
+    sec.querySelectorAll('.gent').forEach(function(el){var g=GLOSS_BY[el.id], ok=!m||m(g.t+' '+g.a+' '+g.d); el.hidden=!ok; if(ok){any++;shown++}});
     sec.hidden=!any;
     var b=document.querySelector('[data-gl-letter="'+sec.id.slice(3)+'"]'); if(b) b.disabled=!any;
   });
