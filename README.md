@@ -30,11 +30,12 @@ AI is a big field that moves fast, and it's hard to know where to start. The pag
 - **Where should I start?** asks what you want to do and what you already know, then suggests one learning path and a second one to follow it.
 - **Pace labels** on each layer mark it *Stable*, *Slow-changing* or *Fast-moving*, so you can tell the slow-changing foundations from the news.
 - **Keeping up** gives a few ways to follow new work without chasing every headline, with a short list of sources.
+- **Where is this?** is for when you're reading something and get lost. Paste a paragraph, and the page finds every term it knows, groups them by layer, and tells you which part of AI the text is mostly about. Each term links to its place on the map.
 - **Inline definitions:** jargon words on the map cards have a dotted underline. Tap one for a short definition, with links to the map and the glossary.
 
 ## How to use it
 
-- **Select any ringed title or item** to see it in the side panel: a description, what it **builds on**, what it **leads to**, and what to read about it.
+- **Select any ringed title or item** to see it in the side panel: a description, what it **builds on**, what it **leads to**, a **learning trail** of what sits further back (the fundamentals behind its ingredients), and what to read about it.
 - **Wires** are drawn over the chart for the selected item:
   - *Solid line*: builds on (an ingredient of the selected item)
   - *Dashed line*: leads to (something it makes possible)
@@ -72,11 +73,12 @@ You can filter by any of these and **tick sources off** as you finish them. A pr
 
 ### Glossary
 
-About 134 AI terms in plain language, from *accuracy* to *zero-shot*. Each entry gives a short definition, other names the term goes by, and a link to its place on the map.
+About 174 AI terms in plain language, including newer agent and LLM vocabulary such as *agent harness*, *context engineering*, *KV cache* and *mixture of experts*, from *accuracy* to *zero-shot*. Each entry gives a short definition, other names the term goes by, and a link to its place on the map.
 
 - **Filter** the list by typing, or **jump to a letter**.
 - The **side panel search** finds glossary terms too.
 - **Selecting a map item** lists its glossary terms in the side panel.
+- A search with no match suggests the closest topics instead of stopping at "No matches".
 
 ## Saving progress
 
