@@ -394,6 +394,9 @@ button.chip:hover{border-color:var(--line,var(--primary))}
 .row{display:grid;gap:4px;justify-items:start;width:100%;padding:10px 8px;border-top:1px solid var(--border);border-radius:0;transition:background var(--fast) var(--ease)}
 .row:hover{background:var(--brand-subtle)}
 .row:hover .chip{border-color:var(--line,var(--primary))}
+/* the panel's collapse bar only shows on narrow screens, where the panel is a bottom sheet */
+.phandle{display:none}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 /* buttons: .clear is secondary, .clear.solid is primary */
 .clear{display:inline-flex;align-items:center;justify-content:center;margin-top:16px;min-height:40px;padding:0 16px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface);color:var(--text);font-size:14px;font-weight:600;transition:background var(--fast) var(--ease),border-color var(--fast) var(--ease)}
 .clear:hover{background:var(--brand-subtle);border-color:var(--brand-border)}
@@ -410,6 +413,12 @@ button.chip:hover{border-color:var(--line,var(--primary))}
   .panel{top:auto;bottom:0;margin-top:20px;max-height:44vh;border-bottom:0;border-radius:12px 12px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom, 0px));box-shadow:var(--elev-3)}
   .panel h2{font-size:18px}
   .panel.rest .d,.panel.rest .wide{display:none}
+  .phandle{position:sticky;top:-14px;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-14px -16px 8px;padding:14px 16px 8px;background:var(--surface);border-radius:12px 12px 0 0}
+  .panel.min .phandle{margin-bottom:0;padding-bottom:0}
+  .panel.min #pmain{display:none}
+  .ptitle{margin:0;min-width:0;font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ptoggle{flex:none;min-height:44px;padding:0 16px;border:1px solid var(--border-strong);border-radius:8px;font-size:14px;font-weight:600;text-align:center;transition:background var(--fast) var(--ease)}
+  .ptoggle:hover{background:var(--brand-subtle)}
 }
 @media (max-width:900px){.top{grid-template-columns:minmax(0,1fr)}.chooser{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:767px){
@@ -518,7 +527,7 @@ button.chip:hover{border-color:var(--line,var(--primary))}
 
   <div class="layout">
     <main class="map" id="map"></main>
-    <aside class="panel" id="panel"><div class="psearch"><label class="lab" for="q">Search the map, reading list and glossary</label><input id="q" type="search" placeholder="transformer, Whisper, Sutton…" autocomplete="off"></div><div id="pbody" aria-live="polite"></div></aside>
+    <aside class="panel" id="panel" aria-label="Search and connections"><div class="phandle"><p class="ptitle" id="ptitle">Search and trace connections</p><button class="ptoggle" id="ptoggle" type="button" aria-expanded="true" aria-controls="pmain">Hide</button></div><div id="pmain"><div class="psearch"><label class="lab" for="q">Search the map, reading list and glossary</label><input id="q" type="search" placeholder="transformer, Whisper, Sutton…" autocomplete="off"></div><div id="pbody"></div></div><p class="sr" id="pstatus" role="status"></p></aside>
   </div>
 </div>
 
@@ -1551,7 +1560,7 @@ function searchHTML(){
     hits.push({e:e,s:s});
   });
   hits.sort(function(x,y){return x.s-y.s||x.e.ord-y.e.ord});
-  var total=hits.length; hits=hits.slice(0,14);
+  var total=hits.length; HITS=total; hits=hits.slice(0,14);
   var h='<p class="kick">Search</p><h2>'+(total?total+(total===1?' match':' matches'):'No matches')+'</h2>';
   if(!total) return h+noMatchHTML(q);
   h+='<ul class="rows">'+hits.map(function(x){
@@ -1583,10 +1592,32 @@ function pathBlockHTML(){
      '<button class="clear" data-path-exit="1">Leave path</button></div>'+(last?nextHTML(PATH):'')+'</div>';
   return h;
 }
+/* panel chrome: a collapse bar on narrow screens, and one short status line for screen readers instead of reading the whole panel */
+var pmain=document.getElementById('pmain'), ptoggle=document.getElementById('ptoggle'), ptitle=document.getElementById('ptitle'),
+    pstatus=document.getElementById('pstatus'), PMIN=false, lastCtx=null, statusT=0, HITS=0;
+function setMin(v){PMIN=v; panel.classList.toggle('min',v); ptoggle.setAttribute('aria-expanded',String(!v)); ptoggle.textContent=v?'Show':'Hide'}
+ptoggle.addEventListener('click',function(){setMin(!PMIN)});
+function announce(msg){clearTimeout(statusT); statusT=setTimeout(function(){pstatus.textContent=msg},QUERY?600:50)}
 function renderPanel(){
-  var inPath=PATH!==null, h='';
-  panel.classList.toggle('rest',!cur&&!QUERY&&!inPath);
-  if(QUERY){pbody.innerHTML=searchHTML();return}
+  var inPath=PATH!==null, rest=!cur&&!QUERY&&!inPath, h='';
+  /* the panel is rebuilt below; remember whether focus was inside it so it isn't dropped on the page */
+  var had=pbody.contains(document.activeElement)?document.activeElement:null;
+  var again=had&&had.dataset.stepNav?'[data-step-nav="'+had.dataset.stepNav+'"]':null;
+  panel.classList.toggle('rest',rest);
+  var ctx=rest?'rest':QUERY?'q':cur+'|'+PATH+'|'+STEP;
+  if(ctx!==lastCtx){
+    if(ctx!=='q'||lastCtx!=='q') setMin(rest);
+    var s=inPath?PATHS[PATH].steps[STEP]:null;
+    ptitle.textContent=QUERY?'Search: '+QUERY:s?'Step '+(STEP+1)+' · '+s.t:cur?N[cur].name:'Search and trace connections';
+    if(lastCtx!==null&&ctx!=='q') announce(rest?'Selection cleared.':(s?'Step '+(STEP+1)+' of '+PATHS[PATH].steps.length+': '+s.t+'. ':'')+
+      (cur?N[cur].name+' selected. Builds on '+ins.length+', leads to '+outs.length+'.':''));
+    lastCtx=ctx;
+  }
+  if(QUERY){
+    pbody.innerHTML=searchHTML(); ptitle.textContent='Search: '+QUERY;
+    announce(HITS?HITS+(HITS===1?' match':' matches')+' for '+QUERY:'No matches for '+QUERY);
+    return;
+  }
   if(inPath) h+=pathBlockHTML();
   if(!cur){
     if(!inPath) h+='<p class="kick">Connections</p><h2>Trace a connection</h2>'+
@@ -1610,6 +1641,15 @@ function renderPanel(){
     h+='<button class="clear" data-clear="1">Clear selection</button>';
   }
   pbody.innerHTML=h; panel.scrollTop=0; syncChecks(pbody);
+  if(had){
+    /* same button if it still exists (Next step), else the panel heading, else the collapse bar */
+    var to=again&&pbody.querySelector(again);
+    if(!to||to.disabled||!pmain.getClientRects().length){
+      to=pmain.getClientRects().length?pbody.querySelector('h2'):ptoggle;
+      if(to&&to!==ptoggle) to.tabIndex=-1;
+    }
+    if(to) to.focus({preventScroll:true});
+  }
 }
 /* what sits behind a node's direct ingredients, up to four steps back */
 function trailFor(id){
@@ -1792,6 +1832,7 @@ function setQuery(v){QUERY=v.trim();renderPanel()}
 function gotoSource(k){
   FDEF.forEach(function(f){FIL[f[0]]=''}); saveFilters(); applyFilters();
   var el=document.querySelector('#reading .res[data-key="'+k+'"]'); if(!el) return;
+  el.querySelector('input').focus({preventScroll:true});
   reveal(el,'center'); el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash')},2200);
 }
 function markPath(){
@@ -1843,6 +1884,7 @@ gq.addEventListener('input',function(){filterGloss(gq.value)});
 function gotoGloss(id){
   var el=document.getElementById(id); if(!el) return;
   if(el.hidden||el.closest('[hidden]')){gq.value='';filterGloss('')}
+  el.tabIndex=-1; el.focus({preventScroll:true});
   reveal(el,'center'); el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash')},2200);
 }
 qbox.addEventListener('keydown',function(e){
