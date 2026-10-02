@@ -30,6 +30,7 @@ A nested-box diagram at the top summarises the containment: AI ⊃ ML ⊃ DL ⊃
   - *Dashed line*: leads to (something it makes possible)
   - *Grey line*: opens up (a layer that expands an item from the layer above)
 - **Search** in the side panel to find items on the map and in the reading list (e.g. `transformer`, `Whisper`, `Sutton`). Press **Enter** to jump to the first result.
+- Use the **top bar** to jump between the map, learning paths and books and sources. The current section is highlighted as you scroll.
 - Press **Escape** to clear the search, or the current selection if there is no search.
 
 ### Learning paths
@@ -65,8 +66,9 @@ You can filter by any of these and **tick sources off** as you finish them. A pr
 
 ## Under the hood
 
-- **Single self-contained file**: HTML, CSS and vanilla JavaScript, with no dependencies. The only external request is Google Fonts (Archivo, Atkinson Hyperlegible, IBM Plex Mono), and the page falls back to system fonts without it.
-- **Light and dark themes** follow your system setting.
+- **Single self-contained file**: HTML, CSS and vanilla JavaScript, with no dependencies. The only external request is Google Fonts (Inter), and the page falls back to system fonts without it.
+- **Visual design**: a calm productivity style with a blue top navigation bar, quiet neutral working surfaces, Inter type and a three-blue accent hierarchy. Each layer of the map keeps its own accent colour.
+- **Light and dark themes** follow your system setting by default. The theme button in the top bar cycles System → Light → Dark and remembers your choice (`aimap.theme`).
 - **Responsive**: wires are redrawn on resize, and the layout works down to phone width.
 - **Content lives in plain data structures** near the top of the `<script>`, so you can edit it without touching the rendering code:
 
