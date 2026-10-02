@@ -1013,66 +1013,66 @@ function pathKeys(p){var seen={},out=[];p.steps.forEach(function(s){s.src.forEac
 var GLOSS=[
  ['Accuracy','','The share of answers a model gets right. Misleading when one answer is much more common than the others; see precision and recall.','ml-eval'],
  ['Activation function','ReLU, sigmoid','A simple rule applied to the output of each unit in a neural network. It bends straight lines into curves, so stacked layers can learn complicated patterns.','dl-core'],
- ['Agent','AI agent','A system given a goal that works toward it over many steps: it plans, calls tools such as search or code, looks at the results and decides what to do next.','prod-agent'],
+ ['Agent','AI agent, autonomous agent, agentic AI, agentic system, autonomous decision-making, task-oriented agent','A system given a goal that works toward it over many steps: it plans, calls tools such as search or code, looks at the results and decides what to do next.','prod-agent'],
  ['Alignment','','Making a model do what people actually intend: helpful, honest and harmless. Done with methods such as RLHF, DPO and Constitutional AI, then checked by testing.','a-align'],
  ['Anomaly detection','outlier detection','Spotting the rare example that does not look like the rest, such as a strange card payment.','p-anom'],
  ['Artificial intelligence','AI','The broad goal of building machines that do things we call intelligent: reasoning, learning, perceiving, using language and acting. Machine learning is one way to get there.','b-ai'],
- ['Attention','self-attention','The mechanism inside a Transformer that lets every word (or image patch) look at every other one and decide which matter most for understanding it.','arch-tr'],
+ ['Attention','self-attention, attention mechanism','The mechanism inside a Transformer that lets every word (or image patch) look at every other one and decide which matter most for understanding it.','arch-tr'],
  ['Autoencoder','','A network that squeezes its input into a small code and then rebuilds the input from that code. The code becomes a compact summary of the data.','arch-ae'],
- ['Autoregressive model','causal language model','A model that writes its output one piece at a time, each new piece predicted from everything written so far. GPT and Claude work this way.','llm-ar'],
+ ['Autoregressive model','causal language model, autoregressive language model','A model that writes its output one piece at a time, each new piece predicted from everything written so far. GPT and Claude work this way.','llm-ar'],
  ['Backpropagation','backprop','The method that works out how much each weight in a network contributed to the error, so gradient descent knows which way to nudge it.','c-backprop'],
- ['Benchmark','','A shared, fixed test that lets different models be compared on the same task.','ml-eval'],
- ['Bias (fairness)','algorithmic bias','When a model treats some groups of people unfairly, usually because the data it learned from was skewed.','sf-safety'],
+ ['Benchmark','AI benchmark','A shared, fixed test that lets different models be compared on the same task.','ml-eval'],
+ ['Bias (fairness)','algorithmic bias, bias in AI, bias audit, bias auditing','When a model treats some groups of people unfairly, usually because the data it learned from was skewed.','sf-safety'],
  ['Bias-variance tradeoff','','The balance between a model that is too simple to capture the pattern (high bias) and one so flexible it memorises noise (high variance).','ml-eval'],
- ['Chain of thought','reasoning steps','Having a model write out its intermediate reasoning before the final answer. It often improves results on maths and logic problems.','a-prompt'],
+ ['Chain of thought','reasoning steps, chain-of-thought prompting','Having a model write out its intermediate reasoning before the final answer. It often improves results on maths and logic problems.','a-prompt'],
  ['Classification','','A problem where the answer is one of a fixed set of labels: spam or not spam, cat or dog.','p-class'],
  ['Clustering','','Grouping examples that are similar to each other, without being told what the groups should be.','ml-problems'],
  ['Computer vision','CV','The field that teaches computers to make sense of images and video.','sf-cv'],
  ['Constitutional AI','CAI','An alignment method from Anthropic in which a model critiques and revises its own answers against a written list of principles.','a-align'],
  ['Context window','context length','The most text, counted in tokens, that a language model can read at once. Anything beyond it is not seen.','llm-large'],
- ['Contrastive learning','','Training by telling matching pairs apart from non-matching ones, such as a photo and its own caption versus random captions. CLIP is trained this way.','o-contrast'],
+ ['Contrastive learning','contrastive learning model','Training by telling matching pairs apart from non-matching ones, such as a photo and its own caption versus random captions. CLIP is trained this way.','o-contrast'],
  ['Convolutional neural network','CNN, ConvNet','A network that slides small pattern detectors across an image. It was the standard design for vision before Transformers.','arch-cnn'],
- ['Cross-validation','','Splitting the data into several parts, training on all but one and testing on the one left out, then rotating. It gives a steadier estimate of real performance.','ml-eval'],
+ ['Cross-validation','k-fold cross-validation','Splitting the data into several parts, training on all but one and testing on the one left out, then rotating. It gives a steadier estimate of real performance.','ml-eval'],
  ['Data pipeline','','The automated steps that collect, clean and reshape data before a model trains on it or uses it.','ml-sys'],
  ['Dataset','training data','The collection of examples a model learns from or is tested on.','sf-ml'],
  ['Decision tree','','A model that answers by asking a series of yes-or-no questions about the input, like a flowchart learned from data.','ml-algos'],
- ['Decoder','','The part of a model that generates output. Decoder-only Transformers such as GPT do nothing but generate.','llm-ar'],
+ ['Decoder','transformer decoder','The part of a model that generates output. Decoder-only Transformers such as GPT do nothing but generate.','llm-ar'],
  ['Deep learning','DL','Machine learning with neural networks of many layers, which work out their own features from raw data.','b-dl'],
  ['Density estimation','','Learning how likely each possible example is, so the model knows what typical data looks like.','ml-problems'],
- ['Diffusion model','','A generator that learns to remove noise from an image step by step. To draw something new, it starts from pure noise and cleans it up. Stable Diffusion works this way.','arch-diff'],
+ ['Diffusion model','diffusion-based model, diffusion-based AI','A generator that learns to remove noise from an image step by step. To draw something new, it starts from pure noise and cleans it up. Stable Diffusion works this way.','arch-diff'],
  ['Dimensionality reduction','PCA','Squeezing data with many measurements into a few that keep most of the information, for speed or for plotting.','ml-problems'],
  ['Distributed training','','Splitting the training of one model across many chips or machines working in parallel.','t-scale'],
  ['DPO','Direct Preference Optimization','An alignment method that trains a model directly on pairs of preferred and rejected answers, without a separate reward model.','a-align'],
- ['Drift','data drift, concept drift','When real-world data slowly changes after a model ships, so its accuracy quietly drops. Monitoring catches it.','s-monitor'],
+ ['Drift','data drift, concept drift, model drift','When real-world data slowly changes after a model ships, so its accuracy quietly drops. Monitoring catches it.','s-monitor'],
  ['Dropout','','Switching off random units during training so the network cannot lean on any single one. A common way to reduce overfitting.','dl-train'],
- ['Embedding','vector','A list of numbers that stands for a word, sentence, image or user, arranged so that similar things get similar numbers.','fam-embed'],
+ ['Embedding','vector, multimodal embeddings, semantic representation','A list of numbers that stands for a word, sentence, image or user, arranged so that similar things get similar numbers.','fam-embed'],
  ['Embodied AI','','AI that has a body, such as a robot, and has to perceive and act in the physical world.','sf-robotics'],
- ['Encoder','','The part of a model that reads the input and turns it into a rich internal representation. BERT is an encoder-only Transformer.','llm-mlm'],
- ['Encoder-decoder','sequence-to-sequence, seq2seq','A model in two halves: one reads the input, the other writes the output. Suited to converting one text into another, as in translation.','llm-encdec'],
- ['Ensemble','boosted trees, random forest','Combining many models and pooling their answers. Boosted decision trees are the usual winner on spreadsheet-style data.','a-ens'],
+ ['Encoder','transformer encoder','The part of a model that reads the input and turns it into a rich internal representation. BERT is an encoder-only Transformer.','llm-mlm'],
+ ['Encoder-decoder','sequence-to-sequence, seq2seq, encoder-decoder model','A model in two halves: one reads the input, the other writes the output. Suited to converting one text into another, as in translation.','llm-encdec'],
+ ['Ensemble','boosted trees, random forest, ensemble methods, ensemble learning','Combining many models and pooling their answers. Boosted decision trees are the usual winner on spreadsheet-style data.','a-ens'],
  ['Epoch','','One full pass through the training data. Training usually runs for several.','dl-train'],
- ['Evaluation','','Checking how well a model works on data it has never seen, using held-out data and suitable metrics.','ml-eval'],
+ ['Evaluation','evaluation metrics, model evaluation metrics','Checking how well a model works on data it has never seen, using held-out data and suitable metrics.','ml-eval'],
  ['Expert system','rule-based system','A program that reasons with rules written by human experts. The main form of AI in the 1980s.','sf-symbolic'],
- ['Explainability','interpretability','Understanding why a model gave the answer it did, from simple feature importance to studying the inside of a neural network.','sf-safety'],
+ ['Explainability','interpretability, explainable AI, XAI','Understanding why a model gave the answer it did, from simple feature importance to studying the inside of a neural network.','sf-safety'],
  ['F1 score','','A single number that balances precision and recall. Useful when one class is rare.','ml-eval'],
- ['Feature','feature engineering','One measurable input to a model, such as the amount of a payment. Feature engineering is designing these inputs by hand.','ml-sys'],
+ ['Feature','feature engineering, feature extraction','One measurable input to a model, such as the amount of a payment. Feature engineering is designing these inputs by hand.','ml-sys'],
  ['Few-shot learning','few-shot prompting','Getting a model to do a task by showing it only a handful of examples, often inside the prompt itself.','a-prompt'],
  ['Fine-tuning','','Continuing to train an already-trained model on a smaller, task-specific dataset so it gets better at that task.','a-ft'],
  ['Foundation model','FM','A large model trained on broad data that can be adapted to many tasks. GPT, Claude, CLIP and Whisper are examples.','b-fm'],
  ['Game theory','','The maths of decisions when several players affect each other. It underlies multi-agent AI and game-playing systems.','sf-multi'],
  ['Generalization','','How well a model works on new data rather than the data it was trained on. The real goal of training.','ml-eval'],
  ['Generative adversarial network','GAN','Two networks trained against each other: one makes fake examples, the other tries to tell them from real ones. Both get better until the fakes look real.','fam-gen'],
- ['Generative AI','generative model','Models that create new content, such as text, images, audio or code, instead of only labelling existing content.','fam-gen'],
+ ['Generative AI','generative model, GenAI, text generation, image generation','Models that create new content, such as text, images, audio or code, instead of only labelling existing content.','fam-gen'],
  ['GPU','graphics processing unit, accelerator','A chip that does thousands of calculations at once. The standard hardware for training and running neural networks.','t-scale'],
  ['Gradient descent','SGD','The basic training method: measure the error, work out which direction lowers it, take a small step that way, and repeat millions of times.','o-gd'],
  ['Graph neural network','GNN','A network that works on data shaped like a graph, such as molecules or social networks, by passing messages between connected nodes.','dl-arch'],
  ['Hallucination','confabulation','When a language model states something false or invented with full confidence. Retrieval and careful checking reduce it.','llm-large'],
- ['Hyperparameter','','A setting chosen before training rather than learned, such as the learning rate or the number of layers.','ml-opt'],
+ ['Hyperparameter','hyperparameter tuning, hyper-parameter','A setting chosen before training rather than learned, such as the learning rate or the number of layers.','ml-opt'],
  ['Inference','','Two meanings. In machine learning: running a trained model to get an answer, as opposed to training it. In logic: deriving new facts from known ones.','s-serve'],
  ['Instruction tuning','','Fine-tuning a language model on examples of requests and good responses, so it follows instructions instead of just continuing text.','a-instr'],
  ['Knowledge graph','','Facts stored as a network of things and the relationships between them, such as “Paris — capital of — France”.','cap-memory'],
  ['Knowledge representation','ontology','Ways of writing down facts and rules so a computer can reason with them.','sf-symbolic'],
- ['Label','annotation, ground truth','The correct answer attached to a training example, often added by people.','p-sup'],
+ ['Label','annotation, ground truth, labeled data, labelled data, data labeling, data labelling','The correct answer attached to a training example, often added by people.','p-sup'],
  ['Large language model','LLM','A very large language model trained on a huge amount of text. Its size is what makes it general-purpose: it can write, summarise, answer, translate and code.','llm-large'],
  ['Latent space','','The internal space of compressed codes a model learns, where similar inputs end up near each other.','c-rep'],
  ['Learning rate','','How big a step gradient descent takes each time. Too big and training goes wild; too small and it crawls.','o-gd'],
@@ -1082,71 +1082,71 @@ var GLOSS=[
  ['Masked language model','MLM','A model trained to fill in hidden words using the whole sentence around them. BERT is the best-known example.','llm-mlm'],
  ['Meta-learning','learning to learn','Training a model across many tasks so it can pick up a new task quickly from very few examples.','ml-paradigms'],
  ['Mixed precision','','Training with lower-precision numbers where it is safe, to save memory and time.','dl-train'],
- ['MLOps','','The engineering practice of shipping models and keeping them working: pipelines, versioning, deployment and monitoring.','ml-sys'],
+ ['MLOps','ML pipeline, pipeline automation, retraining pipeline','The engineering practice of shipping models and keeping them working: pipelines, versioning, deployment and monitoring.','ml-sys'],
  ['Modality','','A kind of data, such as text, images, audio or video.','fm-modal'],
  ['Model','','The learned numbers (parameters) together with the structure that uses them to turn an input into an output.','ml-algos'],
  ['Multi-agent system','','Several AI agents acting in the same world, cooperating or competing.','sf-multi'],
- ['Multimodal model','','One model that handles several kinds of data together, such as reading an image and answering a question about it in text.','fam-multi'],
+ ['Multimodal model','multimodal AI, multi-modal model','One model that handles several kinds of data together, such as reading an image and answering a question about it in text.','fam-multi'],
  ['Natural language processing','NLP','The field that teaches computers to read, write and converse in human language.','sf-nlp'],
  ['Neural network','artificial neural network','A model made of layers of simple connected units, loosely inspired by the brain. Each connection has a weight that training adjusts.','a-nn'],
  ['Next-token prediction','','The training task behind GPT-style models: given the text so far, guess the next token. Repeated, it produces whole answers.','o-next'],
  ['Normalization','batch norm, layer norm','Rescaling the numbers inside a network to a steady range, which makes deep networks train faster and more reliably.','dl-train'],
- ['Optimizer','Adam','The algorithm that turns gradients into weight updates. Adam is the most widely used variant of gradient descent.','dl-train'],
+ ['Optimizer','Adam, optimization algorithm','The algorithm that turns gradients into weight updates. Adam is the most widely used variant of gradient descent.','dl-train'],
  ['Overfitting','','When a model memorises its training data, noise included, and then does badly on new data.','ml-eval'],
  ['Parameter','weight','One of the numbers a model learns during training. Large language models have billions of them.','fm-char'],
  ['PEFT','parameter-efficient fine-tuning','Fine-tuning that trains only a small fraction of a model’s parameters. LoRA is the most common form.','t-peft'],
- ['Planning','','Working out a sequence of actions that reaches a goal before taking any of them.','sf-search'],
- ['Precision and recall','','Precision: of the things the model flagged, how many were right. Recall: of the things it should have flagged, how many it found.','ml-eval'],
- ['Pre-training','','The first and most expensive stage of building a foundation model: training on a huge general dataset before any adaptation to specific jobs.','fm-obj'],
+ ['Planning','agent planning','Working out a sequence of actions that reaches a goal before taking any of them.','sf-search'],
+ ['Precision and recall','precision-recall curve','Precision: of the things the model flagged, how many were right. Recall: of the things it should have flagged, how many it found.','ml-eval'],
+ ['Pre-training','generative pretraining, pretraining','The first and most expensive stage of building a foundation model: training on a huge general dataset before any adaptation to specific jobs.','fm-obj'],
  ['Prompt','prompt engineering','The input text given to a language model. Prompt engineering is the craft of wording it so the model does what you want.','a-prompt'],
  ['Quantization','','Storing a model’s numbers with fewer bits so it runs faster and fits in less memory, at a small cost in accuracy.','s-serve'],
  ['Ranking','','Putting a set of candidates in order of relevance, as search engines and feeds do.','p-rank'],
- ['Recommendation','recommender system','Predicting what a person will want next, such as a video, product or song.','p-reco'],
+ ['Recommendation','recommender system, recommendation system, personalization','Predicting what a person will want next, such as a video, product or song.','p-reco'],
  ['Recurrent neural network','RNN, LSTM','A network that reads a sequence one step at a time and carries a memory forward. Largely replaced by Transformers.','arch-rnn'],
  ['Red-teaming','','Deliberately trying to make a model misbehave, so its weaknesses are found and fixed before release.','sf-safety'],
  ['Regression','','A problem where the answer is a number, such as a price or a temperature.','ml-problems'],
  ['Regularization','','Any technique that discourages a model from overfitting, such as penalising large weights or using dropout.','ml-opt'],
  ['Reasoning model','thinking model','A language model trained, usually with reinforcement learning, to work through a problem step by step before it answers. Spending more of these thinking steps tends to give better answers.','llm-large'],
- ['Reinforcement learning','RL','Learning by trial and error: an agent acts, receives rewards or penalties, and gradually learns which actions pay off.','p-rl'],
+ ['Reinforcement learning','RL, RL agent, reinforcement learning agent','Learning by trial and error: an agent acts, receives rewards or penalties, and gradually learns which actions pay off.','p-rl'],
  ['Representation learning','','Letting a model discover useful features of the data by itself instead of having people design them.','c-rep'],
  ['Retrieval-augmented generation','RAG','Looking up relevant documents first, then having a language model write its answer from them. It keeps answers current and grounded in sources.','a-rag'],
  ['Reward model','','A model trained to score answers the way people would. It supplies the reward signal in RLHF.','a-align'],
  ['RLHF','reinforcement learning from human feedback','People compare pairs of model answers, a reward model learns their preferences, and reinforcement learning then steers the language model toward better answers.','a-align'],
  ['Robotics','','Building machines that sense, decide and move in the physical world.','sf-robotics'],
- ['Scaling laws','','The observation that model quality improves predictably as parameters, data and compute grow together.','t-scale'],
+ ['Scaling laws','scaling up','The observation that model quality improves predictably as parameters, data and compute grow together.','t-scale'],
  ['Search (AI)','tree search, A*','Exploring possible moves or states to find a good path to a goal. One of the oldest ideas in AI.','sf-search'],
  ['Segmentation','','Labelling every pixel of an image with the object it belongs to, giving exact outlines rather than boxes.','fam-vision'],
- ['Self-improvement','self-training, bootstrapping','A model getting better from its own work: it makes attempts, a checker keeps the good ones, and it is trained on those. STaR and AlphaGo’s self-play both work this way.','prod-agent'],
- ['Self-supervised learning','SSL','Learning from data whose labels come from the data itself, for example by hiding a word and predicting it. No human labelling needed, so it scales to the whole internet.','p-ssl'],
- ['Semi-supervised learning','','Learning from a small set of labelled examples together with a large set of unlabelled ones.','ml-paradigms'],
- ['Serving','model serving, deployment','Running a trained model so that people or programs can send it requests and get answers quickly.','s-serve'],
- ['Sim-to-real','','Training a robot in a simulation and then transferring what it learned to the real machine.','sf-robotics'],
+ ['Self-improvement','self-training, self-improving AI, open-ended learning','A model getting better from its own work: it makes attempts, a checker keeps the good ones, and it is trained on those. STaR and AlphaGo’s self-play both work this way.','prod-agent'],
+ ['Self-supervised learning','SSL, self-supervision, self-supervised','Learning from data whose labels come from the data itself, for example by hiding a word and predicting it. No human labelling needed, so it scales to the whole internet.','p-ssl'],
+ ['Semi-supervised learning','semi-supervision','Learning from a small set of labelled examples together with a large set of unlabelled ones.','ml-paradigms'],
+ ['Serving','model serving, deployment, model deployment','Running a trained model so that people or programs can send it requests and get answers quickly.','s-serve'],
+ ['Sim-to-real','simulation-to-real transfer, simulation environment','Training a robot in a simulation and then transferring what it learned to the real machine.','sf-robotics'],
  ['Speech recognition','ASR, speech-to-text','Turning spoken audio into written text. Whisper is a well-known model for it.','sf-speech'],
- ['Supervised learning','','Learning from examples that come with the right answer attached. Most everyday machine learning works this way.','p-sup'],
+ ['Supervised learning','supervision, supervised','Learning from examples that come with the right answer attached. Most everyday machine learning works this way.','p-sup'],
  ['Support vector machine','SVM, kernel methods','A classic model that separates classes with the widest possible gap between them, and uses kernels to handle curved boundaries.','ml-algos'],
- ['Symbolic AI','GOFAI, good old-fashioned AI','AI built from hand-written rules, logic and symbols rather than learned from data.','sf-symbolic'],
+ ['Symbolic AI','GOFAI, good old-fashioned AI, traditional AI','AI built from hand-written rules, logic and symbols rather than learned from data.','sf-symbolic'],
  ['Temperature','sampling','A setting used when a model generates text. Low temperature gives safe, predictable wording; high temperature gives more varied and surprising output.','llm-ar'],
  ['Test-time compute','inference-time scaling','Extra computing spent while answering rather than while training: sampling many attempts, searching over reasoning steps, or simply thinking longer.','llm-large'],
- ['Test set','held-out data, validation set','Data kept aside during training and used only to check the model. A validation set is a second held-out set used to tune settings.','ml-eval'],
+ ['Test set','held-out data, validation set, test data, validation data, data splitting','Data kept aside during training and used only to check the model. A validation set is a second held-out set used to tune settings.','ml-eval'],
  ['Text-to-speech','TTS, speech synthesis','Turning written text into a natural-sounding voice.','fam-speech'],
  ['Token','','A small chunk of text, often a word or part of a word, that language models read and write. Costs and context limits are counted in tokens.','o-next'],
- ['Tokenizer','','The component that splits text into tokens and maps each one to a number before a model reads it.','fam-lm'],
+ ['Tokenizer','tokenization','The component that splits text into tokens and maps each one to a number before a model reads it.','fam-lm'],
  ['Tool use','function calling','Letting a model call outside software, such as search, a calculator, code or a calendar, and use the results in its answer.','a-tools'],
  ['Training','','Adjusting a model’s parameters on data until its errors become small.','o-gd'],
  ['Transfer learning','','Reusing what a model learned on one task as the starting point for another. The idea behind fine-tuning foundation models.','p-transfer'],
  ['Transformer','','The neural network architecture built on attention. It powers almost every modern language model and many image and audio models.','arch-tr'],
  ['Underfitting','','When a model is too simple to capture the pattern in the data, so it does badly even on its training data.','ml-eval'],
- ['Unsupervised learning','','Finding structure in data with no labels at all, such as groups or unusual points.','ml-paradigms'],
+ ['Unsupervised learning','unsupervised','Finding structure in data with no labels at all, such as groups or unusual points.','ml-paradigms'],
  ['Variational autoencoder','VAE','An autoencoder whose codes are arranged smoothly, so you can sample a new code and decode it into a new example.','arch-ae'],
  ['Vector database','vector store','A database that quickly finds the embeddings closest to a query. Used for search by meaning and for RAG.','a-rag'],
  ['Verifier','process reward model, PRM','A model or program that checks an answer, or each step of a solution, and scores it. Verifiers let a system pick its best attempt and learn from it.','a-align'],
  ['Vision-language model','VLM','A model that takes in images and text together, and can describe, answer questions about or reason over pictures.','fam-vision'],
  ['Vision Transformer','ViT','A Transformer applied to images by cutting each image into small patches and treating them like words.','fam-vision'],
- ['Weakly supervised learning','','Learning from labels that are noisy or indirect, such as web image captions or existing subtitles, instead of carefully hand-made ones.','p-weak'],
+ ['Weakly supervised learning','weak supervision, weakly supervised','Learning from labels that are noisy or indirect, such as web image captions or existing subtitles, instead of carefully hand-made ones.','p-weak'],
  ['World model','','A model’s internal picture of how its environment works, which it can use to predict what will happen next.','cap-memory'],
  ['Agent harness','scaffold, scaffolding, agent framework','The software around a model that turns it into an agent. It runs the loop, gives the model its tools, carries out the tool calls, feeds the results back, and manages context, memory and permissions. Claude Code is an example of a harness.','prod-agent'],
  ['Agent loop','agentic loop','The cycle an agent repeats: the model picks an action, the harness runs it, and the result goes back to the model, until the task is done or it stops.','prod-agent'],
- ['Agent memory','long-term memory','How an agent keeps information beyond one context window, such as notes files, a database, or search over its past work.','cap-memory'],
+ ['Agent memory','long-term memory, memory-augmented model, memory-augmented AI','How an agent keeps information beyond one context window, such as notes files, a database, or search over its past work.','cap-memory'],
  ['Computer use','browser agent, GUI agent','An agent that operates a computer the way a person does: it looks at screenshots, moves the mouse and types.','prod-agent'],
  ['Context engineering','','Deciding what goes into a model’s context window at each step: instructions, retrieved documents, tool results and memory. Prompt engineering for systems that run over many steps.','a-prompt'],
  ['Evals','evaluations','Tests built for one specific application, to check that a model or agent does that job well before and after each change.','ml-eval'],
@@ -1163,7 +1163,7 @@ var GLOSS=[
  ['Distillation','knowledge distillation','Training a small model to copy the outputs of a large one, so it keeps much of the skill at a fraction of the cost.','fm-adapt'],
  ['FLOPs','floating-point operations, compute','A count of the arithmetic a model does. Used to measure how much computing power training or running a model takes.','t-scale'],
  ['Gradient','','How much the loss would change for a small change in each weight, and in which direction. Gradient descent follows it downhill.','o-gd'],
- ['Grounding','','Tying a model’s answer to specific sources, such as retrieved documents, so its claims can be checked.','a-rag'],
+ ['Grounding','knowledge-grounded LLM, knowledge-enhanced LLM','Tying a model’s answer to specific sources, such as retrieved documents, so its claims can be checked.','a-rag'],
  ['Guardrails','safety filters','Checks placed around a model that block or rewrite unsafe inputs and outputs.','sf-safety'],
  ['Jailbreak','prompt injection','A jailbreak is a prompt written to trick a model into ignoring its rules. Prompt injection hides instructions inside content the model reads, such as a web page, to take over what it does.','sf-safety'],
  ['KV cache','key-value cache','Stored attention results for tokens a language model has already processed, so it doesn’t recompute them for every new token. It makes generation much faster but uses a lot of memory.','s-serve'],
@@ -1173,7 +1173,7 @@ var GLOSS=[
  ['MCP','Model Context Protocol','An open standard, introduced by Anthropic in 2024, for connecting AI models to outside tools and data through one common interface.','a-tools'],
  ['Mixture of experts','MoE','A model split into many expert sub-networks, where a router sends each token to only a few of them. The model can be very large while using only part of it for each token.','dl-arch'],
  ['MMLU','','A popular benchmark of multiple-choice questions across 57 subjects, used to compare the general knowledge of language models.','ml-eval'],
- ['Open-weight model','open model, open-source model','A model whose trained weights are published, so anyone can download and run it. Llama is an example.','llm-large'],
+ ['Open-weight model','open model','A model whose trained weights are published, so anyone can download and run it. Llama is an example.','llm-large'],
  ['Perplexity','','A measure of how surprised a language model is by real text. Lower is better. (Also the name of an AI search product.)','ml-eval'],
  ['Positional encoding','RoPE, position embedding','Extra information that tells a Transformer the order of the tokens, because attention on its own ignores order. RoPE is a common modern version.','arch-tr'],
  ['Query, key and value','QKV','The three vectors each token produces inside attention. The query asks what to look for, keys are matched against it, and values are what gets passed along.','arch-tr'],
@@ -1184,7 +1184,123 @@ var GLOSS=[
  ['System prompt','system message','Instructions given to a chat model before the conversation starts, setting its role, rules and tone.','a-prompt'],
  ['Top-p sampling','nucleus sampling, top-k','Choosing the next token only from the most likely few, for example those that together make up 90% of the probability. It cuts off unlikely words while keeping some variety.','llm-ar'],
  ['Vanishing gradient','','When gradients shrink as they pass back through many layers, so the early layers barely learn. Residual connections and normalization help.','c-backprop'],
- ['Zero-shot','zero-shot prompting','Asking a model to do a task with no examples at all, only an instruction.','a-prompt']
+ ['Language model','LM, language modeling, language modelling','A model that learns how likely a piece of text is, usually by predicting the next word or a hidden word. A large language model is a very big one.','fam-lm'],
+ ['Object detection','detector','Finding the objects in an image, drawing a box around each one and naming it. YOLO is a well-known detector.','m-resnet'],
+ ['Topic modeling','topic modelling, topic model','Finding the main themes in a collection of documents without labels, by grouping words that tend to appear together.','ml-problems'],
+ ['Forecasting','time series forecasting, time-series prediction','Predicting future values from past ones, such as the weather, demand or prices. Usually regression on a time series.','ml-problems'],
+ ['Zero-shot','zero-shot prompting, zero-shot learning','Asking a model to do a task with no examples at all, only an instruction.','a-prompt'],
+ ['A/B testing','online experiment','Showing two versions of a system, such as two models, to different groups of real users and comparing the results.','s-monitor'],
+ ['Accountability','auditability','Being able to say who is responsible for what an AI system does, and to trace a decision back through its data and steps.','sf-safety'],
+ ['Active learning','','Letting the model choose which unlabeled examples a person should label next, so labeling effort goes where it helps most.','ml-paradigms'],
+ ['Adversarial attack','adversarial example','An input changed on purpose, often invisibly, to make a model give a wrong answer.','sf-safety'],
+ ['Adversarial training','','Training a model on adversarial examples as well as normal ones, so it becomes harder to fool.','sf-safety'],
+ ['AGI','artificial general intelligence','A hypothetical AI that can learn and do any intellectual task a person can, across fields. It does not exist yet, and people disagree on how to define it or when, if ever, it will arrive.','b-ai'],
+ ['AI as a service','AIaaS, cloud AI, model API, API for AI models','Using an AI model through a provider’s online interface (an API) instead of running it yourself.','s-serve'],
+ ['AI fluency','AI literacy','Being able to work well with AI tools: knowing what they can and can’t do, checking what they produce, and using them responsibly.','b-ai'],
+ ['AI governance','model governance, governed AI deployment, ethical use policies','The rules, roles and checks an organisation puts around how AI is built, used, monitored and retired.','sf-safety'],
+ ['AI regulation','regulatory compliance, EU AI Act','Laws that set requirements for AI systems, such as the EU AI Act, which sorts uses by risk level.','sf-safety'],
+ ['AI risk management','AI impact assessment, social impact assessment','Finding, assessing and reducing the ways an AI system could cause harm, before and after it ships.','sf-safety'],
+ ['AI safety','','The field that works on making AI systems reliable and keeping them from causing harm, including as they become more capable.','sf-safety'],
+ ['AI security','','Protecting AI systems, their data and their weights from attacks such as adversarial inputs, prompt injection and data poisoning.','sf-safety'],
+ ['AI workflow','ML lifecycle, AI lifecycle management, AI lifecycle, model decommissioning','The full process of an AI project: collect and prepare data, train, test, deploy, monitor, and update or retire the model.','ml-sys'],
+ ['Algorithm','','A precise, step-by-step procedure for solving a problem. In machine learning, the algorithm is the training method; the model is what it produces.','ml-algos'],
+ ['Automation','task automation, intelligent automation, cognitive automation','Using software to do work that people did by hand. Automation follows set instructions and doesn’t have to involve AI.','b-ai'],
+ ['Bagging','bootstrap aggregation, random forest','Training many models on random resamples of the data and averaging their answers. A random forest is bagging with decision trees.','a-ens'],
+ ['Batch inference','offline inference','Running a model on a large set of inputs at once, on a schedule, rather than answering each request live.','s-serve'],
+ ['Bayesian network','graphical model','A model that shows how variables affect each other as a diagram with probabilities on each link, and can reason about causes from evidence.','ml-algos'],
+ ['BERT','Bidirectional Encoder Representations from Transformers','An encoder-only Transformer from Google (2018) that reads a whole sentence at once. It was trained with masked-token prediction and is used for search, classification and embeddings.','m-bert'],
+ ['Big data','','Datasets too large or fast-changing for ordinary tools. Much of modern machine learning depends on it.','ml-sys'],
+ ['Boosting','gradient boosting, XGBoost, LightGBM, AdaBoost','Training models one after another, each focusing on the mistakes of the ones before. Gradient-boosted trees are a top choice for table data.','a-ens'],
+ ['Bootstrap','bootstrapping, bootstrap sampling','A statistics method: resample your data with replacement many times to estimate how uncertain a result is.','ml-eval'],
+ ['Canary release','canary deployment, shadow deployment, shadow mode deployment, blue-green deployment','Ways to ship a new model safely: run it silently alongside the old one (shadow), give it to a small share of users first (canary), or keep two environments to switch back instantly (blue-green).','s-serve'],
+ ['Capsule network','CapsNet','A 2017 neural network design that tries to keep track of how parts of an object relate in space. Influential as an idea, but rarely used in practice.','dl-arch'],
+ ['Causal AI','causal inference','Methods that try to find what actually causes what, rather than what merely happens together. Needed to answer “what if we change this?”','ml-problems'],
+ ['Chatbot','automated customer support, virtual assistant','A program you talk to in text or voice. Older chatbots followed scripts; modern ones are built on large language models.','prod-chat'],
+ ['Closed model','closed source, proprietary model','A model whose weights are kept private and can only be used through the owner’s product or API.','llm-large'],
+ ['Cognitive computing','','A marketing term, popularised by IBM Watson around 2011, for AI systems that support human decisions. Not a separate technical field.','b-ai'],
+ ['Confusion matrix','','A table that counts a classifier’s right and wrong answers for each class, showing which classes it mixes up.','ml-eval'],
+ ['Containerization','Docker, containers','Packaging a model with everything it needs to run, so it behaves the same on any machine.','ml-sys'],
+ ['Continual learning','continuous learning, lifelong learning','Updating a model on new data over time without forgetting what it learned before. Forgetting old skills (“catastrophic forgetting”) is the main difficulty.','ml-paradigms'],
+ ['Cross-attention','','Attention where one sequence looks at another, such as a decoder reading the encoder’s output or an image generator reading the text prompt.','arch-tr'],
+ ['Data augmentation','','Making extra training examples by changing existing ones, such as flipping or cropping images, so the model sees more variety.','dl-train'],
+ ['Data cleaning','data preprocessing, noise reduction','Finding and fixing errors, gaps and duplicates in data before training. Often the most time-consuming part of a project.','ml-sys'],
+ ['Data governance','ethical data sourcing, data provenance','Rules for where data comes from, who may use it, how it is kept, and whether people agreed to its use.','sf-safety'],
+ ['Data mining','','Searching large datasets for useful patterns. An older name that overlaps heavily with machine learning and statistics.','b-ml'],
+ ['Deep reinforcement learning','deep RL, DRL','Reinforcement learning that uses deep neural networks to choose actions. AlphaGo and Atari-playing agents are examples.','p-rl'],
+ ['Differential privacy','','A mathematical guarantee that a result changes very little whether or not any one person’s data was included, usually achieved by adding careful noise.','sf-safety'],
+ ['Digital twin','','A software model of a real machine, building or process, kept up to date with live data so it can be tested and predicted safely.','sf-robotics'],
+ ['Early stopping','','Stopping training once the score on validation data stops improving, before the model starts to overfit.','dl-train'],
+ ['Edge AI','on-device AI, edge-optimized model','Running a model on the device itself, such as a phone or camera, instead of in the cloud. Faster and more private, but the model must be small.','s-serve'],
+ ['Emergent abilities','emergent behavior','Skills that appear in larger models but not in smaller ones, such as multi-step arithmetic. Researchers still debate how sudden these jumps really are.','llm-large'],
+ ['Energy-based model','EBM','A model that gives each possible input a score (“energy”), low for likely data and high for unlikely data, and generates by finding low-energy points.','fam-gen'],
+ ['Facial recognition','face recognition','Identifying or verifying a person from their face. Accurate in good conditions, but raises serious privacy and bias concerns.','sf-cv'],
+ ['Fairness','','Making sure an AI system’s errors and benefits don’t fall unfairly on particular groups of people. There are several ways to measure it, and they can conflict.','sf-safety'],
+ ['Feature scaling','data normalization, standardization','Putting input features on similar ranges, such as 0 to 1, so no feature dominates just because of its units.','ml-sys'],
+ ['Feature selection','','Choosing which input features a model should use and dropping the rest, to cut noise and cost.','ml-sys'],
+ ['Feature store','','A shared system that stores the features a model uses, so training and live predictions compute them the same way.','ml-sys'],
+ ['Federated learning','federated analytics, federated reinforcement learning','Training a model across many devices or organisations without collecting their data in one place. Only model updates are shared.','sf-safety'],
+ ['Fraud detection','spam detection','Flagging transactions or messages that look suspicious, usually with classification and anomaly detection.','prod-fraud'],
+ ['Frontier model','next-generation LLM','One of the most capable general-purpose models available at a given time, such as the latest from the major AI labs.','llm-large'],
+ ['GPT','Generative Pre-trained Transformer','OpenAI’s family of decoder-only language models, trained with next-token prediction. The models behind ChatGPT.','m-gpt'],
+ ['Human-centered AI','human-centred AI','An approach that designs AI around people’s needs, abilities and values, keeping humans in control.','sf-safety'],
+ ['Human-computer interaction','HCI, human-AI interaction, human-agent collaboration','The study and design of how people use and work alongside computers, including AI systems.','cap-act'],
+ ['Human-in-the-loop','HITL, human oversight','A setup where people review, correct or approve an AI system’s outputs, especially for high-stakes decisions.','sf-safety'],
+ ['Image captioning','','Writing a text description of an image. A typical task for vision-language models.','fam-multi'],
+ ['k-nearest neighbors','k-NN, KNN','A simple model that labels a new example by looking at the k most similar examples it has already seen.','ml-algos'],
+ ['Latency','inference latency, throughput','How long a model takes to answer one request. Throughput is how many requests it can handle per second.','s-serve'],
+ ['LLMOps','','MLOps for applications built on large language models: managing prompts, evaluation, cost, monitoring and model updates.','ml-sys'],
+ ['Machine translation','language translation, speech-to-speech translation','Automatically translating text or speech from one language to another.','prod-translate'],
+ ['Markov chain','','A model of a sequence where the next step depends only on the current state, not on how you got there.','ml-algos'],
+ ['Mean absolute error','MAE','The average size of a regression model’s errors. Less sensitive to a few large errors than mean squared error.','o-loss'],
+ ['Mean squared error','MSE','The average of the squared errors of a regression model. The usual loss for regression; it punishes large errors heavily.','o-loss'],
+ ['Model registry','model versioning','A catalogue of trained models and their versions, recording which one is in use and how each was made.','ml-sys'],
+ ['Monitoring','model monitoring, observability, AI observability, monitoring alerts','Watching a deployed model’s inputs, outputs, quality and cost, and raising an alert when something drifts or breaks.','s-monitor'],
+ ['Multi-task learning','','Training one model on several related tasks at once, so what it learns for one helps the others.','ml-paradigms'],
+ ['Neural architecture search','NAS','Using an algorithm to search for a good neural network design instead of designing it by hand.','dl-arch'],
+ ['Neural ODE','neural ordinary differential equation','A network that models how something changes continuously over time, useful for physical systems and irregular time series.','dl-arch'],
+ ['Neuro-symbolic AI','hybrid AI','Combining neural networks, which learn patterns, with symbolic logic and rules, which reason explicitly.','sf-symbolic'],
+ ['Online inference','real-time inference','Answering each request as it arrives, within milliseconds or seconds, as chat assistants and recommendation feeds do.','s-serve'],
+ ['Open-source model','open source AI, open source','A model released with its weights, its code and enough information about its training data for others to study, rebuild and change it. Stricter than open-weight.','llm-large'],
+ ['Optical character recognition','OCR, handwriting recognition','Reading printed or handwritten text from images or scans and turning it into editable text.','sf-cv'],
+ ['Policy gradient','policy gradient methods, PPO','Reinforcement learning methods that directly adjust the policy, the rule for picking actions, toward actions that earned more reward. PPO is the best known.','p-rl'],
+ ['Predictive analytics','','Using historical data and models to forecast what is likely to happen, such as demand, churn or risk.','b-ml'],
+ ['Predictive maintenance','','Predicting when a machine will fail from its sensor data, so it can be fixed before it breaks.','p-anom'],
+ ['Privacy by design','user consent management, consent management','Building privacy protections into a system from the start: collect less data, protect it, and respect people’s choices about its use.','sf-safety'],
+ ['Prompt tuning','soft prompting, soft prompt','Training a small set of prompt vectors that are added in front of the input, while the model itself stays frozen. Not the same as writing better prompts by hand.','t-peft'],
+ ['Pruning','','Removing weights or neurons that matter little, to make a model smaller and faster with little loss in accuracy.','s-serve'],
+ ['Q-learning','value-based methods, DQN, Deep Q-Network','Reinforcement learning that learns how good each action is in each situation, then picks the best. DQN does this with a neural network.','p-rl'],
+ ['Question answering','QA','Answering questions in natural language, from a given text, a knowledge base, or the model’s own knowledge.','sf-nlp'],
+ ['R-squared','R², coefficient of determination','How much of the variation in the target a regression model explains. 1 is perfect; 0 is no better than guessing the average.','ml-eval'],
+ ['ResNet','residual network','A 2015 image classification network that made very deep networks trainable by adding residual connections.','m-resnet'],
+ ['Responsible AI','ethical AI, AI ethics, trustworthy AI, ethical AI frameworks','Building and using AI in ways that are fair, safe, transparent, private and accountable, with people able to oversee it.','sf-safety'],
+ ['Robotic process automation','RPA','Software “bots” that repeat rule-based computer tasks, such as copying data between systems. Classic RPA follows scripts and is not AI, though it is increasingly combined with it.','b-ai'],
+ ['Robustness','','How well a model keeps working when inputs are noisy, unusual or deliberately manipulated.','sf-safety'],
+ ['ROC curve','AUC, ROC AUC','A chart of a classifier’s true-positive rate against its false-positive rate at every threshold. The area under it (AUC) summarises it as one number.','ml-eval'],
+ ['Self-play','self-play AI','Training an agent by having it play against copies of itself, so it always has an opponent at its own level. Used by AlphaGo Zero.','m-alphago'],
+ ['Semantic analysis','semantic parsing','Working out the meaning of language, not just its words or grammar.','sf-nlp'],
+ ['Semantic search','search by meaning, vector search','Search that matches meaning rather than exact keywords, usually by comparing embeddings.','fam-embed'],
+ ['Sentiment analysis','opinion mining','Detecting whether a piece of text is positive, negative or neutral.','sf-nlp'],
+ ['SMOTE','synthetic oversampling','A way to balance a dataset by creating synthetic examples of the rare class between existing ones.','ml-eval'],
+ ['Spatial intelligence','','The ability to understand and reason about the 3D world: where things are, how they move and how they interact.','cap-percept'],
+ ['Stratified sampling','stratified split','Splitting data so each part keeps the same mix of classes as the whole dataset.','ml-eval'],
+ ['Style transfer','neural style transfer','Redrawing an image in the style of another, such as a photo in the style of a painting.','fam-vision'],
+ ['Summarization','text summarization, data summarization, summarization of conversations','Shortening a long text or conversation into its key points.','sf-nlp'],
+ ['Supervised fine-tuning','SFT','Fine-tuning a pre-trained model on examples of inputs paired with good outputs, such as example conversations. Usually the first step of instruction tuning.','a-instr'],
+ ['Tensor','','A grid of numbers with any number of dimensions. A vector is a 1D tensor and a matrix is 2D; neural networks pass tensors between layers.','dl-core'],
+ ['Text-to-image','text-to-image generation, image generator, transformer-based image generator','Generating an image from a written description. Stable Diffusion and DALL·E are examples.','m-sd'],
+ ['Transparency','algorithmic transparency, transparency report, model card','Being open about how an AI system works, what data it used, and where it fails, for example through model cards and reports.','sf-safety'],
+ ['Turing test','imitation game','A test proposed by Alan Turing in 1950: can a machine hold a text conversation that a judge can’t tell apart from a person’s?','b-ai'],
+ ['U-Net','UNet','A network shaped like a U that shrinks an image, then grows it back with shortcut links. Built for medical image segmentation and used inside many diffusion models.','arch-diff'],
+ ['Video generation','video synthesis, text-to-video, text-to-video generation','Generating video from a text description, an image or other video.','fam-gen'],
+ ['Voice cloning','','Copying a specific person’s voice from samples of their speech. Useful for accessibility, but easy to misuse for fraud.','fam-speech'],
+ ['Efficient Transformer','Transformer-XL, Sparse Transformer, Reformer, long-context Transformer','Transformer variants that handle longer inputs with less memory and compute, for example by attending to only some positions or reusing earlier segments.','arch-tr'],
+ ['Agent orchestration','orchestration, intelligent orchestration, orchestrated AI workflows, multi-agent coordination, multi-agent coordination protocols','Coordinating several agents, models and tools so that each handles its part of a larger task.','sf-multi'],
+ ['ANI','narrow AI, artificial narrow intelligence, weak AI','AI built for one kind of task, such as playing chess or recognising faces. All AI that exists today is narrow in this sense.','b-ai'],
+ ['ASI','artificial superintelligence, superintelligence','A hypothetical AI far more capable than humans in nearly every area. It does not exist; it is discussed mainly in safety research and forecasting.','b-ai'],
+ ['Class imbalance','imbalanced data, oversampling, undersampling','When one class is far rarer than the others, such as fraud among payments, so a model can score well by ignoring it.','ml-eval'],
+ ['Correlation','correlation analysis','How strongly two things move together. Correlation alone doesn’t show that one causes the other.','ml-problems'],
+ ['Document AI','document understanding, intelligent document processing','Reading documents such as invoices or forms, including their layout and tables, and pulling out the information in them.','fam-multi'],
+ ['Self-driving car','autonomous vehicle, autonomous vehicles','A vehicle that senses the road, predicts what others will do, plans a path and drives itself. It combines computer vision, prediction, planning and control.','prod-drive']
 ];
 GLOSS=GLOSS.map(function(g){
   var o={t:g[0],a:g[1],d:g[2],n:g[3],id:'g-'+g[0].toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')};
@@ -1195,6 +1311,12 @@ var GLOSS_BY={}; GLOSS.forEach(function(g){GLOSS_BY[g.id]=g});
 
 /* ---------- registry ---------- */
 var N={}, EDGES=[], ord=0, cur=null, ins=[], outs=[], PLAIN=[];
+/* "Self-supervised", "self supervised" and "selfsupervised" all count as the same word */
+function nrm(s){return String(s).toLowerCase().replace(/[-\s]+/g,'')}
+function termPattern(keys){
+  return new RegExp('(^|[^A-Za-z0-9])('+keys.slice().sort(function(x,y){return y.length-x.length}).map(function(k){
+    return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/[-\s]+/g,'[-\\s]?')}).join('|')+')(s?)(?![A-Za-z0-9])','gi');
+}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function reg(id,o){o.id=id;o.ord=ord++;N[id]=o}
 
@@ -1418,11 +1540,12 @@ function noMatchHTML(q){
   return h+'<p class="rfrom">If it came from something you are reading, paste the whole paragraph into <button class="linkish" data-el="whereis">Where is this?</button> to see which area it belongs to.</p>';
 }
 function searchHTML(){
-  var q=QUERY.toLowerCase(), hits=[], seen={};
+  var q=QUERY.toLowerCase(), qn=nrm(q), hits=[], seen={};
   INDEX.forEach(function(e){
     var n=e.name.toLowerCase(), a=(e.alt||'').toLowerCase(), s;
-    if(n.indexOf(q)===0) s=0; else if(n.indexOf(' '+q)>-1||n.indexOf('('+q)>-1) s=1; else if(n.indexOf(q)>-1) s=2;
-    else if(a.indexOf(q)>-1) s=3; else if((e.text||'').toLowerCase().indexOf(q)>-1) s=4; else return;
+    if(e.gl&&(','+a.replace(/\s*,\s*/g,',')+',').indexOf(','+q+',')>-1) s=0; else if(n.indexOf(q)===0) s=0; else if(n.indexOf(' '+q)>-1||n.indexOf('('+q)>-1) s=1; else if(n.indexOf(q)>-1) s=2;
+    else if(a.indexOf(q)>-1) s=3; else if((e.text||'').toLowerCase().indexOf(q)>-1) s=4;
+    else if(qn.length>2&&(nrm(n).indexOf(qn)>-1||nrm(a).indexOf(qn)>-1)) s=e.gl?3:3.5; else return;
     var uid=e.id||e.key||e.gl;
     if(seen[uid]) return; seen[uid]=1;
     hits.push({e:e,s:s});
@@ -1810,15 +1933,14 @@ var TERM_SKIP={};
 ['ai','ml','dl','cv','fm','model','training','dataset','training data','label','feature','evaluation','planning','inference','search',
  'bias','robotics','vector','sampling','weight','parameter','annotation','ground truth','objective','serving','deployment','modality',
  'accelerator','benchmark','prompt','agent','ai agent','token','decoder','encoder'].forEach(function(w){TERM_SKIP[w]=1});
-var TERMS={};
+var TERMS={}, TERM_KEYS=[];
 GLOSS.forEach(function(g){
   [g.t.replace(/\s*\(.*?\)\s*/g,' ').trim()].concat(g.a?g.a.split(/,\s*/):[]).forEach(function(n){
-    var k=n.toLowerCase(); if(!n||TERM_SKIP[k]||TERMS[k]) return;
-    TERMS[k]={id:g.id,name:n,acr:/^[A-Z0-9*]{2,6}$/.test(n)};
+    var k=n.toLowerCase(); if(!n||TERM_SKIP[k]||TERMS[nrm(k)]) return;
+    TERMS[nrm(k)]={id:g.id,name:n,acr:/^[A-Z0-9*]{2,6}$/.test(n)}; TERM_KEYS.push(k);
   });
 });
-var TERM_RE=new RegExp('(^|[^A-Za-z0-9])('+Object.keys(TERMS).sort(function(x,y){return y.length-x.length}).map(function(k){
-  return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}).join('|')+')(s?)(?![A-Za-z0-9])','gi');
+var TERM_RE=termPattern(TERM_KEYS);
 function linkTerms(){
   var used={};
   document.querySelectorAll('#map .card .plain, #map .card .items li:not(.lk)').forEach(function(box){
@@ -1830,7 +1952,7 @@ function linkTerms(){
       var text=node.nodeValue, frag=null, last=0, m;
       TERM_RE.lastIndex=0;
       while((m=TERM_RE.exec(text))){
-        var info=TERMS[m[2].toLowerCase()];
+        var info=TERMS[nrm(m[2])];
         if(!info||(info.acr&&m[2]!==info.name)||used[key][info.id]||GLOSS_BY[info.id].n===self) continue;
         used[key][info.id]=1;
         frag=frag||document.createDocumentFragment();
@@ -1901,11 +2023,13 @@ var WSKIP={};
  'video','applications','capabilities','core concepts','characteristics','modalities','examples','others','control','logic','compute',
  'products and systems','what these fields produce','optimization','time series','scientific data','multimodal','robotics'].forEach(function(w){WSKIP[w]=1});
 var WIDX={};
+var WKEYS=[];
 function addW(name,id){
   name=String(name).replace(/\s*\(.*?\)\s*/g,' ').replace(/…/g,'').trim();
   var k=name.toLowerCase();
-  if(!name||k.length<2||k.length>48||WSKIP[k]||WIDX[k]) return;
-  WIDX[k]={id:id,name:name,acr:/^[A-Z0-9*]{2,6}$/.test(name)};
+  if(!name||k.length<2||k.length>48||WSKIP[k]||WIDX[nrm(k)]) return;
+  WIDX[nrm(k)]={id:id,name:name,acr:/^[A-Z0-9*]{2,6}$/.test(name)}; WKEYS.push(k);
+  if(/[a-z]{3}s$/i.test(name)&&!/(ss|is|us)$/i.test(name)) addW(name.slice(0,-1),id);
 }
 function addParens(name,id){
   var m=String(name).match(/\(([^)]+)\)/); if(!m) return;
@@ -1918,13 +2042,12 @@ GLOSS.forEach(function(g){
   addW(g.t,g.n); addParens(g.t,g.n);
   (g.a?g.a.split(/,\s*/):[]).forEach(function(a){addW(a,g.n)});
 });
-var WRE=new RegExp('(^|[^A-Za-z0-9])('+Object.keys(WIDX).sort(function(x,y){return y.length-x.length}).map(function(k){
-  return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}).join('|')+')(s?)(?![A-Za-z0-9])','gi');
+var WRE=termPattern(WKEYS);
 var WEXAMPLE='Most modern LLMs are decoder-only Transformers trained with next-token prediction, then instruction-tuned and aligned with RLHF. At inference time a KV cache speeds up generation, and RAG adds documents found with embeddings and a reranker.';
 function findTerms(text){
   var hits=[], m; WRE.lastIndex=0;
   while((m=WRE.exec(text))){
-    var info=WIDX[m[2].toLowerCase()];
+    var info=WIDX[nrm(m[2])];
     if(!info||(info.acr&&m[2]!==info.name)) continue;
     var start=m.index+m[1].length;
     hits.push({start:start,end:start+m[2].length+m[3].length,id:info.id,word:m[2]+m[3]});

@@ -73,7 +73,7 @@ You can filter by any of these and **tick sources off** as you finish them. A pr
 
 ### Glossary
 
-About 174 AI terms in plain language, including newer agent and LLM vocabulary such as *agent harness*, *context engineering*, *KV cache* and *mixture of experts*, from *accuracy* to *zero-shot*. Each entry gives a short definition, other names the term goes by, and a link to its place on the map.
+About 290 AI terms in plain language, including newer agent and LLM vocabulary such as *agent harness*, *context engineering*, *KV cache* and *mixture of experts*, from *accuracy* to *zero-shot*. Each entry gives a short definition, other names the term goes by, and a link to its place on the map.
 
 - **Filter** the list by typing, or **jump to a letter**.
 - The **side panel search** finds glossary terms too.
