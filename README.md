@@ -22,6 +22,16 @@ The map is a stack of colour-coded layers. Each layer opens up one item from the
 
 A nested-box diagram at the top summarises the containment: AI ⊃ ML ⊃ DL ⊃ Foundation Models ⊃ LLMs.
 
+## For newcomers
+
+AI is a big field that moves fast, and it's hard to know where to start. The page is built around that:
+
+- **A note before you start** at the top explains why the map exists and how to use it. It can be collapsed, and the page remembers your choice.
+- **Where should I start?** asks what you want to do and what you already know, then suggests one learning path and a second one to follow it.
+- **Pace labels** on each layer mark it *Stable*, *Slow-changing* or *Fast-moving*, so you can tell the slow-changing foundations from the news.
+- **Keeping up** gives a few ways to follow new work without chasing every headline, with a short list of sources.
+- **Inline definitions:** jargon words on the map cards have a dotted underline. Tap one for a short definition, with links to the map and the glossary.
+
 ## How to use it
 
 - **Select any ringed title or item** to see it in the side panel: a description, what it **builds on**, what it **leads to**, and what to read about it.
@@ -30,12 +40,12 @@ A nested-box diagram at the top summarises the containment: AI ⊃ ML ⊃ DL ⊃
   - *Dashed line*: leads to (something it makes possible)
   - *Grey line*: opens up (a layer that expands an item from the layer above)
 - **Search** in the side panel to find items on the map, in the reading list and in the glossary (e.g. `transformer`, `Whisper`, `Sutton`). Press **Enter** to jump to the first result.
-- Use the **top bar** to jump between the map, learning paths, books and sources, and the glossary. The current section is highlighted as you scroll.
+- Use the **top bar** to jump between the map, learning paths, books and sources, keeping up, and the glossary. The current section is highlighted as you scroll.
 - Press **Escape** to clear the search, or the current selection if there is no search.
 
 ### Learning paths
 
-Six guided routes. Start one and the side panel walks you from stop to stop, with a source to read at each:
+Six guided routes. Start one and the side panel walks you from stop to stop, with a source to read at each. The page remembers which steps you have visited, so a path card offers to continue where you left off, and the last step suggests where to go next:
 
 | Path | Level |
 |---|---|
@@ -70,7 +80,7 @@ About 134 AI terms in plain language, from *accuracy* to *zero-shot*. Each entry
 
 ## Saving progress
 
-- Finished ticks and filter choices are saved in your browser's `localStorage` (`aimap.done`, `aimap.filters`).
+- Finished ticks, filter choices, visited path steps, your answers to *Where should I start?* and whether the welcome note is open are saved in your browser's `localStorage` (`aimap.done`, `aimap.filters`, `aimap.steps`, `aimap.choose`, `aimap.note`).
 - When the page is opened as a Claude artifact with database and user access, ticks also sync to your Claude account, so they follow you across devices. The line above the progress bar shows which storage is in use.
 
 ## Under the hood
@@ -90,6 +100,9 @@ About 134 AI terms in plain language, from *accuracy* to *zero-shot*. Each entry
 | `READS` | Which sources to show for each map node |
 | `SHELF` | How the reading list is grouped |
 | `PATHS` | The learning paths and their steps |
+| `NEXT` | Which paths to suggest after finishing each one |
+| `PACE` | The pace label and note for each layer |
+| `FOLLOW` | Sources listed under Keeping up |
 | `GLOSS` | Glossary entries: `[term, other names, definition, map node id]` |
 
 To add a connection, append to `LINKS` using existing node ids. Links that point to unknown ids are dropped, with a warning in the console.

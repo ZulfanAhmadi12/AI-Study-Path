@@ -23,6 +23,7 @@
   --tone-violet-line:#7C5CD6; --tone-violet-ink:#5B2FB0;
   --tone-teal-line:#2A9D93; --tone-teal-ink:#0C5F62;
   --elev-1:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08);
+  --elev-2:0 4px 8px rgba(15,23,42,.08),0 8px 20px rgba(15,23,42,.08);
   --elev-3:0 12px 24px rgba(15,23,42,.12),0 20px 48px rgba(15,23,42,.12);
   --font:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --fast:120ms; --normal:180ms; --ease:cubic-bezier(.2,0,0,1);
@@ -47,7 +48,7 @@
     --tone-rose-line:#E07A8C; --tone-rose-ink:#FFB0BC;
     --tone-violet-line:#9D83E6; --tone-violet-ink:#CDB9FF;
     --tone-teal-line:#4FB3A9; --tone-teal-ink:#92DEDA;
-    --elev-1:0 1px 2px rgba(0,0,0,.4); --elev-3:0 12px 32px rgba(0,0,0,.55);
+    --elev-1:0 1px 2px rgba(0,0,0,.4); --elev-2:0 8px 24px rgba(0,0,0,.5); --elev-3:0 12px 32px rgba(0,0,0,.55);
     color-scheme:dark;
   }
 }
@@ -69,7 +70,7 @@
   --tone-rose-line:#E07A8C; --tone-rose-ink:#FFB0BC;
   --tone-violet-line:#9D83E6; --tone-violet-ink:#CDB9FF;
   --tone-teal-line:#4FB3A9; --tone-teal-ink:#92DEDA;
-  --elev-1:0 1px 2px rgba(0,0,0,.4); --elev-3:0 12px 32px rgba(0,0,0,.55);
+  --elev-1:0 1px 2px rgba(0,0,0,.4); --elev-2:0 8px 24px rgba(0,0,0,.5); --elev-3:0 12px 32px rgba(0,0,0,.55);
   color-scheme:dark;
 }
 /* layer tones: --line is the accent, --tink is accessible text, --band is a faint tint of the accent */
@@ -111,7 +112,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;te
 .over{margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--primary)}
 h1{font-size:clamp(36px,4vw,48px);font-weight:700;line-height:1.08;letter-spacing:-.03em;margin:0 0 16px;text-wrap:balance}
 .lede{font-size:16px;line-height:1.5;color:var(--text-2);max-width:66ch;margin:0 0 24px}
-.legend{list-style:none;margin:0;padding:16px;display:grid;gap:10px;font-size:14px;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:12px;max-width:66ch}
+.legend{list-style:none;margin:0 0 20px;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px 28px;font-size:13px;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.legend .lh{font-weight:600;color:var(--text)}
 .legend li{display:flex;gap:12px;align-items:center}
 .legend svg{flex:none;color:var(--wire)}
 .legend .grey{color:var(--wire-muted)}
@@ -270,6 +272,71 @@ button.chip:hover{border-color:var(--line,var(--primary))}
 .gent.flash{outline:2px solid var(--focus);outline-offset:4px}
 .gtm{font-size:14px;font-weight:600;color:var(--text)}
 
+/* welcome note */
+.welcome{margin:0;max-width:66ch;background:var(--brand-subtle);border:1px solid var(--brand-border);border-radius:12px}
+.welcome summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:12px 18px;list-style:none;cursor:pointer;font-size:16px;font-weight:600;color:var(--brand-text);border-radius:12px}
+.welcome summary::-webkit-details-marker{display:none}
+.welcome summary::after{content:"Hide";font-size:13px;font-weight:600;color:var(--link)}
+.welcome:not([open]) summary::after{content:"Read"}
+.wbody{display:grid;gap:12px;padding:0 18px 18px;font-size:15px;line-height:1.6;color:var(--text)}
+.wbody p{margin:0}
+.wbody ol{margin:0;padding-left:22px;display:grid;gap:8px}
+.wbody b{font-weight:600}
+.wsig{color:var(--text-2)}
+.linkish{display:inline;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px;border-radius:3px}
+.linkish:hover{text-decoration-thickness:2px}
+
+/* where should I start? */
+.chooser{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px 32px;margin:0 0 24px;padding:24px;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--primary);border-radius:12px}
+.chead{grid-column:1/-1}
+.chead h2{margin:0 0 4px;font-size:24px;font-weight:600;line-height:1.3;letter-spacing:-.015em}
+.cq{display:grid;gap:18px;align-content:start}
+.cq fieldset{margin:0;padding:0;border:0;min-width:0}
+.cq legend{padding:0;margin:0 0 8px;font-size:14px;font-weight:500;color:var(--text)}
+.cq .seg button{min-height:36px}
+.cres{display:grid;gap:14px;align-content:start;padding:16px 18px;background:var(--brand-subtle);border:1px solid var(--brand-border);border-radius:12px}
+.cres .kick{color:var(--brand-text)}
+.cres h3{margin:2px 0 6px;font-size:18px;font-weight:600;line-height:1.35}
+.cres .pd{margin-top:6px}
+.cnext p{margin:0}
+.cempty{margin:0;font-size:14px;color:var(--text-2)}
+.cnote{margin:0;font-size:13px;color:var(--text-2)}
+
+/* pace labels */
+.pace{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin:8px 0 0;font-size:13px;color:var(--text-2)}
+.pbadge{display:inline-flex;gap:6px;align-items:center;padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:var(--surface);font-size:12px;font-weight:600;color:var(--text)}
+.pbars{display:inline-flex;gap:2px;align-items:flex-end;height:12px}
+.pbars i{width:3px;border-radius:1px;background:var(--border-strong)}
+.pbars i:nth-child(1){height:5px}.pbars i:nth-child(2){height:8px}.pbars i:nth-child(3){height:12px}
+.p-stable .pbars i:nth-child(1),.p-slow .pbars i:nth-child(-n+2),.p-fast .pbars i{background:var(--primary)}
+
+/* keeping up */
+.kq{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px;line-height:1.45;color:var(--text-2)}
+.klinks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.klinks a{font-size:14px;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.klinks a::after{content:"\00A0\2197";font-weight:400}
+.klinks .rm{display:block}
+
+/* inline definitions */
+.term{display:inline;font:inherit;color:inherit;text-decoration:underline dotted;text-decoration-color:var(--muted);text-decoration-thickness:1px;text-underline-offset:3px;border-radius:3px;cursor:help}
+.term:hover,.term[aria-expanded="true"]{color:var(--link);text-decoration-style:solid;text-decoration-color:var(--link)}
+.tip{position:absolute;z-index:30;display:grid;gap:8px;padding:14px 16px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--elev-2)}
+.tip:focus{outline:none}
+.tip:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tip-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.tip-t{margin:0;font-size:16px;font-weight:600;line-height:1.35}
+.tip-x{flex:none;display:grid;place-items:center;width:32px;height:32px;margin:-6px -8px 0 0;border-radius:6px;font-size:20px;line-height:1;color:var(--text-2)}
+.tip-x:hover{background:var(--brand-subtle);color:var(--text)}
+.tip .ga{margin:-6px 0 0}
+.tip-d{margin:0;font-size:14px;line-height:1.5;color:var(--text-2)}
+.tip-a{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.tip-g{font-size:13px;font-weight:600;color:var(--link);text-decoration:underline;text-underline-offset:2px;border-radius:3px}
+
+/* path progress */
+.steps button.seen span::after{content:"\00A0\2713";font-weight:600;color:var(--success-text)}
+.pnext{margin-top:16px;padding-top:12px;border-top:1px solid var(--brand-border)}
+.panel .pnext h3{margin-top:0}
+
 /* selection states: primary carries the selected item and its links */
 .map.has-sel .card:not(.rcard):not(.sel):not(.sel-box):not(.rel-in):not(.rel-out){opacity:.42}
 .card.sel,.card.sel-box{outline:2px solid var(--primary);outline-offset:2px;box-shadow:var(--elev-1)}
@@ -318,7 +385,7 @@ button.chip:hover{border-color:var(--line,var(--primary))}
   .panel h2{font-size:18px}
   .panel.rest .d,.panel.rest .wide{display:none}
 }
-@media (max-width:900px){.top{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){.top{grid-template-columns:minmax(0,1fr)}.chooser{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:767px){
   :root{--chrome-h:0px}
   html{scroll-padding-top:16px}
@@ -334,6 +401,8 @@ button.chip:hover{border-color:var(--line,var(--primary))}
   .theme{min-height:44px}
   .theme .tl{display:none}
   .band{padding:16px 14px 24px}
+  .chooser{padding:16px}
+  .cq .seg button{min-height:44px}
   .btitle{font-size:20px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
@@ -347,6 +416,7 @@ button.chip:hover{border-color:var(--line,var(--primary))}
         <li><button data-el="top" data-nav="top" aria-current="true">Map</button></li>
         <li><button data-el="paths" data-nav="paths">Learning paths</button></li>
         <li><button data-el="reading" data-nav="reading">Books and sources</button></li>
+        <li><button data-el="keepup" data-nav="keepup">Keeping up</button></li>
         <li><button data-el="glossary" data-nav="glossary">Glossary</button></li>
       </ul>
     </nav>
@@ -359,13 +429,22 @@ button.chip:hover{border-color:var(--line,var(--primary))}
     <div>
       <p class="over">Interactive study guide</p>
       <h1>AI Field Map</h1>
-      <p class="lede">A map of the fields of study inside AI: how they nest, how they connect, and which models and products they produce. Select any ringed title or item to see what it builds on, what it leads to and what to read about it. Below the map, learning paths walk it in order, and a reading list of books, courses and papers keeps track of what you have finished.</p>
-      <ul class="legend">
-        <li><svg width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Builds on.</b> Solid line: an ingredient of the selected item.</span></li>
-        <li><svg width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="6 5"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Leads to.</b> Dashed line: something the selected item makes possible.</span></li>
-        <li><svg class="grey" width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Opens up.</b> Grey line: a layer that expands one item from the layer above.</span></li>
-        <li><span class="dotring"><span class="ring" style="color:var(--primary)"></span></span><span><b>Has connections.</b> Ringed titles and items can be selected.</span></li>
-      </ul>
+      <p class="lede">An interactive wall chart of artificial intelligence: how its fields nest inside each other, how they connect, and what they produce. Select any ringed title or item to see what it builds on and what it leads to.</p>
+      <details class="welcome" id="welcome" open>
+        <summary>A note before you start</summary>
+        <div class="wbody">
+          <p>I'm really interested in AI, and it often confuses me. Every time I sit down to learn it, the field seems to get bigger: more subfields, more jargon, and something new announced almost every week. It's hard to tell where to start, what to learn next, or even roughly how all the pieces fit together.</p>
+          <p>So I made the map I wanted to have. If you're new and it feels like too much, that's a normal place to be. I'm there too, some days.</p>
+          <p><b>How I'd use it, if it helps:</b></p>
+          <ol>
+            <li><b>Get the whole picture first.</b> The nested boxes show how the big words fit together: every LLM is a foundation model, every foundation model is deep learning, and so on. The layers below open each box up.</li>
+            <li><b>Pick one path, not everything.</b> <button class="linkish" data-el="start">Where should I start?</button> asks two questions and suggests one. The hours on a path count every book in full, so you can move on long before you finish them.</li>
+            <li><b>Tap a word when it stops you.</b> Words with a dotted underline show a short definition. The <button class="linkish" data-el="glossary">glossary</button> has the full list.</li>
+          </ol>
+          <p><b>About the speed.</b> New models come out every few weeks, and this map won't keep up with all of them. My reading is that most of what's new is built on a small set of older ideas that change slowly, so each layer is marked <i>Stable</i>, <i>Slow-changing</i> or <i>Fast-moving</i>. <button class="linkish" data-el="keepup">Keeping up</button> has a few ways to follow the rest without chasing every headline.</p>
+          <p class="wsig">I'm still learning this too, so the levels and hours here are my best guesses. — Zulfan</p>
+        </div>
+      </details>
     </div>
     <figure class="nest">
       <div class="r t-blue">
@@ -386,6 +465,20 @@ button.chip:hover{border-color:var(--line,var(--primary))}
       <figcaption>Each box is a special case of the box around it. The small text names things that sit in a box but outside the next one in.</figcaption>
     </figure>
   </header>
+
+  <section class="chooser" id="start" aria-labelledby="start-h">
+    <div class="chead"><p class="over">Start here</p><h2 id="start-h">Where should I start?</h2><p class="bsub">Two questions, one suggested path. Change your answers any time.</p></div>
+    <div class="cq" id="cq"></div>
+    <div class="cres" id="cres" aria-live="polite"></div>
+  </section>
+
+  <ul class="legend" aria-label="How to read the map">
+        <li class="lh">Reading the map</li>
+        <li><svg width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Builds on.</b> Solid line: an ingredient of the selected item.</span></li>
+        <li><svg width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="6 5"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Leads to.</b> Dashed line: something the selected item makes possible.</span></li>
+        <li><svg class="grey" width="44" height="10" viewBox="0 0 44 10" aria-hidden="true"><line x1="1" y1="5" x2="36" y2="5" stroke="currentColor" stroke-width="2"/><polygon points="34,0.5 44,5 34,9.5" fill="currentColor"/></svg><span><b>Opens up.</b> Grey line: a layer that expands one item from the layer above.</span></li>
+        <li><span class="dotring"><span class="ring" style="color:var(--primary)"></span></span><span><b>Has connections.</b> Ringed titles and items can be selected.</span></li>
+      </ul>
 
   <div class="layout">
     <main class="map" id="map"></main>
@@ -1089,10 +1182,25 @@ function groupHTML(g){
   }
   return h+'<div class="grid g'+g.cols+'">'+g.cards.map(cardHTML).join('')+'</div>';
 }
+/* how fast each layer changes: [pace, note] */
+var PACE={
+ ai:['stable','The big questions and abilities have stayed the same for decades.'],
+ sub:['stable','The main fields have existed for decades. New ones appear rarely.'],
+ ml:['stable','Most of these methods are decades old and still used every day.'],
+ dl:['slow','The core is settled. The Transformer, from 2017, still powers most new models.'],
+ fm:['slow','The idea is settled. Training and adaptation recipes improve every year.'],
+ fam:['fast','New models and families appear every few months.'],
+ out:['fast','Named models and products change fastest. Treat them as examples, not a complete list.']
+};
+var PACE_NAME={stable:'Stable',slow:'Slow-changing',fast:'Fast-moving'};
+function paceHTML(id){
+  var pc=PACE[id]; if(!pc) return '';
+  return '<p class="pace"><span class="pbadge p-'+pc[0]+'"><span class="pbars" aria-hidden="true"><i></i><i></i><i></i></span>'+PACE_NAME[pc[0]]+'</span><span>'+esc(pc[1])+'</span></p>';
+}
 function bandHTML(b){
   var bid='b-'+b.id;
   return '<section class="band t-'+b.tone+'" id="n-'+bid+'"><header class="bhead"><p class="kick">'+esc(b.kicker)+'</p>'+
-    '<h2 class="btitle">'+(touches(bid)?titleBtn(bid,b.title):esc(b.title))+'</h2><p class="bsub">'+esc(b.sub)+'</p></header>'+
+    '<h2 class="btitle">'+(touches(bid)?titleBtn(bid,b.title):esc(b.title))+'</h2><p class="bsub">'+esc(b.sub)+'</p>'+paceHTML(b.id)+'</header>'+
     b.groups.map(groupHTML).join('')+'</section>';
 }
 
@@ -1155,9 +1263,28 @@ function pathsHTML(){
         '<span class="tags"><span class="tag">'+p.lv+'</span><span class="tag">'+p.steps.length+' steps</span><span class="tag">≈ '+hrs+' h</span></span>'+
         '<p class="plain">'+esc(p.d)+'</p>'+
         '<ol class="steps">'+p.steps.map(function(s,j){return '<li><button data-path="'+i+'" data-step="'+j+'"><span>'+esc(s.t)+'</span></button></li>'}).join('')+'</ol>'+
-        '<p class="cnt" data-pprog="'+i+'"></p>'+
-        '<button class="clear" data-path="'+i+'" data-step="0">Start this path</button></article>';
+        '<p class="cnt" data-psteps="'+i+'"></p><p class="cnt" data-pprog="'+i+'"></p>'+
+        '<button class="clear" data-path="'+i+'" data-step="0" data-pstart="'+i+'">Start this path</button></article>';
     }).join('')+'</div></section>';
+}
+var FOLLOW=[
+ ['Hugging Face Papers','https://huggingface.co/papers','New research papers every day, voted up by readers.'],
+ ['The Batch, DeepLearning.AI','https://www.deeplearning.ai/the-batch/','A weekly newsletter written with learners in mind.'],
+ ['Import AI, Jack Clark','https://importai.substack.com/','A weekly newsletter on new research and what it means.'],
+ ['Simon Willison’s Weblog','https://simonwillison.net/','Hands-on notes about using language models, posted often.'],
+ ['AI Index, Stanford HAI','https://hai.stanford.edu/ai-index','A yearly report on where the field stands, with data.']
+];
+function keepupHTML(){
+  return '<section class="band t-plain" id="keepup"><header class="bhead"><p class="kick">When the field moves fast</p>'+
+    '<h2 class="btitle">Keeping up</h2><p class="bsub">New models and papers arrive every week, and nobody reads all of them. These are ways to follow the field without chasing every headline.</p></header>'+
+    '<div class="grid g4 shelf">'+
+    '<article class="card rcard"><h3 class="ct">Start from the stable layers</h3><p class="plain">Each layer on the map has a pace label. The stable ones, such as how models learn, neural networks and the Transformer, change slowly. Once they make sense, most announcements read as a new combination of parts you already know.</p></article>'+
+    '<article class="card rcard"><h3 class="ct">Place each new thing on the map</h3><p class="plain">When a new model or term appears, three questions help:</p>'+
+      '<ol class="kq"><li>Which layer does it sit in?</li><li>What does it build on?</li><li>Is it a new idea, or a bigger, cheaper or faster version of an old one?</li></ol><p class="plain">Often it’s the second.</p></article>'+
+    '<article class="card rcard"><h3 class="ct">Follow a few sources, not all of them</h3><p class="plain">One or two of these is plenty:</p><ul class="klinks">'+
+      FOLLOW.map(function(f){return '<li><a href="'+esc(f[1])+'" target="_blank" rel="noopener">'+esc(f[0])+'</a><span class="rm">'+esc(f[2])+'</span></li>'}).join('')+'</ul></article>'+
+    '<article class="card rcard"><h3 class="ct">It’s fine to skip things</h3><p class="plain">Not every release matters for what you are learning right now. If something is still being discussed a month later, it is probably worth a closer look.</p></article>'+
+    '</div></section>';
 }
 function glossEntry(g){
   return '<div class="gent" id="'+g.id+'"><dt><dfn>'+esc(g.t)+'</dfn>'+(g.a?'<span class="ga">Also: '+esc(g.a)+'</span>':'')+'</dt>'+
@@ -1179,7 +1306,7 @@ function glossHTML(){
     '<p class="none" id="gnone" hidden>No term matches. Try a shorter word, or use the search in the side panel to look across the whole map.</p></section>';
 }
 Object.keys(READS).forEach(function(id){if(!N[id]&&window.console)console.warn('sources for unknown node',id)});
-map.innerHTML=BANDS.map(bandHTML).join('')+pathsHTML()+shelfHTML()+glossHTML()+'<svg class="wires" id="wires" aria-hidden="true"></svg>';
+map.innerHTML=BANDS.map(bandHTML).join('')+pathsHTML()+shelfHTML()+keepupHTML()+glossHTML()+'<svg class="wires" id="wires" aria-hidden="true"></svg>';
 var svg=document.getElementById('wires');
 Object.keys(N).forEach(function(id){
   var n=N[id]; n.el=document.getElementById('n-'+id);
@@ -1222,6 +1349,21 @@ function searchHTML(){
   if(total>hits.length) h+='<p class="rfrom">Showing the first '+hits.length+'. Type more to narrow it down.</p>';
   return h;
 }
+var NEXT={
+ 'From zero to understanding GPT':['Building with LLMs','How image generators work'],
+ 'Practical machine learning on real data':['From zero to understanding GPT','AI that plays and moves'],
+ 'How image generators work':['Building with LLMs'],
+ 'Building with LLMs':['Self-improving agents'],
+ 'AI that plays and moves':['Self-improving agents'],
+ 'Self-improving agents':[]
+};
+function pathIndex(t){for(var i=0;i<PATHS.length;i++)if(PATHS[i].t===t)return i;return -1}
+function nextHTML(i){
+  var nx=(NEXT[PATHS[i].t]||[]).map(pathIndex).filter(function(j){return j>-1});
+  return '<div class="pnext"><h3>Where next?</h3><p class="pd">That’s the end of this path. '+(nx.length?'These build on it:':'From here, the newest work moves fast.')+'</p><div class="pnav">'+
+    nx.map(function(j){return '<button class="clear" data-path="'+j+'" data-step="0">'+esc(PATHS[j].t)+'</button>'}).join('')+
+    '<button class="clear" data-el="keepup">Keeping up with the field</button></div></div>';
+}
 function pathBlockHTML(){
   var p=PATHS[PATH], s=p.steps[STEP], last=STEP===p.steps.length-1;
   var h='<div class="pathbar"><p class="kick">Path · '+esc(p.t)+'</p><h2>Step '+(STEP+1)+' of '+p.steps.length+': '+esc(s.t)+'</h2><p class="pd">'+esc(s.say)+'</p>';
@@ -1229,7 +1371,7 @@ function pathBlockHTML(){
   h+='<h3>Read for this step</h3>'+resList(s.src,'w');
   h+='<div class="pnav"><button class="clear" data-step-nav="-1"'+(STEP===0?' disabled':'')+'>Back</button>'+
      '<button class="clear solid" data-step-nav="1"'+(last?' disabled':'')+'>'+(last?'Last step':'Next step')+'</button>'+
-     '<button class="clear" data-path-exit="1">Leave path</button></div></div>';
+     '<button class="clear" data-path-exit="1">Leave path</button></div>'+(last?nextHTML(PATH):'')+'</div>';
   return h;
 }
 function renderPanel(){
@@ -1242,7 +1384,7 @@ function renderPanel(){
       '<p class="d">Select any ringed title or item on the map. This panel lists what it builds on, what it leads to and what to read about it, and the map draws the links.</p>'+
       '<h3>Good places to start</h3><div class="starts">'+STARTS.map(chip).join('')+'</div>'+
       '<h3 class="wide">Prefer a guided route?</h3><p class="d wide">Learning paths walk the map in order. The reading list keeps track of what you have finished. The glossary explains the words.</p>'+
-      '<div class="starts wide"><button class="clear" data-el="paths">Learning paths</button><button class="clear" data-el="reading">Books and sources</button><button class="clear" data-el="glossary">Glossary</button></div>';
+      '<div class="starts wide"><button class="clear" data-el="start">Where should I start?</button><button class="clear" data-el="paths">Learning paths</button><button class="clear" data-el="reading">Books and sources</button><button class="clear" data-el="glossary">Glossary</button></div>';
   } else {
     var n=N[cur];
     h+='<p class="kick">'+esc(n.where)+'</p><h2>'+esc(n.name)+'</h2><p class="d">'+esc(n.d||'')+'</p>';
@@ -1432,6 +1574,7 @@ function markPath(){
 }
 function goStep(i,j){
   PATH=i; STEP=Math.max(0,Math.min(PATHS[i].steps.length-1,j));
+  markSeen(i,STEP);
   select(PATHS[PATH].steps[STEP].n,true);
 }
 
@@ -1484,6 +1627,160 @@ document.addEventListener('keydown',function(e){
 });
 
 applyFilters();
+/* ---------- where should I start? ---------- */
+var GOALS=[['understand','Understand how tools like ChatGPT work'],['build','Build things with AI models'],['data','Make predictions from data'],
+  ['media','See how image generators work'],['act','Robots, games and planning'],['agents','Agents that improve themselves']];
+var BGS=[['none','No coding or maths yet'],['code','I can code a little'],['ml','I know machine learning basics'],['dl','I know deep learning']];
+var CH={goal:'',bg:''};
+try{var cs=JSON.parse(localStorage.getItem('aimap.choose')||'null');if(cs){if(typeof cs.goal==='string')CH.goal=cs.goal;if(typeof cs.bg==='string')CH.bg=cs.bg}}catch(e){}
+function recommend(goal,bg){
+  var lv={none:0,code:1,ml:2,dl:3}[bg], P=function(t){return pathIndex(t)};
+  var GPT=P('From zero to understanding GPT'), ML=P('Practical machine learning on real data'), IMG=P('How image generators work'),
+      LLM=P('Building with LLMs'), ACT=P('AI that plays and moves'), AG=P('Self-improving agents');
+  if(goal==='understand') return {a:GPT,b:LLM,why:lv>=2?'You can move quickly through the first steps. The later ones show how GPT is put together.':'It assumes no background and ends with every ingredient of a large language model in place.'};
+  if(goal==='build') return lv===0?{a:GPT,b:LLM,why:'Building with LLMs assumes you know roughly what a language model is. This path gives you that first.'}:{a:LLM,b:AG,why:'It goes from what an LLM is to prompting, retrieval, fine-tuning and agents.'};
+  if(goal==='data') return {a:ML,b:GPT,why:'Tables of business data are where classic machine learning does best, and this path goes from the idea to a model in use.'};
+  if(goal==='media') return lv<2?{a:GPT,b:IMG,why:'The image generator path assumes you know what a neural network is. This path covers that first.'}:{a:IMG,b:LLM,why:'It goes from pixels to Stable Diffusion, one ingredient at a time.'};
+  if(goal==='act') return lv<2?{a:ML,b:ACT,why:'AI that plays and moves is the most mathematical path. Practical machine learning is a gentler way in.'}:{a:ACT,b:AG,why:'It covers planning, reinforcement learning, AlphaGo and robots.'};
+  if(lv===0) return {a:GPT,b:AG,why:'Self-improving agents is an advanced path. This one gives you the pieces it builds on.'};
+  if(lv===1) return {a:LLM,b:AG,why:'It covers prompting, tools and agents before the advanced path.'};
+  return {a:AG,b:LLM,why:'It rebuilds the AlphaGo recipe on top of language models, step by step.'};
+}
+function chooserQ(){
+  function row(key,legend,opts){
+    return '<fieldset><legend>'+legend+'</legend><div class="seg">'+opts.map(function(o){
+      return '<button type="button" data-cq="'+key+'" data-cv="'+o[0]+'" aria-pressed="'+(CH[key]===o[0])+'">'+esc(o[1])+'</button>'}).join('')+'</div></fieldset>';
+  }
+  document.getElementById('cq').innerHTML=row('goal','What do you want to do?',GOALS)+row('bg','What do you already know?',BGS);
+}
+function chooserRes(){
+  var el=document.getElementById('cres');
+  if(!CH.goal||!CH.bg){el.innerHTML='<p class="cempty">Choose one answer in each row and a suggested path appears here.</p>';return}
+  var r=recommend(CH.goal,CH.bg), pa=PATHS[r.a], pb=PATHS[r.b];
+  el.innerHTML='<div><p class="kick">Suggested first</p><h3>'+esc(pa.t)+'</h3>'+
+    '<span class="tags"><span class="tag">'+pa.lv+'</span><span class="tag">'+pa.steps.length+' steps</span></span>'+
+    '<p class="pd">'+esc(r.why)+'</p><div class="pnav"><button class="clear solid" data-path="'+r.a+'" data-step="0">Start this path</button><button class="clear" data-el="path-'+r.a+'">See the path card</button></div></div>'+
+    (pb?'<div class="cnext"><p class="kick">After that</p><p><button class="linkish" data-path="'+r.b+'" data-step="0">'+esc(pb.t)+'</button></p></div>':'')+
+    '<p class="cnote">The hours on a path count every source in full. You can move to the next step long before finishing a whole book.</p>';
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-cq]'); if(!b) return;
+  CH[b.dataset.cq]=b.dataset.cv;
+  try{localStorage.setItem('aimap.choose',JSON.stringify(CH))}catch(err){}
+  document.querySelectorAll('[data-cq="'+b.dataset.cq+'"]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+  chooserRes();
+});
+chooserQ(); chooserRes();
+
+/* ---------- path step memory ---------- */
+var SEEN={};
+try{var ss=JSON.parse(localStorage.getItem('aimap.steps')||'null');if(ss&&typeof ss==='object')SEEN=ss}catch(e){}
+function markSeen(i,j){
+  var k=PATHS[i].t; (SEEN[k]=SEEN[k]||{})[j]=1;
+  try{localStorage.setItem('aimap.steps',JSON.stringify(SEEN))}catch(e){}
+  refreshSteps();
+}
+function refreshSteps(){
+  PATHS.forEach(function(p,i){
+    var s=SEEN[p.t]||{}, n=0, first=-1;
+    p.steps.forEach(function(st,j){
+      var v=!!s[j], b=document.querySelector('.steps [data-path="'+i+'"][data-step="'+j+'"]');
+      if(v) n++; else if(first<0) first=j;
+      if(b){b.classList.toggle('seen',v); b.setAttribute('aria-label',st.t+(v?' (visited)':''))}
+    });
+    var go=document.querySelector('[data-pstart="'+i+'"]');
+    if(go){
+      if(n&&first>=0){go.dataset.step=first;go.textContent='Continue at step '+(first+1)}
+      else if(n){go.dataset.step=0;go.textContent='Walk it again'}
+      else {go.dataset.step=0;go.textContent='Start this path'}
+    }
+    var pp=document.querySelector('[data-psteps="'+i+'"]'); if(pp) pp.textContent=n+' of '+p.steps.length+' steps visited';
+  });
+}
+refreshSteps();
+
+/* ---------- inline definitions: glossary words on the map open a short popup ---------- */
+var TERM_SKIP={};
+['ai','ml','dl','cv','fm','model','training','dataset','training data','label','feature','evaluation','planning','inference','search',
+ 'bias','robotics','vector','sampling','weight','parameter','annotation','ground truth','objective','serving','deployment','modality',
+ 'accelerator','benchmark','prompt','agent','ai agent','token','decoder','encoder'].forEach(function(w){TERM_SKIP[w]=1});
+var TERMS={};
+GLOSS.forEach(function(g){
+  [g.t.replace(/\s*\(.*?\)\s*/g,' ').trim()].concat(g.a?g.a.split(/,\s*/):[]).forEach(function(n){
+    var k=n.toLowerCase(); if(!n||TERM_SKIP[k]||TERMS[k]) return;
+    TERMS[k]={id:g.id,name:n,acr:/^[A-Z0-9*]{2,6}$/.test(n)};
+  });
+});
+var TERM_RE=new RegExp('(^|[^A-Za-z0-9])('+Object.keys(TERMS).sort(function(x,y){return y.length-x.length}).map(function(k){
+  return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}).join('|')+')(s?)(?![A-Za-z0-9])','gi');
+function linkTerms(){
+  var used={};
+  document.querySelectorAll('#map .card .plain, #map .card .items li:not(.lk)').forEach(function(box){
+    var card=box.closest('.card'), key=card.id||('c'+Math.random()), self=(card.id||'').slice(2);
+    used[key]=used[key]||{};
+    var walker=document.createTreeWalker(box,NodeFilter.SHOW_TEXT), nodes=[], t;
+    while((t=walker.nextNode())) if(!t.parentNode.closest('button,a')) nodes.push(t);
+    nodes.forEach(function(node){
+      var text=node.nodeValue, frag=null, last=0, m;
+      TERM_RE.lastIndex=0;
+      while((m=TERM_RE.exec(text))){
+        var info=TERMS[m[2].toLowerCase()];
+        if(!info||(info.acr&&m[2]!==info.name)||used[key][info.id]||GLOSS_BY[info.id].n===self) continue;
+        used[key][info.id]=1;
+        frag=frag||document.createDocumentFragment();
+        var start=m.index+m[1].length;
+        frag.appendChild(document.createTextNode(text.slice(last,start)));
+        var b=document.createElement('button');
+        b.type='button'; b.className='term'; b.dataset.term=info.id;
+        b.setAttribute('aria-expanded','false'); b.setAttribute('aria-controls','tip');
+        b.textContent=m[2]+m[3];
+        frag.appendChild(b);
+        last=start+m[2].length+m[3].length;
+      }
+      if(frag){frag.appendChild(document.createTextNode(text.slice(last)));node.parentNode.replaceChild(frag,node)}
+    });
+  });
+}
+linkTerms();
+
+var tip=document.createElement('div'), tipFor=null;
+tip.id='tip'; tip.className='tip'; tip.hidden=true; tip.tabIndex=-1;
+tip.setAttribute('role','dialog'); tip.setAttribute('aria-labelledby','tip-t');
+document.body.appendChild(tip);
+function placeTip(){
+  var r=tipFor.getBoundingClientRect(), vw=document.documentElement.clientWidth, w=Math.min(340,vw-32);
+  tip.style.width=w+'px';
+  var left=Math.max(16,Math.min(r.left,vw-16-w)), h=tip.offsetHeight, top=r.bottom+8,
+      ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--chrome-h'))||0;
+  if(top+h>innerHeight-8&&r.top-8-h>ch+8) top=r.top-8-h;
+  tip.style.left=(left+scrollX)+'px'; tip.style.top=(top+scrollY)+'px';
+}
+function openTip(btn){
+  var g=GLOSS_BY[btn.dataset.term];
+  tip.innerHTML='<div class="tip-h"><p class="tip-t" id="tip-t">'+esc(g.t)+'</p><button class="tip-x" type="button" aria-label="Close definition">×</button></div>'+
+    (g.a?'<p class="ga">Also: '+esc(g.a)+'</p>':'')+'<p class="tip-d">'+esc(g.d)+'</p><div class="tip-a">'+
+    (g.n?'<button class="chip t-'+N[g.n].tone+'" data-goto="'+g.n+'">On the map: '+esc(N[g.n].short)+'</button>':'')+
+    '<button class="tip-g" data-gl="'+g.id+'">Open in glossary</button></div>';
+  if(tipFor) tipFor.setAttribute('aria-expanded','false');
+  tipFor=btn; btn.setAttribute('aria-expanded','true'); tip.hidden=false; placeTip();
+  tip.focus({preventScroll:true});
+}
+function closeTip(restore){
+  if(tip.hidden) return;
+  tip.hidden=true;
+  if(tipFor){tipFor.setAttribute('aria-expanded','false'); if(restore) tipFor.focus({preventScroll:true})}
+  tipFor=null;
+}
+document.addEventListener('click',function(e){
+  var tb=e.target.closest('.term');
+  if(tb){if(tipFor===tb) closeTip(true); else openTip(tb); return}
+  if(e.target.closest('.tip-x')){closeTip(true);return}
+  if(tip.contains(e.target)){if(e.target.closest('[data-gl],[data-goto]')) closeTip(false);return}
+  closeTip(false);
+});
+window.addEventListener('keydown',function(e){if(e.key==='Escape'&&!tip.hidden){e.stopPropagation();closeTip(true)}},true);
+window.addEventListener('resize',function(){closeTip(false)});
+
 refreshDone();
 paint();
 initCloud();
@@ -1510,11 +1807,18 @@ btn.addEventListener('click',function(){
 });
 applyTheme();
 
+var wel=document.getElementById('welcome');
+try{if(localStorage.getItem('aimap.note')==='closed')wel.open=false}catch(e){}
+wel.addEventListener('toggle',function(){
+  try{localStorage.setItem('aimap.note',wel.open?'open':'closed')}catch(e){}
+  window.dispatchEvent(new Event('resize'));
+});
+
 var navs=[].slice.call(document.querySelectorAll('[data-nav]')), ticking=false;
 function spy(){
   ticking=false;
   var line=(parseFloat(getComputedStyle(root).getPropertyValue('--chrome-h'))||0)+innerHeight*0.3, cur='top';
-  ['paths','reading','glossary'].forEach(function(id){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=line)cur=id});
+  ['paths','reading','keepup','glossary'].forEach(function(id){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=line)cur=id});
   navs.forEach(function(b){if(b.dataset.nav===cur)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
 }
 addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(spy)}},{passive:true});
