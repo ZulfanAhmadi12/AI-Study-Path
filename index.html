@@ -149,7 +149,7 @@ h1{font-size:clamp(36px,4vw,48px);font-weight:700;line-height:1.08;letter-spacin
 .grid{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
 @container (min-width:440px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container (min-width:700px){
-  .g5,.g6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g3,.g5,.g6{grid-template-columns:repeat(3,minmax(0,1fr))}
   .g7,.g8{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @container (min-width:860px){
@@ -214,10 +214,10 @@ button.chip:hover{border-color:var(--line,var(--primary))}
 .pcard .tags{margin:0}
 .psearch{display:grid;gap:6px;margin-bottom:16px}
 .psearch .lab{margin:0;font-size:14px;font-weight:500;color:var(--text)}
-.psearch input{font:inherit;font-size:14px;width:100%;min-height:40px;padding:0 12px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface);color:var(--text);transition:border-color var(--fast) var(--ease)}
-.psearch input:hover{border-color:var(--muted)}
-.psearch input:focus-visible{outline:2px solid var(--focus);outline-offset:1px;border-color:var(--focus)}
-.psearch input::placeholder{color:var(--muted)}
+.psearch input,.gfilter input{font:inherit;font-size:14px;width:100%;min-height:40px;padding:0 12px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface);color:var(--text);transition:border-color var(--fast) var(--ease)}
+.psearch input:hover,.gfilter input:hover{border-color:var(--muted)}
+.psearch input:focus-visible,.gfilter input:focus-visible{outline:2px solid var(--focus);outline-offset:1px;border-color:var(--focus)}
+.psearch input::placeholder,.gfilter input::placeholder{color:var(--muted)}
 .pathbar{border:1px solid var(--brand-border);border-radius:12px;padding:16px;margin-bottom:16px;background:var(--brand-subtle)}
 .pathbar .kick{color:var(--brand-text)}
 .pathbar h2{font-size:18px}
@@ -246,6 +246,29 @@ button.chip:hover{border-color:var(--line,var(--primary))}
 .panel .reslist{gap:0}
 .panel .res{padding:10px 0;border-top:1px solid var(--border)}
 .shelf{align-items:start}
+
+/* glossary */
+.gtools{display:grid;gap:12px;margin:0 0 12px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.gfilter{display:grid;gap:6px;max-width:420px}
+.gfilter .lab{margin:0;font-size:14px;font-weight:500;color:var(--text)}
+.az{display:flex;flex-wrap:wrap;gap:0;margin-left:-8px}
+.az button{min-width:32px;min-height:32px;border-radius:6px;font-size:13px;font-weight:600;color:var(--link);text-align:center;transition:background var(--fast) var(--ease)}
+.az button:hover{background:var(--brand-subtle)}
+.az button:disabled{color:var(--disabled);background:none;cursor:default}
+.gcount{margin:0;font-size:13px;color:var(--text-2);font-variant-numeric:tabular-nums}
+.gletter{margin-top:24px}
+.gl{font-size:20px;font-weight:600;line-height:1.3;color:var(--primary);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.glist{margin:0;display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@container (min-width:640px){.glist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (min-width:1000px){.glist{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.gent{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.gent dt{font-size:15px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.gent dfn{font-style:normal}
+.ga{display:block;margin-top:2px;font-size:12px;font-weight:400;color:var(--muted)}
+.gent dd{margin:0;display:grid;gap:10px;justify-items:start}
+.gent dd p{margin:0;font-size:14px;line-height:1.5;color:var(--text-2)}
+.gent.flash{outline:2px solid var(--focus);outline-offset:4px}
+.gtm{font-size:14px;font-weight:600;color:var(--text)}
 
 /* selection states: primary carries the selected item and its links */
 .map.has-sel .card:not(.rcard):not(.sel):not(.sel-box):not(.rel-in):not(.rel-out){opacity:.42}
@@ -324,6 +347,7 @@ button.chip:hover{border-color:var(--line,var(--primary))}
         <li><button data-el="top" data-nav="top" aria-current="true">Map</button></li>
         <li><button data-el="paths" data-nav="paths">Learning paths</button></li>
         <li><button data-el="reading" data-nav="reading">Books and sources</button></li>
+        <li><button data-el="glossary" data-nav="glossary">Glossary</button></li>
       </ul>
     </nav>
     <button class="theme" id="theme" type="button" aria-label="Colour theme: system"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg><span class="tl">System</span></button>
@@ -365,7 +389,7 @@ button.chip:hover{border-color:var(--line,var(--primary))}
 
   <div class="layout">
     <main class="map" id="map"></main>
-    <aside class="panel" id="panel"><div class="psearch"><label class="lab" for="q">Search the map and the reading list</label><input id="q" type="search" placeholder="transformer, Whisper, Sutton…" autocomplete="off"></div><div id="pbody" aria-live="polite"></div></aside>
+    <aside class="panel" id="panel"><div class="psearch"><label class="lab" for="q">Search the map, reading list and glossary</label><input id="q" type="search" placeholder="transformer, Whisper, Sutton…" autocomplete="off"></div><div id="pbody" aria-live="polite"></div></aside>
   </div>
 </div>
 
@@ -535,7 +559,8 @@ var BANDS=[
    {id:'prod-rag',t:'Search with answers (RAG)',s:'RAG search',eg:'Perplexity, chat with your documents',p:'Finds the relevant pages first, then writes an answer from them.',made:[
      ['fam-embed','turns documents into searchable vectors'],['m-bert','BERT-style encoders make the embeddings'],['a-rag','the method: look up, then answer'],['prod-chat','writes the answer']]},
    {id:'prod-agent',t:'AI agents',eg:'Coding and research agents',p:'Given a goal, it plans the steps, uses tools and checks its own work.',made:[
-     ['prod-chat','the reasoning engine'],['a-tools','lets it run software'],['sf-search','planning over many steps'],['a-rag','looks things up as it works'],['sf-multi','several agents can share a task'],['sf-safety','limits on what it may do']]},
+     ['prod-chat','the reasoning engine'],['a-tools','lets it run software'],['sf-search','planning over many steps'],['a-rag','looks things up as it works'],['sf-multi','several agents can share a task'],['sf-safety','limits on what it may do'],
+     ['llm-aligned','instruction-tuned models trained to call tools'],['p-rl','RL on real tasks teaches it to act over many steps'],['fam-multi','sees screens and images when it operates a computer']]},
    {id:'prod-translate',t:'Translation apps',eg:'Google Translate, DeepL',p:'A sentence in one language becomes a sentence in another.',made:[
      ['llm-encdec','read one language, write another'],['arch-tr','the Transformer was invented for translation'],['p-sup','millions of human-translated sentence pairs'],['sf-nlp','the field behind it']]},
    {id:'prod-drive',t:'Self-driving cars',eg:'Waymo',p:'Sees the road, predicts what others will do, plans a path and steers.',made:[
@@ -701,6 +726,12 @@ var LIB={
  lora:["Paper","LoRA: Low-Rank Adaptation of Large Language Models","Edward Hu et al., 2021","Cheap fine-tuning with a small add-on.",AX+"2106.09685"],
  rag:["Paper","Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks","Patrick Lewis et al., 2020","The paper that named RAG.",AX+"2005.11401"],
  react:["Paper","ReAct: Synergizing Reasoning and Acting in Language Models","Shunyu Yao et al., 2022","The reason-then-act loop behind many agents.",AX+"2210.03629"],
+ cs329a:["Course","CS329A: Self-Improving AI Agents","Stanford University, taught by Aakanksha Chowdhery & Azalia Mirhoseini","Graduate seminar on agents that improve through feedback: test-time compute, verifiers, RL, tool use, memory and planning. The site lists paper readings; no recorded lectures were found.","https://cs329a.stanford.edu/",1],
+ star:["Paper","STaR: Bootstrapping Reasoning With Reasoning","Eric Zelikman et al., 2022","A model gets better by training on its own reasoning that led to correct answers.",AX+"2203.14465"],
+ verify:["Paper","Let's Verify Step by Step","Hunter Lightman et al., 2023","Checking every reasoning step beats checking only the final answer.",AX+"2305.20050"],
+ ttc:["Paper","Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters","Charlie Snell et al., 2024","Letting a model think longer, wisely, can beat using a bigger model.",AX+"2408.03314"],
+ lats:["Paper","Language Agent Tree Search Unifies Reasoning Acting and Planning in Language Models","Andy Zhou et al., 2023","AlphaGo-style tree search applied to a language-model agent.",AX+"2310.04406"],
+ deepseekmath:["Paper","DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models","Zhihong Shao et al., 2024","Introduces GRPO, a cheaper RL method now widely used to train reasoning models.",AX+"2402.03300"],
  agents:["Guide","Building Effective AI Agents","Anthropic, 2024","Practical patterns for agent systems.","https://www.anthropic.com/engineering/building-effective-agents",1],
  sbert:["Paper","Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks","Nils Reimers & Iryna Gurevych, 2019","Text embeddings for search.",AX+"1908.10084"],
  covington:["Paper","Deep Neural Networks for YouTube Recommendations","Paul Covington, Jay Adams & Emre Sargin, 2016","How a large recommendation feed is built.","https://research.google/pubs/deep-neural-networks-for-youtube-recommendations/"],
@@ -713,6 +744,7 @@ var LEVEL={};
 'mitchell elements cs50ai mlcc islr geron chollet b3b1b fastai illustrated wooldridge christian human spam prompting alammar'.split(' ').forEach(function(k){LEVEL[k]='Beginner'});
 'esl prml murphy boyd goodfellow bishopdl brachman huang probrob underact shoham marl lavalle'.split(' ').forEach(function(k){LEVEL[k]='Advanced'});
 LEVEL.ruder='Intermediate';
+LEVEL.cs329a='Advanced';
 function cats(k){
   var r=LIB[k], m=META[k]||['none',2], h=m[1];
   return {kind:r[0],cost:PAID[k]?'Paid':'Free',level:LEVEL[k]||(r[0]==='Paper'?'Advanced':'Intermediate'),
@@ -743,7 +775,7 @@ var READS={
  'b-out':['attention','bert','gpt3','clip','ldm'],
  'm-gpt':['gpt3','attention','raschka'],'m-bert':['bert'],'m-t5':['t5','bart'],'m-clip':['clip'],'m-sd':['ldm','ddpm','hfdiff'],'m-whisper':['whisper'],
  'm-resnet':['resnet','yolo'],'m-alphago':['alphago','sutton'],'prod-chat':['instructgpt','cai','prompting'],'prod-multi':['llava','clip'],
- 'prod-rag':['rag','sbert'],'prod-agent':['react','agents'],'prod-translate':['attention','seq2seq','gnmt'],'prod-drive':['probrob','modrob'],
+ 'prod-rag':['rag','sbert'],'prod-agent':['agents','react','cs329a'],'prod-translate':['attention','seq2seq','gnmt'],'prod-drive':['probrob','modrob'],
  'prod-reco':['covington','recsys'],'prod-fraud':['xgb','spam','islr']
 };
 /* the reading-list layer */
@@ -766,7 +798,8 @@ var SHELF=[
   {t:'Foundation models & LLMs',go:'b-fm',keys:['raschka','alammar','aie','fmreport','hfllm']},
   {t:'Transformers and language models',go:'arch-tr',keys:['illustrated','attention','annotated','bert','gpt3','t5','bart','seq2seq','gnmt']},
   {t:'Image, speech and multimodal models',go:'b-fam',keys:['wengdiff','hfdiff','ddpm','ldm','clip','vit','sam','llava','gan','vae']},
-  {t:'Turning a model into a product',go:'fm-adapt',keys:['prompting','agents','instructgpt','cai','lora','rag','react','sbert']}
+  {t:'Turning a model into a product',go:'fm-adapt',keys:['prompting','agents','instructgpt','cai','lora','rag','react','sbert']},
+  {t:'Self-improving agents',go:'prod-agent',keys:['cs329a','star','verify','ttc','lats','deepseekmath']}
  ]}
 ];
 
@@ -783,6 +816,7 @@ var META={
  christian:['none',12],human:['none',10],hendrycks:['none',30],fairml:['basic',30],concrete:['ml',2],raschka:['code',40],alammar:['code',30],aie:['code',30],fmreport:['ml',10],
  attention:['dl',3],illustrated:['ml',1],annotated:['dl',5],bert:['dl',3],gpt3:['dl',4],t5:['dl',4],bart:['dl',2],seq2seq:['dl',2],gnmt:['dl',3],
  ddpm:['dl',4],ldm:['dl',3],wengdiff:['dl',2],hfdiff:['dl',20],clip:['dl',3],llava:['dl',2],gan:['dl',2],vae:['dl',3],
+ cs329a:['dl',80],star:['dl',3],verify:['dl',3],ttc:['dl',4],lats:['dl',3],deepseekmath:['dl',4],
  prompting:['none',2],instructgpt:['dl',3],cai:['dl',3],lora:['dl',2],rag:['dl',2],react:['dl',2],agents:['code',1],sbert:['dl',2],covington:['ml',2],recsys:['ml',4],spam:['none',1]
 };
 
@@ -831,9 +865,164 @@ var PATHS=[
   {n:'m-alphago',t:'AlphaGo',say:'A network supplies intuition, tree search supplies look-ahead, and self-play supplies the training data.',src:['alphago']},
   {n:'sf-robotics',t:'Into the physical world',say:'Real sensors are noisy and real motors are imprecise.',src:['modrob']},
   {n:'prod-drive',t:'Self-driving cars',say:'Perception, prediction, planning and control in one system.',src:['probrob']}
+ ]},
+ {t:'Self-improving agents',lv:'Advanced',d:'How agents get better from their own attempts. The AlphaGo recipe, rebuilt on top of language models.',steps:[
+  {n:'p-rl',t:'Learning from reward',say:'Act, get a score, do more of what scored well. Everything later in this path builds on it.',src:['spinning']},
+  {n:'sf-search',t:'Search and planning',say:'Explore possible next steps before committing to one.',src:['aima']},
+  {n:'m-alphago',t:'The recipe',say:'A network for intuition, search for look-ahead, and self-play for fresh training data. Self-improving agents reuse all three.',src:['alphago']},
+  {n:'llm-aligned',t:'A model that follows instructions',say:'The agent\'s engine: an LLM tuned to follow requests and call tools.',src:['instructgpt']},
+  {n:'a-tools',t:'Reasoning and acting',say:'Think, call a tool, read the result, think again.',src:['react']},
+  {n:'llm-large',t:'Thinking longer at answer time',say:'Sample many attempts or search over reasoning steps. Spending compute at answer time can beat a bigger model.',src:['ttc','lats']},
+  {n:'a-align',t:'Verifiers and feedback',say:'A checker scores each attempt or each step, so the agent knows which ones to keep.',src:['verify','cai']},
+  {n:'a-ft',t:'Training on its own successes',say:'Keep the attempts that passed the checks and train on them. Repeat, and the model improves itself.',src:['star','deepseekmath']},
+  {n:'prod-agent',t:'Self-improving agents',say:'Put it together: agents that use tools, memory and search, and learn from what worked.',src:['cs329a']}
  ]}
 ];
 function pathKeys(p){var seen={},out=[];p.steps.forEach(function(s){s.src.forEach(function(k){if(!seen[k]){seen[k]=1;out.push(k)}})});return out}
+
+/* ---------- glossary: [term, other names, plain definition, map node id] ---------- */
+var GLOSS=[
+ ['Accuracy','','The share of answers a model gets right. Misleading when one answer is much more common than the others; see precision and recall.','ml-eval'],
+ ['Activation function','ReLU, sigmoid','A simple rule applied to the output of each unit in a neural network. It bends straight lines into curves, so stacked layers can learn complicated patterns.','dl-core'],
+ ['Agent','AI agent','A system given a goal that works toward it over many steps: it plans, calls tools such as search or code, looks at the results and decides what to do next.','prod-agent'],
+ ['Alignment','','Making a model do what people actually intend: helpful, honest and harmless. Done with methods such as RLHF, DPO and Constitutional AI, then checked by testing.','a-align'],
+ ['Anomaly detection','outlier detection','Spotting the rare example that does not look like the rest, such as a strange card payment.','p-anom'],
+ ['Artificial intelligence','AI','The broad goal of building machines that do things we call intelligent: reasoning, learning, perceiving, using language and acting. Machine learning is one way to get there.','b-ai'],
+ ['Attention','self-attention','The mechanism inside a Transformer that lets every word (or image patch) look at every other one and decide which matter most for understanding it.','arch-tr'],
+ ['Autoencoder','','A network that squeezes its input into a small code and then rebuilds the input from that code. The code becomes a compact summary of the data.','arch-ae'],
+ ['Autoregressive model','causal language model','A model that writes its output one piece at a time, each new piece predicted from everything written so far. GPT and Claude work this way.','llm-ar'],
+ ['Backpropagation','backprop','The method that works out how much each weight in a network contributed to the error, so gradient descent knows which way to nudge it.','c-backprop'],
+ ['Benchmark','','A shared, fixed test that lets different models be compared on the same task.','ml-eval'],
+ ['Bias (fairness)','algorithmic bias','When a model treats some groups of people unfairly, usually because the data it learned from was skewed.','sf-safety'],
+ ['Bias-variance tradeoff','','The balance between a model that is too simple to capture the pattern (high bias) and one so flexible it memorises noise (high variance).','ml-eval'],
+ ['Chain of thought','reasoning steps','Having a model write out its intermediate reasoning before the final answer. It often improves results on maths and logic problems.','a-prompt'],
+ ['Classification','','A problem where the answer is one of a fixed set of labels: spam or not spam, cat or dog.','p-class'],
+ ['Clustering','','Grouping examples that are similar to each other, without being told what the groups should be.','ml-problems'],
+ ['Computer vision','CV','The field that teaches computers to make sense of images and video.','sf-cv'],
+ ['Constitutional AI','CAI','An alignment method from Anthropic in which a model critiques and revises its own answers against a written list of principles.','a-align'],
+ ['Context window','context length','The most text, counted in tokens, that a language model can read at once. Anything beyond it is not seen.','llm-large'],
+ ['Contrastive learning','','Training by telling matching pairs apart from non-matching ones, such as a photo and its own caption versus random captions. CLIP is trained this way.','o-contrast'],
+ ['Convolutional neural network','CNN, ConvNet','A network that slides small pattern detectors across an image. It was the standard design for vision before Transformers.','arch-cnn'],
+ ['Cross-validation','','Splitting the data into several parts, training on all but one and testing on the one left out, then rotating. It gives a steadier estimate of real performance.','ml-eval'],
+ ['Data pipeline','','The automated steps that collect, clean and reshape data before a model trains on it or uses it.','ml-sys'],
+ ['Dataset','training data','The collection of examples a model learns from or is tested on.','sf-ml'],
+ ['Decision tree','','A model that answers by asking a series of yes-or-no questions about the input, like a flowchart learned from data.','ml-algos'],
+ ['Decoder','','The part of a model that generates output. Decoder-only Transformers such as GPT do nothing but generate.','llm-ar'],
+ ['Deep learning','DL','Machine learning with neural networks of many layers, which work out their own features from raw data.','b-dl'],
+ ['Density estimation','','Learning how likely each possible example is, so the model knows what typical data looks like.','ml-problems'],
+ ['Diffusion model','','A generator that learns to remove noise from an image step by step. To draw something new, it starts from pure noise and cleans it up. Stable Diffusion works this way.','arch-diff'],
+ ['Dimensionality reduction','PCA','Squeezing data with many measurements into a few that keep most of the information, for speed or for plotting.','ml-problems'],
+ ['Distributed training','','Splitting the training of one model across many chips or machines working in parallel.','t-scale'],
+ ['DPO','Direct Preference Optimization','An alignment method that trains a model directly on pairs of preferred and rejected answers, without a separate reward model.','a-align'],
+ ['Drift','data drift, concept drift','When real-world data slowly changes after a model ships, so its accuracy quietly drops. Monitoring catches it.','s-monitor'],
+ ['Dropout','','Switching off random units during training so the network cannot lean on any single one. A common way to reduce overfitting.','dl-train'],
+ ['Embedding','vector','A list of numbers that stands for a word, sentence, image or user, arranged so that similar things get similar numbers.','fam-embed'],
+ ['Embodied AI','','AI that has a body, such as a robot, and has to perceive and act in the physical world.','sf-robotics'],
+ ['Encoder','','The part of a model that reads the input and turns it into a rich internal representation. BERT is an encoder-only Transformer.','llm-mlm'],
+ ['Encoder-decoder','sequence-to-sequence, seq2seq','A model in two halves: one reads the input, the other writes the output. Suited to converting one text into another, as in translation.','llm-encdec'],
+ ['Ensemble','boosted trees, random forest','Combining many models and pooling their answers. Boosted decision trees are the usual winner on spreadsheet-style data.','a-ens'],
+ ['Epoch','','One full pass through the training data. Training usually runs for several.','dl-train'],
+ ['Evaluation','','Checking how well a model works on data it has never seen, using held-out data and suitable metrics.','ml-eval'],
+ ['Expert system','rule-based system','A program that reasons with rules written by human experts. The main form of AI in the 1980s.','sf-symbolic'],
+ ['Explainability','interpretability','Understanding why a model gave the answer it did, from simple feature importance to studying the inside of a neural network.','sf-safety'],
+ ['F1 score','','A single number that balances precision and recall. Useful when one class is rare.','ml-eval'],
+ ['Feature','feature engineering','One measurable input to a model, such as the amount of a payment. Feature engineering is designing these inputs by hand.','ml-sys'],
+ ['Few-shot learning','few-shot prompting','Getting a model to do a task by showing it only a handful of examples, often inside the prompt itself.','a-prompt'],
+ ['Fine-tuning','','Continuing to train an already-trained model on a smaller, task-specific dataset so it gets better at that task.','a-ft'],
+ ['Foundation model','FM','A large model trained on broad data that can be adapted to many tasks. GPT, Claude, CLIP and Whisper are examples.','b-fm'],
+ ['Game theory','','The maths of decisions when several players affect each other. It underlies multi-agent AI and game-playing systems.','sf-multi'],
+ ['Generalization','','How well a model works on new data rather than the data it was trained on. The real goal of training.','ml-eval'],
+ ['Generative adversarial network','GAN','Two networks trained against each other: one makes fake examples, the other tries to tell them from real ones. Both get better until the fakes look real.','fam-gen'],
+ ['Generative AI','generative model','Models that create new content, such as text, images, audio or code, instead of only labelling existing content.','fam-gen'],
+ ['GPU','graphics processing unit, accelerator','A chip that does thousands of calculations at once. The standard hardware for training and running neural networks.','t-scale'],
+ ['Gradient descent','SGD','The basic training method: measure the error, work out which direction lowers it, take a small step that way, and repeat millions of times.','o-gd'],
+ ['Graph neural network','GNN','A network that works on data shaped like a graph, such as molecules or social networks, by passing messages between connected nodes.','dl-arch'],
+ ['Hallucination','confabulation','When a language model states something false or invented with full confidence. Retrieval and careful checking reduce it.','llm-large'],
+ ['Hyperparameter','','A setting chosen before training rather than learned, such as the learning rate or the number of layers.','ml-opt'],
+ ['Inference','','Two meanings. In machine learning: running a trained model to get an answer, as opposed to training it. In logic: deriving new facts from known ones.','s-serve'],
+ ['Instruction tuning','','Fine-tuning a language model on examples of requests and good responses, so it follows instructions instead of just continuing text.','a-instr'],
+ ['Knowledge graph','','Facts stored as a network of things and the relationships between them, such as “Paris — capital of — France”.','cap-memory'],
+ ['Knowledge representation','ontology','Ways of writing down facts and rules so a computer can reason with them.','sf-symbolic'],
+ ['Label','annotation, ground truth','The correct answer attached to a training example, often added by people.','p-sup'],
+ ['Large language model','LLM','A very large language model trained on a huge amount of text. Its size is what makes it general-purpose: it can write, summarise, answer, translate and code.','llm-large'],
+ ['Latent space','','The internal space of compressed codes a model learns, where similar inputs end up near each other.','c-rep'],
+ ['Learning rate','','How big a step gradient descent takes each time. Too big and training goes wild; too small and it crawls.','o-gd'],
+ ['LoRA','low-rank adaptation','A cheap way to fine-tune: freeze the original model and train only small add-on matrices.','t-peft'],
+ ['Loss function','objective, cost function','The single number that measures how wrong a model is. Training is the process of pushing it down.','o-loss'],
+ ['Machine learning','ML','Programs that learn patterns from examples instead of following rules written by hand.','b-ml'],
+ ['Masked language model','MLM','A model trained to fill in hidden words using the whole sentence around them. BERT is the best-known example.','llm-mlm'],
+ ['Meta-learning','learning to learn','Training a model across many tasks so it can pick up a new task quickly from very few examples.','ml-paradigms'],
+ ['Mixed precision','','Training with lower-precision numbers where it is safe, to save memory and time.','dl-train'],
+ ['MLOps','','The engineering practice of shipping models and keeping them working: pipelines, versioning, deployment and monitoring.','ml-sys'],
+ ['Modality','','A kind of data, such as text, images, audio or video.','fm-modal'],
+ ['Model','','The learned numbers (parameters) together with the structure that uses them to turn an input into an output.','ml-algos'],
+ ['Multi-agent system','','Several AI agents acting in the same world, cooperating or competing.','sf-multi'],
+ ['Multimodal model','','One model that handles several kinds of data together, such as reading an image and answering a question about it in text.','fam-multi'],
+ ['Natural language processing','NLP','The field that teaches computers to read, write and converse in human language.','sf-nlp'],
+ ['Neural network','artificial neural network','A model made of layers of simple connected units, loosely inspired by the brain. Each connection has a weight that training adjusts.','a-nn'],
+ ['Next-token prediction','','The training task behind GPT-style models: given the text so far, guess the next token. Repeated, it produces whole answers.','o-next'],
+ ['Normalization','batch norm, layer norm','Rescaling the numbers inside a network to a steady range, which makes deep networks train faster and more reliably.','dl-train'],
+ ['Optimizer','Adam','The algorithm that turns gradients into weight updates. Adam is the most widely used variant of gradient descent.','dl-train'],
+ ['Overfitting','','When a model memorises its training data, noise included, and then does badly on new data.','ml-eval'],
+ ['Parameter','weight','One of the numbers a model learns during training. Large language models have billions of them.','fm-char'],
+ ['PEFT','parameter-efficient fine-tuning','Fine-tuning that trains only a small fraction of a model’s parameters. LoRA is the most common form.','t-peft'],
+ ['Planning','','Working out a sequence of actions that reaches a goal before taking any of them.','sf-search'],
+ ['Precision and recall','','Precision: of the things the model flagged, how many were right. Recall: of the things it should have flagged, how many it found.','ml-eval'],
+ ['Pre-training','','The first and most expensive stage of building a foundation model: training on a huge general dataset before any adaptation to specific jobs.','fm-obj'],
+ ['Prompt','prompt engineering','The input text given to a language model. Prompt engineering is the craft of wording it so the model does what you want.','a-prompt'],
+ ['Quantization','','Storing a model’s numbers with fewer bits so it runs faster and fits in less memory, at a small cost in accuracy.','s-serve'],
+ ['Ranking','','Putting a set of candidates in order of relevance, as search engines and feeds do.','p-rank'],
+ ['Recommendation','recommender system','Predicting what a person will want next, such as a video, product or song.','p-reco'],
+ ['Recurrent neural network','RNN, LSTM','A network that reads a sequence one step at a time and carries a memory forward. Largely replaced by Transformers.','arch-rnn'],
+ ['Red-teaming','','Deliberately trying to make a model misbehave, so its weaknesses are found and fixed before release.','sf-safety'],
+ ['Regression','','A problem where the answer is a number, such as a price or a temperature.','ml-problems'],
+ ['Regularization','','Any technique that discourages a model from overfitting, such as penalising large weights or using dropout.','ml-opt'],
+ ['Reasoning model','thinking model','A language model trained, usually with reinforcement learning, to work through a problem step by step before it answers. Spending more of these thinking steps tends to give better answers.','llm-large'],
+ ['Reinforcement learning','RL','Learning by trial and error: an agent acts, receives rewards or penalties, and gradually learns which actions pay off.','p-rl'],
+ ['Representation learning','','Letting a model discover useful features of the data by itself instead of having people design them.','c-rep'],
+ ['Retrieval-augmented generation','RAG','Looking up relevant documents first, then having a language model write its answer from them. It keeps answers current and grounded in sources.','a-rag'],
+ ['Reward model','','A model trained to score answers the way people would. It supplies the reward signal in RLHF.','a-align'],
+ ['RLHF','reinforcement learning from human feedback','People compare pairs of model answers, a reward model learns their preferences, and reinforcement learning then steers the language model toward better answers.','a-align'],
+ ['Robotics','','Building machines that sense, decide and move in the physical world.','sf-robotics'],
+ ['Scaling laws','','The observation that model quality improves predictably as parameters, data and compute grow together.','t-scale'],
+ ['Search (AI)','tree search, A*','Exploring possible moves or states to find a good path to a goal. One of the oldest ideas in AI.','sf-search'],
+ ['Segmentation','','Labelling every pixel of an image with the object it belongs to, giving exact outlines rather than boxes.','fam-vision'],
+ ['Self-improvement','self-training, bootstrapping','A model getting better from its own work: it makes attempts, a checker keeps the good ones, and it is trained on those. STaR and AlphaGo’s self-play both work this way.','prod-agent'],
+ ['Self-supervised learning','SSL','Learning from data whose labels come from the data itself, for example by hiding a word and predicting it. No human labelling needed, so it scales to the whole internet.','p-ssl'],
+ ['Semi-supervised learning','','Learning from a small set of labelled examples together with a large set of unlabelled ones.','ml-paradigms'],
+ ['Serving','model serving, deployment','Running a trained model so that people or programs can send it requests and get answers quickly.','s-serve'],
+ ['Sim-to-real','','Training a robot in a simulation and then transferring what it learned to the real machine.','sf-robotics'],
+ ['Speech recognition','ASR, speech-to-text','Turning spoken audio into written text. Whisper is a well-known model for it.','sf-speech'],
+ ['Supervised learning','','Learning from examples that come with the right answer attached. Most everyday machine learning works this way.','p-sup'],
+ ['Support vector machine','SVM, kernel methods','A classic model that separates classes with the widest possible gap between them, and uses kernels to handle curved boundaries.','ml-algos'],
+ ['Symbolic AI','GOFAI, good old-fashioned AI','AI built from hand-written rules, logic and symbols rather than learned from data.','sf-symbolic'],
+ ['Temperature','sampling','A setting used when a model generates text. Low temperature gives safe, predictable wording; high temperature gives more varied and surprising output.','llm-ar'],
+ ['Test-time compute','inference-time scaling','Extra computing spent while answering rather than while training: sampling many attempts, searching over reasoning steps, or simply thinking longer.','llm-large'],
+ ['Test set','held-out data, validation set','Data kept aside during training and used only to check the model. A validation set is a second held-out set used to tune settings.','ml-eval'],
+ ['Text-to-speech','TTS, speech synthesis','Turning written text into a natural-sounding voice.','fam-speech'],
+ ['Token','','A small chunk of text, often a word or part of a word, that language models read and write. Costs and context limits are counted in tokens.','o-next'],
+ ['Tokenizer','','The component that splits text into tokens and maps each one to a number before a model reads it.','fam-lm'],
+ ['Tool use','function calling','Letting a model call outside software, such as search, a calculator, code or a calendar, and use the results in its answer.','a-tools'],
+ ['Training','','Adjusting a model’s parameters on data until its errors become small.','o-gd'],
+ ['Transfer learning','','Reusing what a model learned on one task as the starting point for another. The idea behind fine-tuning foundation models.','p-transfer'],
+ ['Transformer','','The neural network architecture built on attention. It powers almost every modern language model and many image and audio models.','arch-tr'],
+ ['Underfitting','','When a model is too simple to capture the pattern in the data, so it does badly even on its training data.','ml-eval'],
+ ['Unsupervised learning','','Finding structure in data with no labels at all, such as groups or unusual points.','ml-paradigms'],
+ ['Variational autoencoder','VAE','An autoencoder whose codes are arranged smoothly, so you can sample a new code and decode it into a new example.','arch-ae'],
+ ['Vector database','vector store','A database that quickly finds the embeddings closest to a query. Used for search by meaning and for RAG.','a-rag'],
+ ['Verifier','process reward model, PRM','A model or program that checks an answer, or each step of a solution, and scores it. Verifiers let a system pick its best attempt and learn from it.','a-align'],
+ ['Vision-language model','VLM','A model that takes in images and text together, and can describe, answer questions about or reason over pictures.','fam-vision'],
+ ['Vision Transformer','ViT','A Transformer applied to images by cutting each image into small patches and treating them like words.','fam-vision'],
+ ['Weakly supervised learning','','Learning from labels that are noisy or indirect, such as web image captions or existing subtitles, instead of carefully hand-made ones.','p-weak'],
+ ['World model','','A model’s internal picture of how its environment works, which it can use to predict what will happen next.','cap-memory'],
+ ['Zero-shot','zero-shot prompting','Asking a model to do a task with no examples at all, only an instruction.','a-prompt']
+];
+GLOSS=GLOSS.map(function(g){
+  var o={t:g[0],a:g[1],d:g[2],n:g[3],id:'g-'+g[0].toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')};
+  o.l=/[a-z]/i.test(o.t.charAt(0))?o.t.charAt(0).toUpperCase():'#';
+  return o;
+}).sort(function(x,y){return x.t.toLowerCase()<y.t.toLowerCase()?-1:1});
+var GLOSS_BY={}; GLOSS.forEach(function(g){GLOSS_BY[g.id]=g});
 
 /* ---------- registry ---------- */
 var N={}, EDGES=[], ord=0, cur=null, ins=[], outs=[], PLAIN=[];
@@ -960,7 +1149,7 @@ function shelfHTML(){
 function pathsHTML(){
   return '<section class="band t-plain" id="paths"><header class="bhead"><p class="kick">A suggested order</p>'+
     '<h2 class="btitle">Learning paths</h2><p class="bsub">Each path walks the map in order. Start one and the side panel takes you from stop to stop, with what to read at each. The hours on each card add up every source on the path in full, so they look large. You can move to the next step before finishing each source.</p></header>'+
-    '<div class="grid g5 shelf">'+PATHS.map(function(p,i){
+    '<div class="grid g3 shelf">'+PATHS.map(function(p,i){
       var hrs=pathKeys(p).reduce(function(a,k){return a+cats(k).hours},0);
       return '<article class="card rcard pcard" id="path-'+i+'"><h3 class="ct">'+esc(p.t)+'</h3>'+
         '<span class="tags"><span class="tag">'+p.lv+'</span><span class="tag">'+p.steps.length+' steps</span><span class="tag">≈ '+hrs+' h</span></span>'+
@@ -970,8 +1159,27 @@ function pathsHTML(){
         '<button class="clear" data-path="'+i+'" data-step="0">Start this path</button></article>';
     }).join('')+'</div></section>';
 }
+function glossEntry(g){
+  return '<div class="gent" id="'+g.id+'"><dt><dfn>'+esc(g.t)+'</dfn>'+(g.a?'<span class="ga">Also: '+esc(g.a)+'</span>':'')+'</dt>'+
+    '<dd><p>'+esc(g.d)+'</p>'+(g.n?'<button class="chip t-'+N[g.n].tone+'" data-goto="'+g.n+'">On the map: '+esc(N[g.n].short)+'</button>':'')+'</dd></div>';
+}
+function glossHTML(){
+  var letters=[], groups={};
+  GLOSS.forEach(function(g){
+    if(g.n&&!N[g.n]){if(window.console)console.warn('glossary term on unknown node',g.t,g.n);g.n=null}
+    if(!groups[g.l]){groups[g.l]=[];letters.push(g.l)}
+    groups[g.l].push(g);
+  });
+  return '<section class="band t-plain" id="glossary"><header class="bhead"><p class="kick">Words used on this map</p>'+
+    '<h2 class="btitle">Glossary</h2><p class="bsub">The vocabulary of the field in plain language. Each term links to its place on the map. Filter by typing, or jump to a letter. The search in the side panel finds these terms too.</p></header>'+
+    '<div class="gtools"><div class="gfilter"><label class="lab" for="gq">Filter terms</label><input id="gq" type="search" placeholder="embedding, RAG, overfitting…" autocomplete="off"></div>'+
+    '<nav class="az" aria-label="Jump to a letter">'+letters.map(function(l){return '<button data-gl-letter="'+l+'">'+l+'</button>'}).join('')+'</nav></div>'+
+    '<p class="gcount" id="gcount" aria-live="polite">'+GLOSS.length+' terms</p>'+
+    letters.map(function(l){return '<div class="gletter" id="gl-'+l+'"><h3 class="gl">'+l+'</h3><dl class="glist">'+groups[l].map(glossEntry).join('')+'</dl></div>'}).join('')+
+    '<p class="none" id="gnone" hidden>No term matches. Try a shorter word, or use the search in the side panel to look across the whole map.</p></section>';
+}
 Object.keys(READS).forEach(function(id){if(!N[id]&&window.console)console.warn('sources for unknown node',id)});
-map.innerHTML=BANDS.map(bandHTML).join('')+pathsHTML()+shelfHTML()+'<svg class="wires" id="wires" aria-hidden="true"></svg>';
+map.innerHTML=BANDS.map(bandHTML).join('')+pathsHTML()+shelfHTML()+glossHTML()+'<svg class="wires" id="wires" aria-hidden="true"></svg>';
 var svg=document.getElementById('wires');
 Object.keys(N).forEach(function(id){
   var n=N[id]; n.el=document.getElementById('n-'+id);
@@ -996,16 +1204,17 @@ function searchHTML(){
     var n=e.name.toLowerCase(), a=(e.alt||'').toLowerCase(), s;
     if(n.indexOf(q)===0) s=0; else if(n.indexOf(' '+q)>-1||n.indexOf('('+q)>-1) s=1; else if(n.indexOf(q)>-1) s=2;
     else if(a.indexOf(q)>-1) s=3; else if((e.text||'').toLowerCase().indexOf(q)>-1) s=4; else return;
-    var key=(e.id||e.key)+'|'+(s<3?e.name:'');
-    if(seen[e.id||e.key]) return; seen[e.id||e.key]=1;
+    var uid=e.id||e.key||e.gl;
+    if(seen[uid]) return; seen[uid]=1;
     hits.push({e:e,s:s});
   });
   hits.sort(function(x,y){return x.s-y.s||x.e.ord-y.e.ord});
   var total=hits.length; hits=hits.slice(0,14);
   var h='<p class="kick">Search</p><h2>'+(total?total+(total===1?' match':' matches'):'No matches')+'</h2>';
-  if(!total) return h+'<p class="d">Nothing on the map or in the reading list contains “'+esc(QUERY)+'”. Try a shorter word.</p>';
+  if(!total) return h+'<p class="d">Nothing on the map, in the reading list or in the glossary contains “'+esc(QUERY)+'”. Try a shorter word.</p>';
   h+='<ul class="rows">'+hits.map(function(x){
     var e=x.e;
+    if(e.gl){var g=GLOSS_BY[e.gl];return '<li><button class="row" data-gl="'+g.id+'"><span class="chip">Glossary · '+esc(g.t)+'</span><span class="why">'+esc(g.d.length>120?g.d.slice(0,117).replace(/\s+\S*$/,'')+'…':g.d)+'</span></button></li>'}
     if(e.key){var r=LIB[e.key];return '<li><button class="row" data-src="'+e.key+'"><span class="chip">'+esc(r[1])+'</span><span class="why">'+r[0]+' · '+esc(r[2])+'</span></button></li>'}
     var n=N[e.id], via=e.name!==n.name?'<b>'+esc(e.name)+'</b> in ':'';
     return '<li><button class="row" data-goto="'+e.id+'"><span class="chip t-'+n.tone+'">'+esc(n.short)+'</span><span class="why">'+via+esc(e.name!==n.name?n.where+' › '+n.name:n.where)+'</span></button></li>';
@@ -1032,13 +1241,16 @@ function renderPanel(){
     if(!inPath) h+='<p class="kick">Connections</p><h2>Trace a connection</h2>'+
       '<p class="d">Select any ringed title or item on the map. This panel lists what it builds on, what it leads to and what to read about it, and the map draws the links.</p>'+
       '<h3>Good places to start</h3><div class="starts">'+STARTS.map(chip).join('')+'</div>'+
-      '<h3 class="wide">Prefer a guided route?</h3><p class="d wide">Learning paths walk the map in order. The reading list keeps track of what you have finished.</p>'+
-      '<div class="starts wide"><button class="clear" data-el="paths">Learning paths</button><button class="clear" data-el="reading">Books and sources</button></div>';
+      '<h3 class="wide">Prefer a guided route?</h3><p class="d wide">Learning paths walk the map in order. The reading list keeps track of what you have finished. The glossary explains the words.</p>'+
+      '<div class="starts wide"><button class="clear" data-el="paths">Learning paths</button><button class="clear" data-el="reading">Books and sources</button><button class="clear" data-el="glossary">Glossary</button></div>';
   } else {
     var n=N[cur];
     h+='<p class="kick">'+esc(n.where)+'</p><h2>'+esc(n.name)+'</h2><p class="d">'+esc(n.d||'')+'</p>';
     if(ins.length) h+='<h3>'+LINE_IN+'Builds on</h3><ul class="rows">'+rowsHTML(ins,'in')+'</ul>';
     if(outs.length) h+='<h3>'+LINE_OUT+'Leads to</h3><ul class="rows">'+rowsHTML(outs,'out')+'</ul>';
+    var gl=GLOSS.filter(function(g){return g.n===cur});
+    if(gl.length) h+='<h3>Glossary</h3>'+(gl.length>3?'<div class="starts">'+gl.map(function(g){return '<button class="chip" data-gl="'+g.id+'">'+esc(g.t)+'</button>'}).join('')+'</div>':
+      '<ul class="rows">'+gl.map(function(g){return '<li><button class="row" data-gl="'+g.id+'"><span class="gtm">'+esc(g.t)+'</span><span class="why">'+esc(g.d)+'</span></button></li>'}).join('')+'</ul>');
     var rd=readsFor(cur);
     if(rd.keys.length) h+='<h3>Learn it</h3>'+(rd.from!==cur?'<p class="rfrom">Sources for '+esc(N[rd.from].short)+'</p>':'')+resList(rd.keys,'p');
     h+='<button class="clear" data-clear="1">Clear selection</button>';
@@ -1206,6 +1418,7 @@ var QUERY='', PATH=null, STEP=0, INDEX=[], qbox=document.getElementById('q');
 Object.keys(N).forEach(function(id){var n=N[id];INDEX.push({id:id,name:n.name,alt:n.short,text:n.d||'',ord:n.ord})});
 PLAIN.forEach(function(p,i){INDEX.push({id:p[1],name:p[0],alt:'',text:'',ord:1000+i})});
 Object.keys(LIB).forEach(function(k,i){var r=LIB[k];INDEX.push({key:k,name:r[1],alt:r[2],text:r[3]||'',ord:5000+i})});
+GLOSS.forEach(function(g,i){INDEX.push({gl:g.id,name:g.t,alt:g.a,text:g.d,ord:3000+i})});
 function setQuery(v){QUERY=v.trim();renderPanel()}
 function gotoSource(k){
   FDEF.forEach(function(f){FIL[f[0]]=''}); saveFilters(); applyFilters();
@@ -1224,10 +1437,11 @@ function goStep(i,j){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
-  var t=e.target.closest('[data-goto],[data-pick],[data-scroll],[data-clear],[data-el],[data-f],[data-src],[data-path],[data-step-nav],[data-path-exit]'); if(!t) return;
+  var t=e.target.closest('[data-goto],[data-pick],[data-scroll],[data-clear],[data-el],[data-f],[data-src],[data-path],[data-step-nav],[data-path-exit],[data-gl],[data-gl-letter]'); if(!t) return;
   var d=t.dataset;
-  if(d.goto||d.src){var had=QUERY; if(had){qbox.value='';QUERY=''}
-    if(d.goto) select(d.goto,true); else {if(had) renderPanel(); gotoSource(d.src)}}
+  if(d.goto||d.src||d.gl){var had=QUERY; if(had){qbox.value='';QUERY=''}
+    if(d.goto) select(d.goto,true); else {if(had) renderPanel(); if(d.src) gotoSource(d.src); else gotoGloss(d.gl)}}
+  else if(d.glLetter) reveal(document.getElementById('gl-'+d.glLetter),'start');
   else if(d.pick) select(d.pick,false);
   else if(d.scroll){var n=N[d.scroll]; if(n) reveal(n.el,'start')}
   else if(d.f){FIL[d.f]=d.v;saveFilters();applyFilters()}
@@ -1243,6 +1457,24 @@ document.addEventListener('change',function(e){
   TS=Date.now(); touched=true; saveLocal(); refreshDone(); pushCloud();
 });
 qbox.addEventListener('input',function(){setQuery(qbox.value)});
+var gq=document.getElementById('gq'), gcount=document.getElementById('gcount'), gnone=document.getElementById('gnone');
+function filterGloss(v){
+  var q=v.trim().toLowerCase(), shown=0;
+  document.querySelectorAll('#glossary .gletter').forEach(function(sec){
+    var any=0;
+    sec.querySelectorAll('.gent').forEach(function(el){var g=GLOSS_BY[el.id], ok=!q||(g.t+' '+g.a+' '+g.d).toLowerCase().indexOf(q)>-1; el.hidden=!ok; if(ok){any++;shown++}});
+    sec.hidden=!any;
+    var b=document.querySelector('[data-gl-letter="'+sec.id.slice(3)+'"]'); if(b) b.disabled=!any;
+  });
+  gcount.textContent=q?shown+' of '+GLOSS.length+' terms':GLOSS.length+' terms';
+  gnone.hidden=!!shown;
+}
+gq.addEventListener('input',function(){filterGloss(gq.value)});
+function gotoGloss(id){
+  var el=document.getElementById(id); if(!el) return;
+  if(el.hidden||el.closest('[hidden]')){gq.value='';filterGloss('')}
+  reveal(el,'center'); el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash')},2200);
+}
 qbox.addEventListener('keydown',function(e){
   if(e.key==='Enter'){var first=pbody.querySelector('.row'); if(QUERY&&first){e.preventDefault();first.click()}}
 });
@@ -1282,7 +1514,7 @@ var navs=[].slice.call(document.querySelectorAll('[data-nav]')), ticking=false;
 function spy(){
   ticking=false;
   var line=(parseFloat(getComputedStyle(root).getPropertyValue('--chrome-h'))||0)+innerHeight*0.3, cur='top';
-  ['paths','reading'].forEach(function(id){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=line)cur=id});
+  ['paths','reading','glossary'].forEach(function(id){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=line)cur=id});
   navs.forEach(function(b){if(b.dataset.nav===cur)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
 }
 addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(spy)}},{passive:true});

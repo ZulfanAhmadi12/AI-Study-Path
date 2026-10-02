@@ -29,13 +29,13 @@ A nested-box diagram at the top summarises the containment: AI ⊃ ML ⊃ DL ⊃
   - *Solid line*: builds on (an ingredient of the selected item)
   - *Dashed line*: leads to (something it makes possible)
   - *Grey line*: opens up (a layer that expands an item from the layer above)
-- **Search** in the side panel to find items on the map and in the reading list (e.g. `transformer`, `Whisper`, `Sutton`). Press **Enter** to jump to the first result.
-- Use the **top bar** to jump between the map, learning paths and books and sources. The current section is highlighted as you scroll.
+- **Search** in the side panel to find items on the map, in the reading list and in the glossary (e.g. `transformer`, `Whisper`, `Sutton`). Press **Enter** to jump to the first result.
+- Use the **top bar** to jump between the map, learning paths, books and sources, and the glossary. The current section is highlighted as you scroll.
 - Press **Escape** to clear the search, or the current selection if there is no search.
 
 ### Learning paths
 
-Five guided routes. Start one and the side panel walks you from stop to stop, with a source to read at each:
+Six guided routes. Start one and the side panel walks you from stop to stop, with a source to read at each:
 
 | Path | Level |
 |---|---|
@@ -44,10 +44,11 @@ Five guided routes. Start one and the side panel walks you from stop to stop, wi
 | How image generators work | Intermediate |
 | Building with LLMs | Intermediate |
 | AI that plays and moves | Advanced |
+| Self-improving agents | Advanced |
 
 ### Books and sources
 
-About 88 curated sources (books, courses, papers, guides and videos), arranged in shelves by field. Each one is tagged with:
+About 94 curated sources (books, courses, papers, guides and videos), arranged in shelves by field. Each one is tagged with:
 
 - **Type**: book, course, paper, guide or video
 - **Cost**: free or paid
@@ -58,6 +59,14 @@ About 88 curated sources (books, courses, papers, guides and videos), arranged i
 You can filter by any of these and **tick sources off** as you finish them. A progress bar tracks how far you've got.
 
 > Hours, prerequisites and levels are rough estimates, judged rather than looked up. Most links were checked on 2 October 2026.
+
+### Glossary
+
+About 134 AI terms in plain language, from *accuracy* to *zero-shot*. Each entry gives a short definition, other names the term goes by, and a link to its place on the map.
+
+- **Filter** the list by typing, or **jump to a letter**.
+- The **side panel search** finds glossary terms too.
+- **Selecting a map item** lists its glossary terms in the side panel.
 
 ## Saving progress
 
@@ -81,5 +90,6 @@ You can filter by any of these and **tick sources off** as you finish them. A pr
 | `READS` | Which sources to show for each map node |
 | `SHELF` | How the reading list is grouped |
 | `PATHS` | The learning paths and their steps |
+| `GLOSS` | Glossary entries: `[term, other names, definition, map node id]` |
 
 To add a connection, append to `LINKS` using existing node ids. Links that point to unknown ids are dropped, with a warning in the console.
